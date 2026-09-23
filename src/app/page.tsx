@@ -52,25 +52,18 @@ export default async function Landing() {
         </div>
 
         <div className="relative z-10 mt-14 max-w-xl lg:mt-0">
-          <p className="font-mono text-[11px] tracking-[0.3em] text-[#3B82F6]">TEAM-ASSISTED INDIVIDUALIZATION</p>
-          <h1 className="font-display mt-4 text-4xl font-bold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.4rem]">
-            Kuasai SPtLDV.
+          <p className="font-mono text-[11px] tracking-[0.3em] text-[#3B82F6]">MATEMATIKA KELAS X · FASE E</p>
+          <h1 className="font-display mt-4 text-4xl font-bold leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.2rem]">
+            Sistem Pertidaksamaan
             <br />
-            <span className="text-white/40">Baris demi baris.</span>
-            <br />
-            <span className="text-[#3B82F6]">Teman demi teman.</span>
+            <span className="text-[#3B82F6]">Linear Dua Variabel</span>
           </h1>
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-white/55">
-            10 sub-bab berjenjang dari pengenalan pertidaksamaan hingga nilai optimum —
-            dengan mastery learning, petunjuk bertingkat, tutor sebaya yang siaga,
-            dan guru yang memegang kendali penuh kelas.
-          </p>
           <div className="mt-7 flex flex-wrap gap-2">
             {[
               { icon: <Target size={13} />, label: "3 Benar Beruntun = Naik" },
-              { icon: <Brain size={13} />, label: "Petunjuk H1–H3" },
-              { icon: <Users size={13} />, label: "Tutor Sebaya Fluid 25%" },
-              { icon: <Lock size={13} />, label: "Teacher Focus Lock" },
+              { icon: <Brain size={13} />, label: "Petunjuk Bertahap H1–H3" },
+              { icon: <Users size={13} />, label: "Tutor Sebaya" },
+              { icon: <Lock size={13} />, label: "Kunci Layar oleh Guru" },
             ].map((f) => (
               <span key={f.label} className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/75">
                 {f.icon} {f.label}

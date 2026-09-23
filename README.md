@@ -66,8 +66,27 @@ curl -X POST https://NAMA-APP.vercel.app/api/setup \
 
 **Cara B — Neon SQL Editor (copy-paste):**
 
-1. Neon Dashboard → project Anda → **SQL Editor** → **New query**.
-2. Salin **seluruh** isi file [`db/schema.sql`](./db/schema.sql) → tempel → **Run**.
+> ⚠️ **PENTING**: yang ditempel harus file **`db/schema.sql`** (SQL murni). Jangan tempel file TypeScript (`src/app/api/setup/route.ts`) — itu kode JavaScript dan akan memicu error
+> `syntax error at or near "{"` tepat di baris `import { sql } from "drizzle-orm"`.
+
+1. Di repositori GitHub Anda, buka file **`db/schema.sql`** → klik tombol **"Copy raw file"** (ikon dua kotak bertumpuk di kanan atas area kode) — bukan menyalin dari file lain.
+2. Neon Dashboard → project Anda → **SQL Editor** → **New query** → **tempel** → **Run**.
+
+Isi file dimulai dengan komentar SQL seperti ini (bukan `import ...`):
+
+```sql
+-- SPtLDV.belajar — Skema Database (PostgreSQL / Neon)
+create table if not exists teachers (
+  id serial primary key,
+  ...
+```
+
+Setelah Run, lanjut isi data demo (opsional) via endpoint:
+```bash
+curl -X POST https://NAMA-APP.vercel.app/api/setup \
+  -H "Content-Type: application/json" \
+  -d "{\"seed\": true}"
+```
 
 **Cara C — lewat CLI (drizzle-kit):**
 
@@ -163,6 +182,8 @@ scripts/seed.mjs                 → seed demo via CLI
 | Gejala | Penyebab | Solusi |
 |---|---|---|
 | **500 saat login/register** | Tabel belum ada di Neon | Langkah 3 di atas (POST `/api/setup`, atau `db/schema.sql`, atau `npx drizzle-kit push`) |
+| **`syntax error at or near "{"` di Neon SQL Editor** | Yang ditempel adalah file TypeScript (bukan SQL) | Tempel **hanya** isi `db/schema.sql` — lihat Catatan di Langkah 3 Cara B |
+| Integrasi Vercel↔Neon sudah jalan tapi tabel tetap kosong | Integrasi hanya membuat database + env var, **tidak** membuat tabel | Tetap jalankan Langkah 3 sekali saja per database |
 | Body `{ "ok": false }` di `/api/health` | `DATABASE_URL` salah/belum diset | Cek nama variabel persis `DATABASE_URL`, **Redeploy** setelah mengubah env |
 | `{"error":"Kunci salah..."}` dari `/api/setup` | `SETUP_SECRET` diset | Sertakan `"key"` di body request |
 | Favicon 404 | (sudah diperbaiki — kini ada `src/app/icon.svg`) | pull commit terbaru |

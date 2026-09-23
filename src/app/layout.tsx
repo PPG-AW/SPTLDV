@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SPtLDV.belajar — Platform TAI Fase E",
+  title: "Sistem Pertidaksamaan Linear Dua Variabel",
   description:
-    "Platform belajar Sistem Pertidaksamaan Linear Dua Variabel (Kelas X) dengan model Team-Assisted Individualization, tutor sebaya, dan dashboard kendali guru.",
+    "Platform belajar Sistem Pertidaksamaan Linear Dua Variabel untuk Kelas X, dilengkapi tutor sebaya dan dashboard kendali guru.",
 };
 
 export const viewport: Viewport = {

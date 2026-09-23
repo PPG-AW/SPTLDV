@@ -72,6 +72,7 @@ export default function TeacherApp({
   const [showAnswer, setShowAnswer] = useState(false);
   const [expanded, setExpanded] = useState<number | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [dismissedCalls, setDismissedCalls] = useState<number[]>([]);
 
   const active = classes.find((c) => c.id === activeId) ?? null;
 
@@ -176,7 +177,7 @@ export default function TeacherApp({
           </span>
           <div className="leading-tight">
             <p className="text-[13px] font-bold tracking-tight">SPtLDV<span className="text-[#3B82F6]">.guru</span></p>
-            <p className="text-[10px] text-white/50">Dashboard Kendali Kelas · TAI</p>
+            <p className="text-[10px] text-white/50">Dashboard Kendali Kelas</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden rounded-full border border-white/15 px-3 py-1.5 text-[11px] font-semibold text-white/80 sm:block">{teacherName}</span>
@@ -469,6 +470,42 @@ export default function TeacherApp({
           )}
         </main>
       </div>
+
+      {/* ══ POP-UP: panggilan dari Tutor Sebaya ══ */}
+      {(() => {
+        const call = tele?.calls.find((c) => !dismissedCalls.includes(c.id));
+        if (!call) return null;
+        return (
+          <div className="fixed inset-0 z-[95] flex items-end justify-center bg-black/55 p-4 backdrop-blur-sm sm:items-center">
+            <div className="w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl">
+              <div className="bg-[#2563EB] px-6 py-7 text-center text-white">
+                <span className="relative mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15">
+                  <MonitorPlay size={28} />
+                  <span className="absolute -right-1 -top-1 h-3.5 w-3.5 animate-ping rounded-full bg-[#FBBF24]" />
+                  <span className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full bg-[#FBBF24]" />
+                </span>
+                <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-white/70">Panggilan Masuk</p>
+                <p className="mt-2 text-xl font-bold leading-tight">{call.tutorName} memanggil Anda</p>
+                <p className="mt-1 text-xs text-white/80">{call.message} · {call.ageSec} detik lalu</p>
+              </div>
+              <div className="space-y-2 p-5">
+                <button
+                  onClick={() => resolveCall(call.id)}
+                  className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] text-sm font-bold text-white transition active:scale-[0.98]"
+                >
+                  <Check size={17} /> Sudah Saya Hampiri
+                </button>
+                <button
+                  onClick={() => setDismissedCalls((d) => [...d, call.id])}
+                  className="min-h-[44px] w-full rounded-xl border border-[#E5E5E5] text-sm font-semibold text-[#525252]"
+                >
+                  Tunda Sebentar
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* modal hapus */}
       {confirmDelete && active && (
