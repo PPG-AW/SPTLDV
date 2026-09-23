@@ -40,6 +40,8 @@ export interface MCOption { id: string; label: string }
 export interface FillField { key: string; label: string; suffix?: string }
 export type QKind = "mc" | "fill" | "points" | "graph" | "region-tap";
 export interface CheckResult { ok: boolean; note?: string }
+/** Fungsi pemeriksa yang membawa kunci jawabannya (dipakai untuk audit otomatis). */
+export type CheckFn = ((answer: unknown) => CheckResult) & { key?: unknown };
 
 export interface Question {
   subbab: number;
@@ -57,7 +59,9 @@ export interface Question {
   graphCaptions?: string[];
   needPoints?: number;
   tapPointsLabel?: string;
-  check(answer: unknown): CheckResult;
+  check: CheckFn;
+  /** Jawaban benar (diisi otomatis) — untuk audit & tampilan kunci bagi guru. */
+  answerKey?: unknown;
 }
 
 // ── Util acak ────────────────────────────────────────────────────────────────
@@ -117,19 +121,33 @@ function baseQ(
   return { subbab, templateId, kind, prompt, hints, explain, check: () => ({ ok: false }), ...extra };
 }
 
-function mcCheck(answerId: string, notes: Record<string, string> = {}) {
-  return (answer: unknown): CheckResult => {
+function mcCheck(answerId: string, notes: Record<string, string> = {}): CheckFn {
+  const fn: CheckFn = (answer: unknown): CheckResult => {
     const a = String(answer ?? "");
     if (a === answerId) return { ok: true };
     return { ok: false, note: notes[a] ?? "Pilihan belum tepat." };
   };
+  fn.key = answerId;
+  return fn;
+}
+
+/** Pemeriksa untuk soal pilihan grafik; otomatis mengunci indeks yang benar. */
+function graphCheck(variants: { why: string; ok: boolean }[]): CheckFn {
+  const correct = variants.findIndex((v) => v.ok);
+  const fn: CheckFn = (answer: unknown): CheckResult => {
+    const idx = Number(answer);
+    if (idx === correct) return { ok: true };
+    return { ok: false, note: variants[idx]?.why ?? "Grafik belum tepat." };
+  };
+  fn.key = correct;
+  return fn;
 }
 
 function fillCheck(
   expected: Record<string, number>, labels: Record<string, string>,
   swapPairs: [string, string, string][] = []
-) {
-  return (answer: unknown): CheckResult => {
+): CheckFn {
+  const fn: CheckFn = (answer: unknown): CheckResult => {
     const ans = (answer ?? {}) as Record<string, unknown>;
     for (const key of Object.keys(expected)) {
       const v = parseNum(ans[key]);
@@ -148,10 +166,12 @@ function fillCheck(
     }
     return { ok: true };
   };
+  fn.key = expected;
+  return fn;
 }
 
-function pointsCheck(targets: Pt[], need: number, tol = 0.55) {
-  return (answer: unknown): CheckResult => {
+function pointsCheck(targets: Pt[], need: number, tol = 0.55): CheckFn {
+  const fn: CheckFn = (answer: unknown): CheckResult => {
     const taps = (answer ?? []) as Pt[];
     if (taps.length < need) return { ok: false, note: `Butuh ${need} titik.` };
     const used = new Set<number>();
@@ -169,6 +189,8 @@ function pointsCheck(targets: Pt[], need: number, tol = 0.55) {
     }
     return { ok: true };
   };
+  fn.key = targets;
+  return fn;
 }
 
 const NON_NEG: IneqSpec[] = [
@@ -283,10 +305,17 @@ function t12(): Question {
 }
 
 function t13(): Question {
-  const s = pick([
+  let s = pick([
     { A: "buku tulis", B: "pensil", hA: ri(3, 5) * 1000, hB: ri(1, 2) * 1000, tot: pick([20000, 25000, 30000]) },
     { A: "roti cokelat", B: "roti keju", hA: ri(2, 4) * 1000, hB: ri(2, 5) * 1000, tot: pick([30000, 40000, 50000]) },
   ]);
+  // harga kedua barang WAJIB berbeda, agar distraktor "koefisien tertukar"
+  // tidak menghasilkan opsi yang kembar dengan kunci jawaban
+  let guard = 0;
+  while (s.hA === s.hB && guard++ < 20) {
+    s = { ...s, hB: ri(1, 5) * 1000 };
+  }
+  if (s.hA === s.hB) s = { ...s, hB: s.hA + 1000 };
   const model = (p: number, q2: number, rel: string) => `${p}x + ${q2}y ${rel} ${s.tot}`;
   const correct = model(s.hA, s.hB, "≤");
   const variants = shuffle([
@@ -493,12 +522,7 @@ function t32(): Question {
       graphOptions: variants.map((v) => v.spec),
       explainSteps: steps,
     });
-  q.check = (answer) => {
-    const idx = Number(answer);
-    return idx === variants.findIndex((v) => v.ok)
-      ? { ok: true }
-      : { ok: false, note: variants[idx]?.why ?? "Grafik belum tepat." };
-  };
+  q.check = graphCheck(variants);
   return q;
 }
 
@@ -529,7 +553,10 @@ function t33(): Question {
 // ════════════════ SUB-BAB 4 ═════════════════════════════════════════════════
 
 function sub4Ineq(): IneqSpec {
-  const p = ri(3, 6), q0 = ri(3, 6);
+  const p = ri(3, 6);
+  let q0 = ri(3, 6);
+  // pastikan p ≠ q0 supaya distraktor "koefisien tertukar" tidak kembar dengan kunci
+  while (q0 === p) q0 = ri(3, 6);
   return { ...lineFromIntercepts(p, q0), sign: pick<Sign>(["<=", ">="]) };
 }
 
@@ -638,12 +665,7 @@ function t43(): Question {
         `> Karena hasil uji ${r.ok ? "BENAR" : "SALAH"}, daerah penyelesaian ${r.ok ? "memuat" : "tidak memuat"} titik (0, 0).\n` +
         `> Arsiran diletakkan pada daerah seberangnya, yaitu daerah yang BUKAN penyelesaian.`,
     });
-  q.check = (answer) => {
-    const idx = Number(answer);
-    return idx === variants.findIndex((v) => v.ok)
-      ? { ok: true }
-      : { ok: false, note: variants[idx]?.why ?? "Gambar belum tepat." };
-  };
+  q.check = graphCheck(variants);
   return q;
 }
 
@@ -708,10 +730,23 @@ function t53(): Question {
     ...NON_NEG,
   ];
   const good = pt(tx, ty);
-  const bads = [pt(tx, s1 - tx + 2), pt(0, 0), pt(s1 - ty + 2, ty)]
-    .filter((p) => !ineqs.every((i) => satisfies(p, i)))
-    .slice(0, 3);
-  while (bads.length < 3) bads.push(pt(tx + bads.length + 2, ty + 2));
+  // distraktor WAJIB melanggar minimal satu kendala — divalidasi, bukan diasumsikan
+  const bads: Pt[] = [];
+  const pushBad = (p: Pt) => {
+    if (bads.length >= 3) return;
+    if (p.x === good.x && p.y === good.y) return;
+    if (ineqs.every((i) => satisfies(p, i))) return; // ternyata valid → buang
+    if (bads.some((b) => b.x === p.x && b.y === p.y)) return;
+    bads.push(p);
+  };
+  pushBad(pt(tx, s1 - tx + 2));
+  pushBad(pt(s1 - ty + 2, ty));
+  pushBad(pt(0, 0));
+  pushBad(pt(s1 + 2, 0));
+  pushBad(pt(0, s1 + 2));
+  for (let gx = 0; gx <= s1 + 4 && bads.length < 3; gx++) {
+    for (let gy = 0; gy <= s1 + 4 && bads.length < 3; gy++) pushBad(pt(gx, gy));
+  }
   const variants = shuffle([{ p: good, ok: true }, ...bads.map((p) => ({ p, ok: false }))]);
   const opts = variants.map((v, i) => ({ id: `o${i}`, label: `(${num(v.p.x)}, ${num(v.p.y)})` }));
   const notes: Record<string, string> = {};
@@ -802,12 +837,7 @@ function t62(): Question {
         `> Tambahkan kendala x ≥ 0 dan y ≥ 0 yang mengurung daerah di Kuadran I.\n` +
         `> DHP adalah daerah bersih dengan titik pojok: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}.`,
     });
-  q.check = (answer) => {
-    const idx = Number(answer);
-    return idx === variants.findIndex((v) => v.ok)
-      ? { ok: true }
-      : { ok: false, note: variants[idx]?.why ?? "Gambar DHP belum tepat." };
-  };
+  q.check = graphCheck(variants);
   return q;
 }
 
@@ -832,7 +862,7 @@ function t63(): Question {
         `${ineqStr(l1)}\n${ineqStr(l2)}\nx ≥ 0\ny ≥ 0\n` +
         `> Titik pojok DHP ini: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}. Titik mana pun di dalam daerah bersih tersebut adalah jawaban yang benar.`,
     });
-  q.check = (answer) => {
+  const checker: CheckFn = (answer) => {
     const taps = (answer ?? []) as Pt[];
     const tap = taps[0];
     if (!tap) return { ok: false, note: "Ketuk satu titik pada grafik." };
@@ -842,6 +872,16 @@ function t63(): Question {
     const viol = sys.ineqs.find((i) => !satisfies(s, i));
     return { ok: false, note: `Titik (${s.x}, ${s.y}) melanggar kendala ${viol ? ineqStr(viol) : "sistem"}.` };
   };
+  // kunci: salah satu titik lattice yang pasti berada di dalam DHP
+  const inside: Pt[] = [];
+  for (let gx = 0; gx <= 14 && inside.length === 0; gx++) {
+    for (let gy = 0; gy <= 14 && inside.length === 0; gy++) {
+      const c = pt(gx, gy);
+      if (sys.ineqs.every((i) => satisfies(c, i))) inside.push(c);
+    }
+  }
+  checker.key = inside.length ? [inside[0]] : [sys.corners[0]];
+  q.check = checker;
   return q;
 }
 
@@ -857,8 +897,12 @@ function cornerSpec(sys: { ineqs: IneqSpec[]; lines: IneqSpec[]; corners: Pt[] }
 }
 
 function t71(): Question {
-  const sys = integerCornerSystem();
-  const n = sys.corners.length;
+  let sys = integerCornerSystem();
+  // opsi jawaban hanya 2–5 titik, jadi pastikan jumlah pojoknya berada di rentang itu
+  for (let i = 0; i < 30 && (sys.corners.length < 3 || sys.corners.length > 5); i++) {
+    sys = integerCornerSystem();
+  }
+  const n = Math.min(Math.max(sys.corners.length, 2), 5);
   const opts = [2, 3, 4, 5].map((k, i) => ({ id: `o${i}`, label: `${k} titik`, k }));
   const q = baseQ(7, "7.1", "mc",
     "Perhatikan DHP (daerah bersih tanpa arsiran) pada grafik. Berapa banyak titik pojok yang dimilikinya?",
@@ -1089,7 +1133,8 @@ function t93(): Question {
     `Nilai maksimum ${num(s.maxV)} dicapai di (${num(s.maxPt.x)}, ${num(s.maxPt.y)}), dan nilai minimum ${num(s.minV)} dicapai di (${num(s.minPt.x)}, ${num(s.minPt.y)}).`,
     {
       math: `f(x, y) = ${s.fa}x + ${s.fb}y`,
-      canvas: cornerSpec(s.sys, { points: s.corners.map((c, i) => ({ p: c, color: "#7C3AED", label: `${num(s.values[i])}` })) }),
+      // titik pojok ditandai tanpa label nilai f — siswa yang harus menghitungnya
+      canvas: cornerSpec(s.sys, { points: s.corners.map((c) => ({ p: c, color: "#7C3AED", hollow: true })) }),
       fillFields: [{ key: "max", label: "nilai maksimum" }, { key: "min", label: "nilai minimum" }],
       explainSteps: steps,
     });
@@ -1212,12 +1257,19 @@ const GENERATORS: Record<number, (() => Question)[]> = {
 
 export function generateQuestion(subbab: number, avoidTemplateId?: string): Question {
   const gens = GENERATORS[Math.min(Math.max(subbab, 1), 10)] ?? GENERATORS[1];
+  let q: Question | null = null;
   for (let i = 0; i < 10; i++) {
-    const q = pick(gens)();
-    if (avoidTemplateId && q.templateId === avoidTemplateId && gens.length > 1) continue;
-    return q;
+    const cand = pick(gens)();
+    if (avoidTemplateId && cand.templateId === avoidTemplateId && gens.length > 1) continue;
+    q = cand;
+    break;
   }
-  return gens[0]();
+  if (!q) q = gens[0]();
+  q.answerKey = q.check.key;
+  return q;
 }
+
+/** Semua generator (dipakai oleh skrip audit kunci jawaban). */
+export const ALL_GENERATORS = GENERATORS;
 
 export type { IneqSpec, Pt, Sign };
