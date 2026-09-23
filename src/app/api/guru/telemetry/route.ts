@@ -77,6 +77,17 @@ export async function GET(req: NextRequest) {
     const sum = sumByStudent.get(s.id);
     const mine = logs.filter((l) => l.studentId === s.id);
     const wrong = mine.filter((l) => !l.isCorrect).length;
+    // ── statistik pemakaian petunjuk ──
+    const withHint = mine.filter((l) => l.hintLevel > 0);
+    const hintTotal = mine.reduce((acc, l) => acc + l.hintLevel, 0);
+    const hintH3 = mine.filter((l) => l.hintLevel >= 3).length;
+    const hintBySubbab = Array.from({ length: TOTAL_SUBBAB }, (_, i) => {
+      const sub = i + 1;
+      const rows = mine.filter((l) => l.subbab === sub && l.hintLevel > 0);
+      return rows.length
+        ? { subbab: sub, count: rows.length, total: rows.reduce((a, l) => a + l.hintLevel, 0) }
+        : null;
+    }).filter(Boolean) as { subbab: number; count: number; total: number }[];
     return {
       id: s.id,
       name: s.name,
@@ -91,6 +102,11 @@ export async function GET(req: NextRequest) {
       totalAttempts: mine.length,
       totalWrong: wrong,
       accuracy: mine.length ? Math.round(((mine.length - wrong) / mine.length) * 100) : null,
+      hintQuestions: withHint.length,
+      hintTotal,
+      hintH3,
+      hintRate: mine.length ? Math.round((withHint.length / mine.length) * 100) : null,
+      hintBySubbab,
       summativeScore: sum?.totalScore ?? null,
       summativeDetails: sum?.scoreDetails ?? null,
     };

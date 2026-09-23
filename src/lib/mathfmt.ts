@@ -190,6 +190,95 @@ export function stepsMixedMethod(
   return { text: L.join("\n"), x, y };
 }
 
+// ─── Versi PETUNJUK: berhenti sebelum nilai akhir muncul ─────────────────────
+// Dipakai untuk H1–H3 agar siswa tetap harus menghitung sendiri.
+
+/** Petunjuk titik potong sumbu X — berhenti pada bentuk ax = c. */
+export function hintInterceptX(a: number, b: number, c: number): string {
+  const L: string[] = [];
+  L.push(eqStr(a, b, c));
+  L.push("> Titik potong sumbu X dicari saat y = 0, maka:");
+  L.push(`${term(a, "x", true)}${subst(b, 0, false)} = ${neg(c)}`);
+  L.push(`${term(a, "x", true)} = ${neg(c)}`);
+  L.push(`> Tinggal satu langkah lagi: bagi kedua ruas dengan ${neg(a)} untuk memperoleh nilai x.`);
+  return L.join("\n");
+}
+
+/** Petunjuk titik potong sumbu Y — berhenti pada bentuk by = c. */
+export function hintInterceptY(a: number, b: number, c: number): string {
+  const L: string[] = [];
+  L.push(eqStr(a, b, c));
+  L.push("> Titik potong sumbu Y dicari saat x = 0, maka:");
+  L.push(`${subst(a, 0, true)}${term(b, "y", false)} = ${neg(c)}`);
+  L.push(`${term(b, "y", true)} = ${neg(c)}`);
+  L.push(
+    b < 0
+      ? `> Tinggal bagi kedua ruas dengan ${neg(b)}. Hati-hati: membagi dengan bilangan negatif mengubah tanda hasilnya.`
+      : `> Tinggal satu langkah lagi: bagi kedua ruas dengan ${neg(b)} untuk memperoleh nilai y.`
+  );
+  return L.join("\n");
+}
+
+/** Petunjuk metode campuran — berhenti sebelum nilai variabel ditemukan. */
+export function hintMixedMethod(l1: Lin, l2: Lin, which: "x" | "y" = "x"): string {
+  const L: string[] = [];
+  const k1 = which === "x" ? l1.a : l1.b;
+  const k2 = which === "x" ? l2.a : l2.b;
+  const g = gcd(k1, k2);
+  const m1 = Math.abs(k2 / g);
+  const m2 = Math.abs(k1 / g);
+  L.push(`${eqStr(l1.a, l1.b, l1.c)}   …(1)`);
+  L.push(`${eqStr(l2.a, l2.b, l2.c)}   …(2)`);
+  L.push(`> LANGKAH 1 — ELIMINASI ${which}:`);
+  if (m1 !== 1 && m2 !== 1) {
+    L.push(`> Samakan koefisien ${which} dengan mengalikan persamaan (1) dengan ${m1} dan persamaan (2) dengan ${m2}.`);
+  } else if (m1 !== 1) {
+    L.push(`> Samakan koefisien ${which} dengan mengalikan persamaan (1) dengan ${m1}.`);
+  } else if (m2 !== 1) {
+    L.push(`> Samakan koefisien ${which} dengan mengalikan persamaan (2) dengan ${m2}.`);
+  } else {
+    L.push(`> Koefisien ${which} pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.`);
+  }
+  const s1 = { a: l1.a * m1, b: l1.b * m1, c: l1.c * m1 };
+  const s2 = { a: l2.a * m2, b: l2.b * m2, c: l2.c * m2 };
+  L.push(eqStr(s1.a, s1.b, s1.c));
+  L.push(eqStr(s2.a, s2.b, s2.c));
+  const kk1 = which === "x" ? s1.a : s1.b;
+  const kk2 = which === "x" ? s2.a : s2.b;
+  const sameSign = Math.sign(kk1) === Math.sign(kk2);
+  L.push(
+    sameSign
+      ? `> Koefisien ${which} bertanda sama, jadi KURANGKAN kedua persamaan tersebut.`
+      : `> Koefisien ${which} berlawanan tanda, jadi JUMLAHKAN kedua persamaan tersebut.`
+  );
+  L.push(
+    `> Setelah ${which} hilang, selesaikan variabel yang tersisa. LANGKAH 2: substitusikan hasilnya kembali ke persamaan (1) untuk memperoleh ${which}.`
+  );
+  return L.join("\n");
+}
+
+/** Petunjuk uji titik — berhenti pada bentuk substitusi, tanpa kesimpulan. */
+export function hintTestPoint(
+  a: number, b: number, c: number, rel: string, px: number, py: number
+): string {
+  const L: string[] = [];
+  L.push(`${linExpr(a, b)} ${rel} ${neg(c)}`);
+  L.push(`> Substitusikan x = ${neg(px)} dan y = ${neg(py)}:`);
+  L.push(`${subst(a, px, true)}${subst(b, py, false)} ${rel} ${neg(c)}`);
+  L.push(`> Hitung nilai ruas kiri, lalu bandingkan dengan ruas kanan. Apakah pernyataannya bernilai benar?`);
+  return L.join("\n");
+}
+
+/** Petunjuk evaluasi fungsi tujuan — hanya bentuk substitusinya. */
+export function hintObjective(fa: number, fb: number, p: { x: number; y: number }): string {
+  return [
+    `f(x, y) = ${linExpr(fa, fb)}`,
+    `> Substitusikan titik (${neg(p.x)}, ${neg(p.y)}):`,
+    `f(${neg(p.x)}, ${neg(p.y)}) = ${fa}(${neg(p.x)}) + ${fb}(${neg(p.y)})`,
+    `> Kerjakan perkalian lebih dahulu, baru penjumlahannya.`,
+  ].join("\n");
+}
+
 /** Langkah uji titik ke sebuah pertidaksamaan. */
 export function stepsTestPoint(
   a: number, b: number, c: number, rel: string, px: number, py: number

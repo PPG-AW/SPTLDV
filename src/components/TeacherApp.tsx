@@ -8,6 +8,8 @@ import {
   ClipboardList,
   Eye,
   GraduationCap,
+  KeyRound,
+  Lightbulb,
   Loader2,
   Lock,
   LockOpen,
@@ -29,6 +31,8 @@ interface StudentRow {
   id: number; name: string; currentSubbab: number; completed: number[];
   streak: number; errors: number; status: string; isTutor: boolean; tutorBusy: boolean;
   lastActiveAt: string; totalAttempts: number; totalWrong: number; accuracy: number | null;
+  hintQuestions: number; hintTotal: number; hintH3: number; hintRate: number | null;
+  hintBySubbab: { subbab: number; count: number; total: number }[];
   summativeScore: number | null;
   summativeDetails: { key: string; label: string; earned: number; max: number }[] | null;
 }
@@ -44,13 +48,15 @@ interface ClassInfo {
   id: number; classCode: string; className: string; isLocked: boolean; studentCount: number;
 }
 
-type Tab = "telemetri" | "miskonsepsi" | "tutor" | "panggilan" | "nilai";
+type Tab = "telemetri" | "petunjuk" | "miskonsepsi" | "tutor" | "panggilan" | "nilai" | "siswa";
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: "telemetri", label: "Telemetri Kelas", icon: <Radio size={15} /> },
+  { id: "petunjuk", label: "Pemakaian Petunjuk", icon: <Lightbulb size={15} /> },
   { id: "miskonsepsi", label: "Miskonsepsi", icon: <BarChart3 size={15} /> },
   { id: "tutor", label: "Tutor Sebaya", icon: <Users size={15} /> },
   { id: "panggilan", label: "Panggilan", icon: <MonitorPlay size={15} /> },
   { id: "nilai", label: "Nilai Sumatif", icon: <ClipboardList size={15} /> },
+  { id: "siswa", label: "Data & Sandi Siswa", icon: <KeyRound size={15} /> },
 ];
 
 export default function TeacherApp({
@@ -325,6 +331,10 @@ export default function TeacherApp({
                 <div className="flex h-40 items-center justify-center"><Loader2 className="animate-spin text-[#A3A3A3]" /></div>
               ) : tab === "telemetri" ? (
                 <TelemetryView tele={tele} />
+              ) : tab === "petunjuk" ? (
+                <HintView tele={tele} />
+              ) : tab === "siswa" ? (
+                <StudentAdminView tele={tele} onChanged={loadTelemetry} />
               ) : tab === "miskonsepsi" ? (
                 <div className="space-y-3">
                   {worst && (
@@ -570,12 +580,13 @@ function TelemetryView({ tele }: { tele: Telemetry }) {
                   <th key={i} className="px-1 py-2.5 text-center font-mono">{i + 1}</th>
                 ))}
                 <th className="px-2 py-2.5 text-center">Akurasi</th>
+                <th className="px-2 py-2.5 text-center">Petunjuk</th>
                 <th className="py-2.5 pl-2 pr-4 text-center">Status</th>
               </tr>
             </thead>
             <tbody>
               {tele.students.length === 0 && (
-                <tr><td colSpan={13} className="px-4 py-10 text-center text-sm text-[#A3A3A3]">
+                <tr><td colSpan={14} className="px-4 py-10 text-center text-sm text-[#A3A3A3]">
                   Belum ada siswa. Bagikan kode <b className="font-mono">{tele.class.classCode}</b> ke kelasmu!
                 </td></tr>
               )}
@@ -615,6 +626,20 @@ function TelemetryView({ tele }: { tele: Telemetry }) {
                   <td className="px-2 py-2 text-center font-mono text-xs font-bold text-[#525252]">
                     {s.accuracy === null ? "—" : `${s.accuracy}%`}
                   </td>
+                  <td className="px-2 py-2 text-center">
+                    {s.hintTotal === 0 ? (
+                      <span className="font-mono text-xs text-[#C9C9C9]">—</span>
+                    ) : (
+                      <span
+                        title={`${s.hintQuestions} soal memakai petunjuk · ${s.hintTotal} petunjuk dibuka · ${s.hintH3}× sampai H3`}
+                        className={`inline-flex items-center gap-1 rounded-full px-2 py-1 font-mono text-[10px] font-bold ${
+                          (s.hintRate ?? 0) >= 60 ? "bg-[#F59E0B]/15 text-[#B45309]" : "bg-[#F5F5F5] text-[#737373]"
+                        }`}
+                      >
+                        <Lightbulb size={10} /> {s.hintTotal}
+                      </span>
+                    )}
+                  </td>
                   <td className="py-2 pl-2 pr-4 text-center">
                     {s.status === "MACET" ? (
                       <span className="inline-flex animate-pulse items-center gap-1 rounded-full bg-[#EF4444] px-2 py-1 text-[9px] font-black text-white">
@@ -630,6 +655,213 @@ function TelemetryView({ tele }: { tele: Telemetry }) {
           </table>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── Pemakaian petunjuk per siswa ────────────────────────────────────────────
+function HintView({ tele }: { tele: Telemetry }) {
+  const [open, setOpen] = useState<number | null>(null);
+  const rows = [...tele.students].sort((a, b) => b.hintTotal - a.hintTotal);
+  const maxTotal = Math.max(1, ...rows.map((r) => r.hintTotal));
+  const kelasTotal = rows.reduce((a, r) => a + r.hintTotal, 0);
+  const kelasSoal = rows.reduce((a, r) => a + r.hintQuestions, 0);
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-3 gap-2.5">
+        {[
+          { label: "Total Petunjuk Dibuka", value: kelasTotal },
+          { label: "Soal Pakai Petunjuk", value: kelasSoal },
+          { label: "Sampai Tingkat H3", value: rows.reduce((a, r) => a + r.hintH3, 0) },
+        ].map((s) => (
+          <div key={s.label} className="rounded-2xl border border-[#E5E5E5] bg-white px-3 py-3.5 text-center">
+            <p className="font-mono text-2xl font-black text-[#B45309]">{s.value}</p>
+            <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#A3A3A3]">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white">
+        <div className="border-b border-[#F0F0F0] px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A3A3A3]">
+            Pemakaian Petunjuk per Siswa (urut terbanyak)
+          </p>
+          <p className="mt-0.5 text-[11px] text-[#737373]">
+            Ketuk nama siswa untuk melihat rincian per sub-bab. Pemakaian tinggi menandakan siswa perlu pendampingan.
+          </p>
+        </div>
+        {rows.length === 0 && (
+          <p className="px-6 py-10 text-center text-sm text-[#A3A3A3]">Belum ada siswa di rombel ini.</p>
+        )}
+        {rows.map((s) => (
+          <div key={s.id} className="border-b border-[#F7F7F7] last:border-0">
+            <button onClick={() => setOpen(open === s.id ? null : s.id)} className="flex w-full items-center gap-3 px-4 py-3 text-left">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFFBEB] text-xs font-black text-[#B45309]">
+                {s.name.slice(0, 1).toUpperCase()}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-bold">{s.name}</p>
+                <p className="text-[11px] text-[#A3A3A3]">
+                  {s.hintQuestions} soal memakai petunjuk
+                  {s.hintRate !== null && ` · ${s.hintRate}% dari percobaannya`}
+                  {s.hintH3 > 0 && ` · ${s.hintH3}× sampai H3`}
+                </p>
+              </div>
+              <div className="hidden w-28 sm:block">
+                <div className="h-2 overflow-hidden rounded-full bg-[#F0F0F0]">
+                  <div className="h-full rounded-full bg-[#F59E0B]" style={{ width: `${(s.hintTotal / maxTotal) * 100}%` }} />
+                </div>
+              </div>
+              <span className="w-10 shrink-0 text-right font-mono text-base font-black text-[#B45309]">{s.hintTotal}</span>
+            </button>
+            {open === s.id && (
+              <div className="space-y-1.5 bg-[#FAFAFA] px-4 py-3">
+                {s.hintBySubbab.length === 0 ? (
+                  <p className="text-xs text-[#A3A3A3]">Siswa ini belum pernah membuka petunjuk.</p>
+                ) : (
+                  s.hintBySubbab.map((h) => (
+                    <div key={h.subbab} className="flex items-center gap-2.5 text-xs">
+                      <span className="w-28 shrink-0 truncate font-semibold text-[#525252]">
+                        Sub-Bab {h.subbab}
+                      </span>
+                      <span className="flex-1 truncate text-[#A3A3A3]">{getSubbab(h.subbab).title}</span>
+                      <span className="font-mono font-bold text-[#B45309]">{h.count} soal · {h.total} petunjuk</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Data siswa & reset kata sandi ───────────────────────────────────────────
+function StudentAdminView({ tele, onChanged }: { tele: Telemetry; onChanged: () => void }) {
+  const [target, setTarget] = useState<StudentRow | null>(null);
+  const [pw, setPw] = useState("");
+  const [msg, setMsg] = useState<string | null>(null);
+  const [err2, setErr2] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const submit = async () => {
+    if (!target) return;
+    setSaving(true);
+    setErr2(null);
+    try {
+      const res = await fetch(`/api/students/${target.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newPassword: pw }),
+      });
+      const data = await res.json();
+      if (!res.ok) setErr2(data.error ?? "Gagal mengubah kata sandi.");
+      else {
+        setMsg(`Kata sandi ${target.name} berhasil diubah menjadi "${pw}". Sampaikan kepada siswa yang bersangkutan.`);
+        setTarget(null);
+        setPw("");
+        onChanged();
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="rounded-2xl border border-[#3B82F6]/30 bg-[#EFF6FF] px-4 py-3 text-xs leading-relaxed text-[#1E40AF]">
+        Gunakan menu ini bila ada siswa yang lupa kata sandinya. Setelah diganti, siswa tersebut otomatis keluar dari
+        sesinya dan harus masuk kembali memakai kata sandi baru.
+      </div>
+
+      {msg && (
+        <div className="flex items-start gap-2.5 rounded-2xl border border-[#10B981]/30 bg-[#ECFDF5] px-4 py-3 text-[13px] text-[#065F46]">
+          <Check size={15} className="mt-0.5 shrink-0" />
+          <span className="flex-1">{msg}</span>
+          <button onClick={() => setMsg(null)}><X size={14} /></button>
+        </div>
+      )}
+
+      <div className="overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white">
+        <div className="border-b border-[#F0F0F0] px-4 py-3">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A3A3A3]">
+            Daftar Siswa Terdaftar · {tele.class.classCode}
+          </p>
+        </div>
+        {tele.students.length === 0 && (
+          <p className="px-6 py-10 text-center text-sm text-[#A3A3A3]">
+            Belum ada siswa. Bagikan kode <b className="font-mono">{tele.class.classCode}</b> kepada kelas Anda.
+          </p>
+        )}
+        {tele.students.map((s) => (
+          <div key={s.id} className="flex items-center gap-3 border-b border-[#F7F7F7] px-4 py-3 last:border-0">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#F5F5F5] text-xs font-black">
+              {s.name.slice(0, 1).toUpperCase()}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-bold">{s.name}</p>
+              <p className="text-[11px] text-[#A3A3A3]">
+                Sub-Bab {s.currentSubbab} · {s.completed.length}/10 tuntas
+                {s.isTutor && " · Tutor Sebaya"}
+              </p>
+            </div>
+            <button
+              onClick={() => { setTarget(s); setPw(""); setErr2(null); }}
+              className="flex min-h-[38px] shrink-0 items-center gap-1.5 rounded-xl border-2 border-[#1A1A1A] px-3 text-xs font-bold transition active:scale-95"
+            >
+              <KeyRound size={13} /> Ubah Sandi
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {target && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl">
+            <div className="bg-[#1A1A1A] px-6 py-6 text-center text-white">
+              <span className="mx-auto mb-2.5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
+                <KeyRound size={24} />
+              </span>
+              <p className="text-[11px] font-bold uppercase tracking-[0.25em] text-white/50">Ubah Kata Sandi</p>
+              <p className="mt-1 text-lg font-bold">{target.name}</p>
+            </div>
+            <div className="space-y-3 p-5">
+              <label className="block">
+                <span className="mb-1.5 block text-xs font-bold text-[#525252]">Kata sandi baru</span>
+                <input
+                  type="text"
+                  value={pw}
+                  onChange={(e) => setPw(e.target.value)}
+                  placeholder="minimal 4 karakter"
+                  autoFocus
+                  className="h-12 w-full rounded-xl border border-[#E5E5E5] px-4 font-mono text-base outline-none focus:border-[#1A1A1A] focus:shadow-[0_0_0_3px_rgba(26,26,26,0.08)]"
+                />
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {["siswa123", "belajar2024", "mtk" + new Date().getFullYear()].map((sug) => (
+                  <button key={sug} onClick={() => setPw(sug)}
+                    className="rounded-lg border border-[#E5E5E5] px-2.5 py-1.5 font-mono text-[11px] text-[#525252] transition hover:bg-[#F5F5F5]">
+                    {sug}
+                  </button>
+                ))}
+              </div>
+              {err2 && <p className="rounded-xl bg-[#FEF2F2] px-3 py-2 text-xs text-[#991B1B]">{err2}</p>}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button onClick={() => setTarget(null)} className="min-h-[46px] rounded-xl border border-[#E5E5E5] text-sm font-semibold">
+                  Batal
+                </button>
+                <button onClick={submit} disabled={saving || pw.trim().length < 4}
+                  className="flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#1A1A1A] text-sm font-bold text-white disabled:opacity-40">
+                  {saving ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />} Simpan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

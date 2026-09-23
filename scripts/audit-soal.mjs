@@ -124,6 +124,45 @@ for (const [subbab, gens] of Object.entries(ALL_GENERATORS)) {
       if (!q.hints || q.hints.length !== 3 || q.hints.some((h) => !h || !h.trim())) {
         problems.push(`[${id}] petunjuk H1–H3 tidak lengkap`);
       }
+
+      // 7b. PETUNJUK TIDAK BOLEH MEMBOCORKAN JAWABAN
+      const hintText = (q.hints ?? []).join("\n");
+      if (/>\s*Jadi\b/i.test(hintText)) {
+        problems.push(`[${id}] petunjuk memuat kalimat kesimpulan ("Jadi …")`);
+      }
+      if (q.kind === "fill") {
+        // Kebocoran sejati = baris kesimpulan dengan VARIABEL SENDIRIAN di ruas kiri,
+        // mis. "x = 6". Persamaan soal seperti "x − y = 2" bukan kebocoran.
+        for (const [k, v] of Object.entries(key)) {
+          const val = String(v).replace("-", "[−-]");
+          const vn = k === "v" || k === "max" || k === "min" ? "(f|nilai|maksimum|minimum)" : k;
+          const leak = new RegExp(`^\\s*${vn}\\s*=\\s*${val}\\s*$`, "im");
+          if (leak.test(hintText)) {
+            problems.push(`[${id}] petunjuk membocorkan hasil akhir ${k} = ${v}`);
+          }
+        }
+        // bentuk "f(a, b) = nilai" juga termasuk membocorkan
+        if (/^\s*f\([^)]*\)\s*=\s*[−-]?\d+\s*$/m.test(hintText)) {
+          problems.push(`[${id}] petunjuk memuat hasil evaluasi fungsi tujuan`);
+        }
+      }
+      if (q.kind === "mc") {
+        const correctLabel = (q.mcOptions ?? []).find((o) => o.id === key)?.label ?? "";
+        if (correctLabel.length >= 6 && hintText.includes(correctLabel)) {
+          problems.push(`[${id}] petunjuk menyebut opsi jawaban secara utuh: "${correctLabel}"`);
+        }
+        if (/\b(jawabannya adalah|yaitu opsi|pilih opsi)\b/i.test(hintText)) {
+          problems.push(`[${id}] petunjuk menunjuk langsung opsi jawaban`);
+        }
+      }
+      if (q.kind === "points" || q.kind === "region-tap") {
+        for (const t of key) {
+          const pat = new RegExp(`\\(\\s*${String(t.x).replace("-", "[−-]")}\\s*,\\s*${String(t.y).replace("-", "[−-]")}\\s*\\)`);
+          if (pat.test(hintText)) {
+            problems.push(`[${id}] petunjuk menyebut koordinat target (${t.x}, ${t.y})`);
+          }
+        }
+      }
       if (!q.explain || !q.explain.trim()) problems.push(`[${id}] pembahasan kosong`);
       if (q.prompt.includes("undefined") || (q.math ?? "").includes("undefined") || (q.explain ?? "").includes("undefined")) {
         problems.push(`[${id}] memuat teks "undefined"`);

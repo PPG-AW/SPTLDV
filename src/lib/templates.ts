@@ -20,6 +20,11 @@ import {
   stepsInterceptY,
   stepsMixedMethod,
   stepsTestPoint,
+  hintInterceptX,
+  hintInterceptY,
+  hintMixedMethod,
+  hintTestPoint,
+  hintObjective,
 } from "./mathfmt";
 
 // ── Tipe ─────────────────────────────────────────────────────────────────────
@@ -256,8 +261,8 @@ function t11(): Question {
     "Manakah bentuk berikut yang merupakan pertidaksamaan linear dua variabel (PtLDV)?",
     [
       "PtLDV harus memuat dua variabel yang masing-masing berpangkat satu, dan dihubungkan tanda <, >, ≤, atau ≥.",
-      "Singkirkan opsi yang memuat pangkat dua, perkalian antarvariabel (xy), atau tanda sama dengan.",
-      `Hanya satu opsi yang memenuhi seluruh syarat, yaitu ${correct}.`,
+      "Periksa setiap opsi satu per satu: adakah variabel berpangkat dua? adakah perkalian antarvariabel seperti xy? adakah yang memakai tanda sama dengan?",
+      "Coret setiap opsi yang melanggar salah satu syarat. Opsi yang tidak melanggar syarat apa pun itulah jawabannya.",
     ],
     `Bentuk ${correct} memenuhi semua syarat PtLDV: dua variabel, keduanya berpangkat satu, tanpa perkalian antarvariabel, dan memakai tanda ketidaksamaan.`,
     {
@@ -283,8 +288,8 @@ function t12(): Question {
     "Tentukan koefisien x, koefisien y, dan konstanta dari pertidaksamaan berikut.",
     [
       "Bandingkan bentuk pada soal dengan bentuk umum ax + by ≤ c.",
-      "Koefisien adalah bilangan yang menempel pada variabel. Tanda negatif ikut menjadi bagian koefisien.",
-      `Pada ${text}: koefisien x adalah ${neg(a)}, koefisien y adalah ${neg(b)}, dan konstanta adalah ${neg(c)}.`,
+      "Koefisien adalah bilangan yang menempel pada variabel, sedangkan konstanta adalah suku tanpa variabel di ruas kanan.",
+      "Perhatikan tanda di depan setiap suku. Bila sebuah suku didahului tanda minus, maka koefisiennya bernilai NEGATIF — tanda itu ikut ditulis, jangan dibuang.",
     ],
     `Koefisien x = ${neg(a)}, koefisien y = ${neg(b)}, konstanta = ${neg(c)}.`,
     {
@@ -331,8 +336,8 @@ function t13(): Question {
     `Harga sebuah ${s.A} adalah Rp${s.hA.toLocaleString("id-ID")} dan sebuah ${s.B} adalah Rp${s.hB.toLocaleString("id-ID")}. Misalkan x = banyak ${s.A} dan y = banyak ${s.B}. Jika total belanja tidak lebih dari Rp${s.tot.toLocaleString("id-ID")}, model matematikanya adalah…`,
     [
       "Susun dahulu bentuk total belanjanya: (harga satuan) dikali (banyaknya), untuk kedua barang.",
-      `Total belanja = ${s.hA}x + ${s.hB}y. Sekarang terjemahkan frasa \"tidak lebih dari\".`,
-      `\"Tidak lebih dari\" berarti ≤, sehingga modelnya menjadi ${correct}.`,
+      `Belanja ${s.A} adalah ${s.hA}x dan belanja ${s.B} adalah ${s.hB}y. Jumlahkan keduanya untuk memperoleh bentuk total belanja.`,
+      "Sekarang terjemahkan frasa \"tidak lebih dari\". Frasa ini menyatakan BATAS ATAS — nilainya boleh kurang, tetapi tidak boleh melebihi, dan tidak harus tepat sama. Pilih tanda ketidaksamaan yang sesuai serta pastikan koefisiennya tidak tertukar.",
     ],
     `Total belanja adalah ${s.hA}x + ${s.hB}y, dan karena tidak boleh melebihi Rp${s.tot.toLocaleString("id-ID")} maka tandanya ≤.`,
     {
@@ -364,9 +369,9 @@ function t21(): Question {
   const q = baseQ(2, "2.1", "fill",
     "Tentukan koordinat titik potong garis berikut dengan sumbu X.",
     [
-      "Setiap titik pada sumbu X selalu berbentuk (p, 0), artinya nilai y-nya nol.",
-      `Substitusikan y = 0:\n${eqStr(line.a, line.b, line.c)}\n${linExpr(line.a, 0)} + ${line.b}(0) = ${neg(line.c)}`,
-      steps,
+      "Setiap titik pada sumbu X selalu berbentuk (p, 0), artinya nilai y-nya sama dengan nol.",
+      "Substitusikan y = 0 ke dalam persamaan garisnya. Suku yang memuat y akan hilang karena dikali nol.",
+      hintInterceptX(line.a, line.b, line.c),
     ],
     `Dengan mensubstitusikan y = 0 diperoleh x = ${neg(p)}, sehingga titik potong sumbu X adalah (${neg(p)}, 0).`,
     {
@@ -385,9 +390,9 @@ function t22(): Question {
   const q = baseQ(2, "2.2", "fill",
     "Tentukan koordinat titik potong garis berikut dengan sumbu Y.",
     [
-      "Setiap titik pada sumbu Y selalu berbentuk (0, q), artinya nilai x-nya nol.",
-      `Substitusikan x = 0, lalu selesaikan:\n${eqStr(line.a, line.b, line.c)}\n${line.a}(0) + ${linExpr(0, line.b)} = ${neg(line.c)}`,
-      steps,
+      "Setiap titik pada sumbu Y selalu berbentuk (0, q), artinya nilai x-nya sama dengan nol.",
+      "Substitusikan x = 0 ke dalam persamaan garisnya. Suku yang memuat x akan hilang karena dikali nol.",
+      hintInterceptY(line.a, line.b, line.c),
     ],
     `Dengan mensubstitusikan x = 0 diperoleh y = ${neg(yInt)}, sehingga titik potong sumbu Y adalah (0, ${neg(yInt)}).`,
     {
@@ -406,9 +411,9 @@ function t23(): Question {
   const q = baseQ(2, "2.3", "fill",
     "Tentukan KEDUA titik potong garis berikut dengan sumbu koordinat.",
     [
-      "Kerjakan dalam dua perhitungan terpisah: sumbu X dengan y = 0, sumbu Y dengan x = 0.",
-      stepsInterceptX(line.a, line.b, line.c),
-      stepsInterceptY(line.a, line.b, line.c),
+      "Kerjakan dalam dua perhitungan yang terpisah: sumbu X dicari dengan y = 0, dan sumbu Y dicari dengan x = 0.",
+      hintInterceptX(line.a, line.b, line.c),
+      hintInterceptY(line.a, line.b, line.c),
     ],
     `Titik potong sumbu X adalah (${neg(p)}, 0) dan titik potong sumbu Y adalah (0, ${neg(yInt)}).`,
     {
@@ -461,9 +466,9 @@ function t31(): Question {
   const q = baseQ(3, "3.1", "mc",
     "Jenis garis pembatas yang tepat untuk pertidaksamaan berikut adalah…",
     [
-      "Perhatikan tanda relasinya: apakah memuat unsur \"sama dengan\" atau tidak?",
-      "Tanda ≤ dan ≥ memuat \"sama dengan\" → garis penuh. Tanda < dan > tidak memuat → garis putus-putus.",
-      `Tanda pada soal adalah ${SYM[ineq.sign]}, sehingga garisnya ${dashed ? "PUTUS-PUTUS" : "PENUH"}.`,
+      "Perhatikan tanda relasi pada soal: apakah memuat unsur \"sama dengan\" atau tidak?",
+      "Tanda ≤ dan ≥ memuat \"sama dengan\", sehingga titik-titik tepat pada garis IKUT menjadi penyelesaian. Tanda < dan > tidak memuatnya.",
+      "Tanyakan pada dirimu: untuk tanda yang ada di soal ini, apakah titik pada garis ikut menjadi penyelesaian? Bila ikut, garis digambar utuh; bila tidak ikut, garis digambar terputus-putus.",
     ],
     `Tanda ${SYM[ineq.sign]} ${dashed ? "tidak memuat" : "memuat"} unsur "sama dengan", sehingga garis pembatas digambar ${dashed ? "putus-putus" : "penuh"}.`,
     {
@@ -512,9 +517,9 @@ function t32(): Question {
   const q = baseQ(3, "3.2", "graph",
     "Manakah grafik garis pembatas yang TEPAT untuk pertidaksamaan berikut? Perhatikan letak titik potong dan jenis garisnya.",
     [
-      "Periksa dua hal: letak kedua titik potong dengan sumbu, dan jenis garis (penuh atau putus-putus).",
-      `Hitung titik potongnya lebih dahulu:\n${stepsInterceptX(line.a, line.b, line.c)}`,
-      `${stepsInterceptY(line.a, line.b, line.c)}\n> Tanda ${SYM[sign]} → garis ${dashed ? "PUTUS-PUTUS" : "PENUH"}.`,
+      "Periksa dua hal pada setiap pilihan: letak kedua titik potong dengan sumbu, dan jenis garisnya.",
+      hintInterceptX(line.a, line.b, line.c),
+      `${hintInterceptY(line.a, line.b, line.c)}\n> Setelah kedua titik potong diperoleh, tentukan jenis garisnya dari tanda relasi pada soal.`,
     ],
     `Garis melalui (${p}, 0) dan (0, ${q0}), digambar ${dashed ? "putus-putus" : "penuh"} karena tandanya ${SYM[sign]}.`,
     {
@@ -534,9 +539,9 @@ function t33(): Question {
   const q = baseQ(3, "3.3", "points",
     "Ketuk TEPAT pada dua titik potong garis berikut dengan sumbu koordinat (urutan bebas).",
     [
-      "Cari satu titik pada sumbu X (dengan y = 0) dan satu titik pada sumbu Y (dengan x = 0).",
-      stepsInterceptX(line.a, line.b, line.c),
-      stepsInterceptY(line.a, line.b, line.c),
+      "Carilah satu titik pada sumbu X (dengan y = 0) dan satu titik pada sumbu Y (dengan x = 0).",
+      hintInterceptX(line.a, line.b, line.c),
+      hintInterceptY(line.a, line.b, line.c),
     ],
     `Kedua titik potongnya adalah (${p}, 0) dan (0, ${q0}).`,
     {
@@ -571,8 +576,8 @@ function t41(): Question {
     `Apakah titik (${tp.x}, ${tp.y}) memenuhi pertidaksamaan berikut?`,
     [
       "Substitusikan nilai x dan y dari titik tersebut ke ruas kiri pertidaksamaan.",
-      `Tuliskan substitusinya secara lengkap:\n${ineqStr(ineq)}\n${ineq.a}(${tp.x}) + ${ineq.b}(${tp.y}) ${SYM[ineq.sign]} ${neg(ineq.c)}`,
-      r.text,
+      hintTestPoint(ineq.a, ineq.b, ineq.c, SYM[ineq.sign], tp.x, tp.y),
+      "Hitung hasil ruas kiri dengan teliti, lalu bandingkan dengan ruas kanan sesuai tandanya. Jika pernyataan yang terbentuk bernilai benar, berarti titik itu memenuhi pertidaksamaan.",
     ],
     `Hasil substitusi memberi ${neg(r.lhs)} ${SYM[ineq.sign]} ${neg(ineq.c)} yang bernilai ${r.ok ? "BENAR" : "SALAH"}, sehingga titik (${tp.x}, ${tp.y}) ${r.ok ? "memenuhi" : "tidak memenuhi"} pertidaksamaan.`,
     {
@@ -618,9 +623,9 @@ function t42(): Question {
   const q = baseQ(4, "4.2", "mc",
     "Lakukan uji titik (0, 0) pada pertidaksamaan berikut. Manakah kesimpulan yang BENAR?",
     [
-      "Substitusikan x = 0 dan y = 0 ke pertidaksamaan, lalu nilai kebenaran pernyataannya.",
-      `Tuliskan substitusinya:\n${ineqStr(ineq)}\n${ineq.a}(0) + ${ineq.b}(0) ${SYM[ineq.sign]} ${neg(ineq.c)}\n0 ${SYM[ineq.sign]} ${neg(ineq.c)}`,
-      `${r.text}\n> Bila hasilnya BENAR, daerah penyelesaian memuat titik (0, 0). Bila SALAH, daerah penyelesaian ada di sisi seberangnya.`,
+      "Substitusikan x = 0 dan y = 0 ke pertidaksamaan, lalu nilai kebenaran pernyataan yang terbentuk.",
+      hintTestPoint(ineq.a, ineq.b, ineq.c, SYM[ineq.sign], 0, 0),
+      "Aturannya: bila hasil uji BENAR, titik (0, 0) termasuk penyelesaian sehingga daerah penyelesaian berada di sisi yang memuatnya. Bila hasil uji SALAH, daerah penyelesaian berada di sisi seberangnya. Sekarang hitung hasil ujimu dan tentukan pilihannya.",
     ],
     `Uji titik (0, 0) menghasilkan pernyataan ${r.ok ? "BENAR" : "SALAH"}, sehingga daerah penyelesaiannya adalah sisi garis yang ${r.ok ? "MEMUAT" : "TIDAK memuat"} titik (0, 0).`,
     {
@@ -652,9 +657,9 @@ function t43(): Question {
   const q = baseQ(4, "4.3", "graph",
     "Manakah gambar yang TEPAT untuk pertidaksamaan berikut? (arsiran menandai daerah yang BUKAN penyelesaian)",
     [
-      "Tentukan dahulu garis pembatasnya melalui kedua titik potong, lalu lakukan uji titik (0, 0).",
-      `${stepsInterceptX(ineq.a, ineq.b, ineq.c)}\n${stepsInterceptY(ineq.a, ineq.b, ineq.c)}`,
-      `${r.text}\n> Daerah penyelesaian (yang BERSIH tanpa arsiran) adalah sisi yang ${r.ok ? "memuat" : "tidak memuat"} titik (0, 0).`,
+      "Tentukan dahulu garis pembatasnya melalui kedua titik potong, kemudian lakukan uji titik (0, 0).",
+      `${hintInterceptX(ineq.a, ineq.b, ineq.c)}\n${hintInterceptY(ineq.a, ineq.b, ineq.c)}`,
+      `${hintTestPoint(ineq.a, ineq.b, ineq.c, SYM[ineq.sign], 0, 0)}\n> Ingat konvensinya: yang DIARSIR adalah daerah yang bukan penyelesaian, sehingga daerah penyelesaian justru tampil bersih.`,
     ],
     `Garis penuh melalui (${num(ineq.c / ineq.a)}, 0) dan (0, ${num(ineq.c / ineq.b)}), dengan daerah bersih (penyelesaian) di sisi yang ${r.ok ? "memuat" : "tidak memuat"} titik (0, 0).`,
     {
@@ -687,9 +692,9 @@ function t51(): Question {
   const q = baseQ(5, "5.1", "mc",
     "Manakah yang merupakan Sistem Pertidaksamaan Linear Dua Variabel (SPtLDV)?",
     [
-      "SPtLDV terdiri atas dua PtLDV atau lebih yang berlaku bersamaan.",
-      "Periksa setiap opsi: adakah pangkat dua? adakah tanda sama dengan? adakah yang hanya bervariabel tunggal?",
-      "Opsi yang benar memuat beberapa pertidaksamaan linear dua variabel sekaligus, termasuk kendala x ≥ 0 dan y ≥ 0.",
+      "SPtLDV terdiri atas dua PtLDV atau lebih yang berlaku secara bersamaan.",
+      "Periksa setiap opsi: adakah variabel berpangkat dua? adakah yang memakai tanda sama dengan? adakah pertidaksamaan yang hanya memuat satu variabel?",
+      "Coret semua opsi yang melanggar syarat tersebut. Opsi yang seluruh pertidaksamaannya linear, bervariabel dua, dan bertanda ketidaksamaan itulah jawabannya.",
     ],
     "SPtLDV harus terdiri atas beberapa pertidaksamaan yang semuanya linear, memuat dua variabel, dan berlaku secara bersamaan.",
     { mcOptions: opts });
@@ -710,9 +715,9 @@ function t52(): Question {
   const q = baseQ(5, "5.2", "mc",
     "Daerah Himpunan Penyelesaian (DHP) dari sebuah SPtLDV adalah…",
     [
-      "Setiap kendala menghasilkan satu daerah penyelesaian tersendiri.",
-      "Titik penyelesaian sistem harus memenuhi SEMUA kendala sekaligus.",
-      "Dalam bahasa himpunan, \"memenuhi semuanya sekaligus\" berarti IRISAN.",
+      "Setiap kendala pada sistem menghasilkan satu daerah penyelesaian tersendiri.",
+      "Sebuah titik disebut penyelesaian sistem hanya jika memenuhi SEMUA kendala sekaligus, bukan cukup salah satu.",
+      "Bandingkan makna dua istilah dalam teori himpunan: \"gabungan\" berarti cukup menjadi anggota salah satu, sedangkan \"irisan\" berarti harus menjadi anggota semuanya. Mana yang sesuai dengan syarat di atas?",
     ],
     "Karena setiap titik penyelesaian harus memenuhi seluruh kendala secara bersamaan, DHP merupakan IRISAN dari semua daerah penyelesaian.",
     { mcOptions: opts });
@@ -766,9 +771,9 @@ function t53(): Question {
   const q = baseQ(5, "5.3", "mc",
     "Titik manakah yang merupakan penyelesaian dari sistem berikut?",
     [
-      "Titik penyelesaian harus memenuhi SEMUA kendala. Uji satu per satu dan hentikan bila ada yang gagal.",
-      `Mulailah dari kendala pertama:\n${ineqStr(ineqs[0])}`,
-      stepText,
+      "Sebuah titik penyelesaian harus memenuhi SEMUA kendala. Uji setiap opsi satu per satu dan hentikan begitu ada kendala yang gagal.",
+      `Saring kandidatnya memakai kendala pertama lebih dahulu:\n${ineqStr(ineqs[0])}\n> Substitusikan koordinat tiap opsi, lalu buang yang tidak memenuhi.`,
+      `Kandidat yang lolos kendala pertama masih harus diuji pada kendala kedua:\n${ineqStr(ineqs[1])}\n> Jangan lupa memeriksa kendala x ≥ 0 dan y ≥ 0 juga.`,
     ],
     `Hanya titik (${tx}, ${ty}) yang memenuhi seluruh kendala sistem sehingga berada di dalam DHP.`,
     {
@@ -790,9 +795,9 @@ function t61(): Question {
   const q = baseQ(6, "6.1", "fill",
     "Tentukan titik potong kedua garis pembatas berikut menggunakan METODE CAMPURAN (eliminasi lalu substitusi).",
     [
-      "Metode campuran: hilangkan dahulu satu variabel dengan eliminasi, baru cari variabel lainnya dengan substitusi.",
-      "Samakan koefisien salah satu variabel. Jika tandanya sama, kurangkan kedua persamaan; jika berlawanan, jumlahkan.",
-      mm.text,
+      "Metode campuran: hilangkan dahulu satu variabel dengan ELIMINASI, kemudian cari variabel sisanya dengan SUBSTITUSI.",
+      "Samakan koefisien salah satu variabel lebih dahulu. Bila koefisiennya bertanda sama, kurangkan kedua persamaan; bila berlawanan tanda, jumlahkan.",
+      hintMixedMethod(l1, l2, Math.abs(l1.a) === Math.abs(l2.a) ? "x" : "y"),
     ],
     `Melalui eliminasi kemudian substitusi diperoleh titik potong (${num(mm.x)}, ${num(mm.y)}).`,
     {
@@ -823,9 +828,9 @@ function t62(): Question {
   const q = baseQ(6, "6.2", "graph",
     "Manakah gambar DHP yang TEPAT untuk sistem berikut? (arsiran = bukan daerah penyelesaian)",
     [
-      "Periksa tiga hal: sisi penyelesaian tiap kendala, penerapan kendala x ≥ 0 dan y ≥ 0, serta jenis garisnya.",
-      "Uji titik (0, 0) pada kedua kendala untuk memastikan sisi mana yang bersih (menjadi penyelesaian).",
-      "DHP yang benar berada di Kuadran I, di bawah kedua garis, dengan kedua garis digambar penuh.",
+      "Periksa tiga hal pada setiap pilihan: sisi penyelesaian tiap kendala, penerapan kendala x ≥ 0 dan y ≥ 0, serta jenis garisnya.",
+      `Lakukan uji titik (0, 0) pada kedua kendala:\n${hintTestPoint(l1.a, l1.b, l1.c, SYM[l1.sign], 0, 0)}`,
+      "Sekarang bandingkan setiap pilihan: apakah daerah bersihnya terkurung di Kuadran I? apakah sisi bersihnya sesuai hasil uji titikmu? apakah jenis garisnya sesuai tanda pada kendala? Hanya satu pilihan yang lolos ketiganya.",
     ],
     "DHP yang benar adalah daerah bersih di Kuadran I yang dibatasi oleh kedua garis penuh serta kedua sumbu.",
     {
@@ -848,8 +853,8 @@ function t63(): Question {
     "Ketuk satu titik berkoordinat bulat yang berada DI DALAM DHP sistem berikut (daerah bersih tanpa arsiran).",
     [
       "Titik di dalam DHP harus memenuhi SEMUA kendala, termasuk x ≥ 0 dan y ≥ 0.",
-      `Pastikan titik pilihanmu memenuhi ${ineqStr(l1)} dan juga ${ineqStr(l2)}.`,
-      `Contoh pemeriksaan untuk titik (1, 1):\n1 + 1 = 2\n> Periksa apakah hasil ini memenuhi kedua kendala. Titik kecil dekat titik asal biasanya aman untuk sistem bertanda ≤.`,
+      `Pilih sebuah titik percobaan di Kuadran I, lalu substitusikan ke setiap kendala:\n${ineqStr(l1)}\n${ineqStr(l2)}`,
+      "Perhatikan bahwa kedua kendala bertanda ≤. Artinya semakin kecil nilai x dan y, semakin besar peluang titik itu memenuhi keduanya. Uji dahulu titik pilihanmu dengan substitusi sebelum mengetuk grafik.",
     ],
     "Setiap titik yang memenuhi seluruh kendala berada di dalam DHP, yaitu daerah bersih tanpa arsiran.",
     {
@@ -907,9 +912,9 @@ function t71(): Question {
   const q = baseQ(7, "7.1", "mc",
     "Perhatikan DHP (daerah bersih tanpa arsiran) pada grafik. Berapa banyak titik pojok yang dimilikinya?",
     [
-      "Titik pojok adalah sudut-sudut daerah bersih tersebut. Telusuri tepinya satu putaran penuh.",
-      "Hitung setiap kali tepi daerah berbelok arah — di situlah letak sebuah titik pojok. Jangan lupa titik asal (0, 0) bila termasuk.",
-      `Sudut-sudutnya berada di: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}, sehingga banyaknya ada ${n}.`,
+      "Titik pojok adalah sudut-sudut dari daerah bersih (tidak diarsir). Telusuri tepinya satu putaran penuh.",
+      "Perhatikan setiap kali tepi daerah berbelok arah — di setiap belokan itulah terdapat sebuah titik pojok.",
+      "Jangan sampai ada yang terlewat: hitung juga sudut yang dibentuk oleh sumbu X dengan sumbu Y, sudut tempat garis kendala memotong sumbu, serta sudut tempat dua garis kendala berpotongan.",
     ],
     `DHP ini memiliki ${n} sudut, yaitu di ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}.`,
     {
@@ -930,9 +935,9 @@ function t72(): Question {
   const q = baseQ(7, "7.2", "points",
     `Ketuk SEMUA titik pojok DHP berikut (${need} titik, urutan bebas).`,
     [
-      "Mulailah dari titik yang paling mudah: perpotongan kedua sumbu dan perpotongan garis dengan sumbu.",
-      "Setelah itu cari perpotongan antar-garis kendala yang masih berada di dalam daerah bersih.",
-      `Titik pojoknya: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}.`,
+      "Mulailah dari sudut yang paling mudah dibaca, yaitu perpotongan kedua sumbu dan perpotongan garis dengan sumbu.",
+      "Setelah itu, perhatikan sudut tempat dua garis kendala saling berpotongan — pastikan titik tersebut masih berada pada tepi daerah bersih.",
+      "Periksa ulang hasilmu: setiap titik pojok harus merupakan pertemuan dua garis pembatas DAN harus memenuhi seluruh kendala. Titik yang berada di luar daerah bersih bukan titik pojok.",
     ],
     `Titik pojok DHP ini adalah ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}.`,
     {
@@ -956,9 +961,9 @@ function t73(): Question {
   const q = baseQ(7, "7.3", "fill",
     "Tentukan titik pojok DHP yang merupakan perpotongan KEDUA garis kendala. Gunakan metode campuran (eliminasi lalu substitusi).",
     [
-      "Titik pojok ini tidak berada di sumbu, sehingga harus dihitung dengan menyelesaikan kedua persamaan garisnya.",
-      "Metode campuran: eliminasi lebih dahulu untuk menghilangkan satu variabel, kemudian substitusi untuk variabel sisanya.",
-      mm.text,
+      "Titik pojok ini tidak berada pada sumbu, sehingga harus dihitung dengan menyelesaikan kedua persamaan garisnya.",
+      "Gunakan metode campuran: ELIMINASI lebih dahulu untuk menghilangkan satu variabel, kemudian SUBSTITUSI untuk mencari variabel sisanya.",
+      hintMixedMethod(l1, l2, Math.abs(l1.a) === Math.abs(l2.a) ? "x" : "y"),
     ],
     `Perpotongan kedua garis kendala berada di titik (${num(ip.x)}, ${num(ip.y)}), dan titik ini memenuhi seluruh kendala sehingga merupakan titik pojok DHP.`,
     {
@@ -985,9 +990,9 @@ function t81(): Question {
   const q = baseQ(8, "8.1", "fill",
     "Tentukan titik potong kedua garis berikut dengan metode campuran (eliminasi lalu substitusi).",
     [
-      "Perhatikan koefisien x pada kedua persamaan: keduanya sudah sama, sehingga eliminasi dapat langsung dilakukan.",
-      "Karena koefisien x bertanda sama, KURANGKAN kedua persamaan agar suku x saling menghapus.",
-      mm.text,
+      "Amati koefisien x pada kedua persamaan. Bila sudah sama, eliminasi dapat langsung dilakukan tanpa perlu mengalikan apa pun.",
+      "Koefisien yang bertanda sama dihilangkan dengan cara MENGURANGKAN kedua persamaan; koefisien yang berlawanan tanda dihilangkan dengan MENJUMLAHKAN.",
+      hintMixedMethod(l1, l2, "x"),
     ],
     `Eliminasi menghasilkan nilai salah satu variabel, lalu substitusi memberikan variabel lainnya, yaitu titik (${num(mm.x)}, ${num(mm.y)}).`,
     {
@@ -1008,9 +1013,9 @@ function t82(): Question {
   const q = baseQ(8, "8.2", "fill",
     "Tentukan titik potong kedua garis berikut. Samakan dahulu koefisiennya, lalu gunakan metode campuran.",
     [
-      "Koefisien x pada kedua persamaan berbeda (1 dan 2), sehingga harus disamakan lebih dahulu.",
-      "Kalikan persamaan pertama dengan 2 agar koefisien x-nya menjadi sama, kemudian kurangkan kedua persamaan.",
-      mm.text,
+      "Koefisien x pada kedua persamaan belum sama, sehingga harus disamakan terlebih dahulu sebelum dieliminasi.",
+      "Kalikan salah satu persamaan dengan bilangan yang tepat agar koefisien x-nya menjadi sama besar, lalu lakukan eliminasi.",
+      hintMixedMethod(l1, l2, "x"),
     ],
     `Setelah koefisien disamakan, eliminasi dan substitusi menghasilkan titik potong (${num(mm.x)}, ${num(mm.y)}).`,
     {
@@ -1031,9 +1036,9 @@ function t83(): Question {
   const q = baseQ(8, "8.3", "fill",
     "Tentukan titik potong kedua garis berikut dengan metode campuran. Perhatikan adanya koefisien negatif.",
     [
-      "Koefisien y pada kedua persamaan sama-sama 1, sehingga variabel y paling mudah dieliminasi.",
-      "Karena koefisien y bertanda sama, kurangkan kedua persamaan. Berhati-hatilah saat mengurangkan bilangan negatif.",
-      mm.text,
+      "Amati koefisien y pada kedua persamaan — variabel inilah yang paling mudah dieliminasi.",
+      "Berhati-hatilah dengan koefisien negatif. Mengurangkan bilangan negatif sama artinya dengan menjumlahkan bilangan positifnya.",
+      hintMixedMethod(l1, l2, "y"),
     ],
     `Eliminasi y kemudian substitusi menghasilkan titik potong (${num(mm.x)}, ${num(mm.y)}).`,
     {
@@ -1074,9 +1079,9 @@ function t91(): Question {
   const q = baseQ(9, "9.1", "fill",
     `Tentukan nilai fungsi tujuan f(x, y) = ${fa}x + ${fb}y pada titik (${p.x}, ${p.y}).`,
     [
-      "Menghitung nilai fungsi tujuan berarti mensubstitusikan koordinat titik ke dalam rumusnya.",
-      `Tuliskan substitusinya lebih dahulu:\nf(${p.x}, ${p.y}) = ${fa}(${p.x}) + ${fb}(${p.y})`,
-      steps,
+      "Menghitung nilai fungsi tujuan berarti mensubstitusikan koordinat titik ke dalam rumus f(x, y).",
+      hintObjective(fa, fb, p),
+      "Kerjakan kedua perkalian lebih dahulu, kemudian jumlahkan hasilnya. Perhatikan urutan operasi ini agar tidak keliru.",
     ],
     `Substitusi memberikan f(${p.x}, ${p.y}) = ${fa * p.x} + ${fb * p.y} = ${val}.`,
     {
@@ -1099,9 +1104,9 @@ function t92(): Question {
   const q = baseQ(9, "9.2", "mc",
     `Titik pojok DHP adalah ${s.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}. Tentukan NILAI MAKSIMUM dari f(x, y) = ${s.fa}x + ${s.fb}y.`,
     [
-      "Gunakan metode uji titik pojok: hitung nilai fungsi tujuan di setiap titik pojok, lalu bandingkan.",
-      `Mulai dari titik pertama:\nf(${num(s.corners[0].x)}, ${num(s.corners[0].y)}) = ${s.fa}(${num(s.corners[0].x)}) + ${s.fb}(${num(s.corners[0].y)})`,
-      steps,
+      "Gunakan metode uji titik pojok: hitung nilai fungsi tujuan pada setiap titik pojok, lalu bandingkan seluruh hasilnya.",
+      hintObjective(s.fa, s.fb, s.corners[0]),
+      "Pastikan seluruh titik pojok dihitung tanpa ada yang terlewat, lalu susun hasilnya berjajar. Nilai maksimum adalah yang paling besar di antara semuanya — jangan tertukar dengan yang paling kecil.",
     ],
     `Setelah seluruh titik pojok dievaluasi, nilai terbesarnya adalah ${num(s.maxV)} yang dicapai di titik (${num(s.maxPt.x)}, ${num(s.maxPt.y)}).`,
     {
@@ -1126,9 +1131,9 @@ function t93(): Question {
   const q = baseQ(9, "9.3", "fill",
     `Dengan titik pojok ${s.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")} dan f(x, y) = ${s.fa}x + ${s.fb}y, tentukan nilai maksimum dan minimumnya.`,
     [
-      "Susun tabel evaluasi: hitung nilai fungsi tujuan pada setiap titik pojok tanpa ada yang terlewat.",
-      tableSteps(s.fa, s.fb, s.corners),
-      steps,
+      "Susun tabel evaluasi: hitung nilai fungsi tujuan pada setiap titik pojok satu per satu.",
+      hintObjective(s.fa, s.fb, s.corners[0]),
+      "Setelah seluruh nilai diperoleh, urutkan dari yang terkecil hingga terbesar. Nilai terbesar menjadi maksimum dan nilai terkecil menjadi minimum — perhatikan jangan sampai tertukar saat menuliskannya.",
     ],
     `Nilai maksimum ${num(s.maxV)} dicapai di (${num(s.maxPt.x)}, ${num(s.maxPt.y)}), dan nilai minimum ${num(s.minV)} dicapai di (${num(s.minPt.x)}, ${num(s.minPt.y)}).`,
     {
@@ -1170,9 +1175,9 @@ function t101(): Question {
   const q = baseQ(10, "10.1", "mc",
     `Sebuah usaha memproduksi ${s.A} dan ${s.B}. Pemisalan variabel yang tepat adalah…`,
     [
-      "Variabel harus menyatakan sesuatu yang banyaknya dapat diatur oleh pelaku usaha.",
-      "Objek yang disebut pertama pada soal biasanya dimisalkan sebagai x, dan objek kedua sebagai y.",
-      `Pemisalan yang tepat: ${correct}.`,
+      "Variabel harus menyatakan sesuatu yang banyaknya dapat diatur sendiri oleh pelaku usaha.",
+      "Harga, keuntungan, total produksi, dan sisa bahan bukanlah variabel — semuanya justru dihitung DARI variabel.",
+      "Periksa urutan penyebutan objek pada soal. Objek yang disebut lebih dahulu lazimnya dimisalkan sebagai x, dan objek berikutnya sebagai y. Pastikan pilihanmu tidak tertukar.",
     ],
     `Variabel menyatakan banyaknya objek yang diproduksi, sehingga ${correct}.`,
     { mcOptions: opts });
@@ -1195,9 +1200,9 @@ function t102(): Question {
   const q = baseQ(10, "10.2", "mc",
     `Setiap ${s.A} memerlukan ${s.pa} ${s.sat1} dan setiap ${s.B} memerlukan ${s.pb} ${s.sat1}. Total yang tersedia adalah ${s.kap1} ${s.sat1}. Kendala yang tepat adalah…`,
     [
-      `Susun bentuk total kebutuhannya: (kebutuhan per ${s.A}) × x ditambah (kebutuhan per ${s.B}) × y.`,
-      `Total kebutuhan:\n${linExpr(s.pa, s.pb)}\n> Sekarang tentukan tanda yang sesuai dengan kata \"tersedia\".`,
-      `Karena pemakaian tidak boleh melebihi yang tersedia, tandanya ≤ sehingga kendalanya ${correct}.`,
+      "Susun bentuk total kebutuhannya: (kebutuhan per unit) dikali (banyaknya), untuk kedua objek.",
+      `Kebutuhan untuk ${s.A} adalah ${s.pa === 1 ? "x" : `${s.pa}x`} dan kebutuhan untuk ${s.B} adalah ${s.pb === 1 ? "y" : `${s.pb}y`}. Jumlahkan keduanya.`,
+      "Sekarang tentukan tandanya. Kata \"tersedia\" menunjukkan batas maksimum: pemakaian boleh kurang dari itu, tetapi tidak boleh melebihi, dan tidak harus habis persis. Pastikan pula koefisiennya tidak tertukar.",
     ],
     `Total kebutuhan ${linExpr(s.pa, s.pb)} tidak boleh melebihi ${s.kap1}, sehingga kendalanya adalah ${correct}.`,
     {
@@ -1230,9 +1235,9 @@ function t103(): Question {
   const q = baseQ(10, "10.3", "mc",
     `Keuntungan setiap ${s.A} adalah Rp${s.ua}.000 dan setiap ${s.B} adalah Rp${s.ub}.000, dengan kendala ${k1} dan ${k2}. Model matematika LENGKAP yang benar adalah…`,
     [
-      "Model lengkap terdiri atas fungsi tujuan, seluruh kendala sumber daya, dan kendala non-negatif.",
-      "Kata \"keuntungan\" menandakan fungsi tujuan dimaksimumkan. Jangan lupa menambahkan x ≥ 0 dan y ≥ 0.",
-      `Model lengkapnya: ${correct}.`,
+      "Model lengkap terdiri atas tiga bagian: fungsi tujuan, seluruh kendala sumber daya, dan kendala non-negatif.",
+      "Perhatikan kata kuncinya. Keuntungan selalu dicari sebesar-besarnya, sedangkan biaya dicari sekecil-kecilnya.",
+      "Periksa setiap opsi dengan tiga pertanyaan: apakah arah optimasinya sudah sesuai? apakah koefisien fungsi tujuannya cocok dengan objeknya? apakah kendala x ≥ 0 dan y ≥ 0 disertakan? Hanya satu opsi yang lolos ketiganya.",
     ],
     `Model lengkap memuat fungsi tujuan ${obj} yang dimaksimumkan, beserta kendala ${k1}, ${k2}, x ≥ 0, dan y ≥ 0.`,
     {
