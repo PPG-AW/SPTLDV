@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Users, BarChart3, Bell, AlertTriangle, Award, MessageSquare, ClipboardList, LogOut, Plus, Copy } from 'lucide-react';
+import { Card, CardBody, CardHeader } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Users, BarChart3, Bell, AlertTriangle, Award, MessageSquare, ClipboardList, LogOut, Plus, Copy, TrendingUp } from 'lucide-react';
 
 interface Props {
   guruId: number;
@@ -57,55 +59,60 @@ export default function GuruDashboardClient({ guruId, guruNama }: Props) {
 
   const copyKode = (kode: string) => {
     navigator.clipboard.writeText(kode);
-    alert(`Kode kelas ${kode} disalin!`);
+    alert(`Kode kelas ${kode} telah disalin!`);
   };
 
-  const tabs: { id: Tab; label: string; icon: any }[] = [
-    { id: 'kelas', label: 'Kelas', icon: Users },
-    { id: 'siswa', label: 'Siswa', icon: Users },
-    { id: 'analitik', label: 'Analitik', icon: BarChart3 },
-    { id: 'tutor', label: 'Tutor', icon: MessageSquare },
-    { id: 'stuck', label: 'Perlu Perhatian', icon: AlertTriangle },
-    { id: 'nilai', label: 'Nilai', icon: ClipboardList },
-    { id: 'panggilan', label: 'Panggilan', icon: Bell },
+  const tabs = [
+    { id: 'kelas' as Tab, label: 'Kelas', icon: Users },
+    { id: 'siswa' as Tab, label: 'Siswa', icon: Users },
+    { id: 'analitik' as Tab, label: 'Analitik', icon: BarChart3 },
+    { id: 'tutor' as Tab, label: 'Tutor', icon: MessageSquare },
+    { id: 'stuck' as Tab, label: 'Perlu Perhatian', icon: AlertTriangle },
+    { id: 'nilai' as Tab, label: 'Nilai', icon: ClipboardList },
+    { id: 'panggilan' as Tab, label: 'Panggilan', icon: Bell },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-grid">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <header className="bg-white border-b-2 border-gray-900">
+        <div className="max-w-7xl mx-auto px-4 py-5">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-bold text-indigo-700">LINIERKu — Dashboard Guru</h1>
-              <p className="text-sm text-gray-600">Selamat datang, {guruNama}</p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center shadow-medium">
+                <span className="text-white font-bold text-xl">G</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Dashboard Guru</h1>
+                <p className="text-sm text-gray-600">Selamat datang, {guruNama}</p>
+              </div>
             </div>
             <button
               onClick={() => fetch('/api/auth/logout', { method: 'POST' }).then(() => window.location.href = '/guru')}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg"
+              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
             >
-              <LogOut size={16} />
-              Keluar
+              <LogOut size={18} />
+              <span className="hidden sm:inline">Keluar</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Tabs */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b-2 border-gray-200 sticky top-0 z-10 shadow-soft">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex overflow-x-auto">
+          <div className="flex overflow-x-auto -mb-0.5">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                className={`flex items-center gap-2 px-5 py-4 text-sm font-bold whitespace-nowrap border-b-3 transition-all ${
                   activeTab === tab.id
-                    ? 'border-indigo-600 text-indigo-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? 'border-gray-900 text-gray-900 bg-gray-50'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                <tab.icon size={16} />
+                <tab.icon size={18} />
                 {tab.label}
               </button>
             ))}
@@ -116,113 +123,126 @@ export default function GuruDashboardClient({ guruId, guruNama }: Props) {
       {/* Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
         {activeTab === 'kelas' && (
-          <div className="space-y-4">
+          <div className="space-y-6">
+            {/* Header */}
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-800">Kelola Kelas</h2>
-              <button
-                onClick={() => setShowCreateKelas(!showCreateKelas)}
-                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm"
-              >
-                <Plus size={16} />
-                Buat Kelas Baru
-              </button>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Kelola Kelas</h2>
+                <p className="text-gray-600 mt-1">Buat dan kelola kelas untuk pembelajaran</p>
+              </div>
+              <Button onClick={() => setShowCreateKelas(!showCreateKelas)}>
+                <Plus size={18} className="mr-2" />
+                Buat Kelas
+              </Button>
             </div>
 
+            {/* Create Form */}
             {showCreateKelas && (
-              <div className="bg-white rounded-xl shadow-sm p-4">
-                <input
-                  type="text"
-                  value={newKelasNama}
-                  onChange={(e) => setNewKelasNama(e.target.value)}
-                  placeholder="Nama kelas (contoh: XI MIPA 1)"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-3"
-                />
-                <div className="flex gap-2">
-                  <button
-                    onClick={createKelas}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700"
-                  >
-                    Buat
-                  </button>
-                  <button
-                    onClick={() => setShowCreateKelas(false)}
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm"
-                  >
-                    Batal
-                  </button>
+              <Card className="shadow-medium">
+                <div className="bg-gradient-to-r from-gray-100 to-gray-50 px-6 py-4 border-b-2 border-gray-200">
+                  <h3 className="font-bold text-gray-900">Buat Kelas Baru</h3>
                 </div>
-              </div>
+                <CardBody>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-900 mb-2">
+                        Nama Kelas
+                      </label>
+                      <input
+                        type="text"
+                        value={newKelasNama}
+                        onChange={(e) => setNewKelasNama(e.target.value)}
+                        placeholder="Contoh: XI MIPA 1"
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-gray-900 focus:shadow-soft transition-all"
+                        style={{ fontSize: '16px' }}
+                      />
+                    </div>
+                    <div className="flex gap-3">
+                      <Button onClick={createKelas}>
+                        Buat Kelas
+                      </Button>
+                      <Button variant="outline" onClick={() => setShowCreateKelas(false)}>
+                        Batal
+                      </Button>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
             )}
 
+            {/* Kelas List */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {kelasList.map(k => (
-                <div key={k.id} className="bg-white rounded-xl shadow-sm p-4">
-                  <h3 className="font-semibold text-gray-800 mb-2">{k.nama}</h3>
-                  <div className="flex items-center gap-2 mb-3">
-                    <code className="flex-1 bg-gray-100 px-3 py-2 rounded text-sm font-mono">{k.kode}</code>
-                    <button
-                      onClick={() => copyKode(k.kode)}
-                      className="p-2 hover:bg-gray-100 rounded-lg"
-                      title="Salin kode"
-                    >
-                      <Copy size={16} />
-                    </button>
+                <Card key={k.id} hoverable className="shadow-soft">
+                  <div className="bg-gradient-to-r from-gray-100 to-gray-50 px-5 py-3 border-b-2 border-gray-200">
+                    <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">Kelas</span>
                   </div>
-                  <p className="text-xs text-gray-500">
-                    Kuota elit: {k.kuota_elit ? `${k.kuota_elit} siswa` : 'Default 10%'}
-                  </p>
-                </div>
+                  <CardBody>
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-bold text-xl text-gray-900 mb-2">{k.nama}</h3>
+                        <p className="text-sm text-gray-600">
+                          Kuota elit: {k.kuota_elit ? `${k.kuota_elit} siswa` : 'Default 10%'}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-bold text-gray-600 uppercase">Kode Kelas</span>
+                          <button
+                            onClick={() => copyKode(k.kode)}
+                            className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                            title="Salin kode"
+                          >
+                            <Copy size={16} className="text-gray-700" />
+                          </button>
+                        </div>
+                        <code className="text-2xl font-mono font-bold text-gray-900">{k.kode}</code>
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
               ))}
             </div>
 
             {kelasList.length === 0 && !loading && (
-              <div className="text-center py-12 text-gray-500">
-                <p>Belum ada kelas. Buat kelas pertama untuk memulai.</p>
-              </div>
+              <Card className="shadow-soft">
+                <CardBody>
+                  <div className="text-center py-16">
+                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl flex items-center justify-center mb-4 shadow-medium">
+                      <Users className="text-white" size={40} />
+                    </div>
+                    <p className="text-gray-900 font-bold text-xl mb-2">Belum Ada Kelas</p>
+                    <p className="text-gray-600 mb-6">Buat kelas pertama untuk memulai pembelajaran</p>
+                    <Button onClick={() => setShowCreateKelas(true)}>
+                      <Plus size={18} className="mr-2" />
+                      Buat Kelas Pertama
+                    </Button>
+                  </div>
+                </CardBody>
+              </Card>
             )}
           </div>
         )}
 
-        {activeTab === 'siswa' && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Daftar Siswa</h2>
-            <p className="text-gray-600">Pilih kelas untuk melihat daftar siswa.</p>
-          </div>
-        )}
-
-        {activeTab === 'analitik' && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Analitik Kesalahan per Subbab</h2>
-            <p className="text-gray-600">Statistik kesalahan siswa per subbab akan ditampilkan di sini.</p>
-          </div>
-        )}
-
-        {activeTab === 'tutor' && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Tutor Sebaya</h2>
-            <p className="text-gray-600">Daftar siswa yang menjadi tutor sebaya.</p>
-          </div>
-        )}
-
-        {activeTab === 'stuck' && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Perlu Perhatian</h2>
-            <p className="text-gray-600">Siswa yang perlu bantuan tambahan akan ditampilkan di sini.</p>
-          </div>
-        )}
-
-        {activeTab === 'nilai' && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Nilai Sumatif</h2>
-            <p className="text-gray-600">Hasil asesmen sumatif siswa (read-only).</p>
-          </div>
-        )}
-
-        {activeTab === 'panggilan' && (
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold mb-4">Antrean Panggilan</h2>
-            <p className="text-gray-600">Panggilan dari siswa yang membutuhkan bantuan guru.</p>
-          </div>
+        {activeTab !== 'kelas' && (
+          <Card className="shadow-medium">
+            <CardBody>
+              <div className="text-center py-16">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl flex items-center justify-center mb-4 shadow-medium">
+                  {activeTab === 'siswa' && <Users className="text-white" size={40} />}
+                  {activeTab === 'analitik' && <BarChart3 className="text-white" size={40} />}
+                  {activeTab === 'tutor' && <MessageSquare className="text-white" size={40} />}
+                  {activeTab === 'stuck' && <AlertTriangle className="text-white" size={40} />}
+                  {activeTab === 'nilai' && <ClipboardList className="text-white" size={40} />}
+                  {activeTab === 'panggilan' && <Bell className="text-white" size={40} />}
+                </div>
+                <p className="text-gray-900 font-bold text-xl mb-2">
+                  {tabs.find(t => t.id === activeTab)?.label}
+                </p>
+                <p className="text-gray-600">Fitur ini akan segera tersedia</p>
+              </div>
+            </CardBody>
+          </Card>
         )}
       </main>
     </div>

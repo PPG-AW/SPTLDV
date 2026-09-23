@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, BookOpen, Video, Lightbulb, BarChart, PenTool } from 'lucide-react';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { ArrowLeft, BookOpen, Lightbulb, Settings, PenTool, HelpCircle, CheckCircle, XCircle, Star, Sparkles, Zap, Trophy } from 'lucide-react';
+import SoalRunner from './SoalRunner';
 
 interface Props {
   subbabNo: number;
@@ -14,7 +17,7 @@ interface Props {
   kelasId: number;
 }
 
-type Tab = 'materi' | 'video' | 'contoh' | 'simulasi' | 'asesmen';
+type Tab = 'materi' | 'contoh' | 'simulasi' | 'asesmen';
 
 export default function BelajarSubbabClient({ subbabNo, judul, materi, videoUrl, siswaId, siswaNama, kelasId }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>('materi');
@@ -22,7 +25,6 @@ export default function BelajarSubbabClient({ subbabNo, judul, materi, videoUrl,
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load current progress
     fetch('/api/progres')
       .then(res => res.json())
       .then(data => {
@@ -32,38 +34,131 @@ export default function BelajarSubbabClient({ subbabNo, judul, materi, videoUrl,
       .catch(() => setLoading(false));
   }, [subbabNo]);
 
-  const tabs: { id: Tab; label: string; icon: any }[] = [
-    { id: 'materi', label: 'Materi', icon: BookOpen },
-    { id: 'video', label: 'Video', icon: Video },
-    { id: 'contoh', label: 'Contoh Soal', icon: Lightbulb },
-    { id: 'simulasi', label: 'Simulasi', icon: BarChart },
-    { id: 'asesmen', label: 'Asesmen', icon: PenTool },
+  const tabs = [
+    { id: 'materi' as Tab, label: 'Materi', icon: BookOpen, gradient: 'from-purple-500 to-indigo-500' },
+    { id: 'contoh' as Tab, label: 'Contoh Soal', icon: Lightbulb, gradient: 'from-yellow-500 to-orange-500' },
+    { id: 'simulasi' as Tab, label: 'Simulasi', icon: Settings, gradient: 'from-blue-500 to-cyan-500' },
+    { id: 'asesmen' as Tab, label: 'Asesmen', icon: PenTool, gradient: 'from-green-500 to-emerald-500' },
   ];
 
-  const isVideoPlaceholder = !videoUrl || videoUrl.includes('VIDEO_ID');
+  const gradients = [
+    'from-purple-500 to-indigo-500',
+    'from-pink-500 to-rose-500',
+    'from-blue-500 to-cyan-500',
+    'from-green-500 to-emerald-500',
+    'from-orange-500 to-amber-500',
+    'from-red-500 to-pink-500',
+    'from-indigo-500 to-purple-500',
+    'from-teal-500 to-cyan-500',
+    'from-yellow-500 to-orange-500',
+    'from-purple-600 to-pink-600'
+  ];
+
+  const renderMateri = () => {
+    return (
+      <div className="space-y-6">
+        {materi.split('\n').map((line, i) => {
+          if (line.startsWith('## ')) {
+            return (
+              <div key={i} className="relative">
+                <div className={`absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b ${gradients[subbabNo - 1]} rounded-full`}></div>
+                <div className="pl-6 py-2">
+                  <h2 className="text-3xl font-black text-gray-900">{line.replace('## ', '')}</h2>
+                </div>
+              </div>
+            );
+          }
+          if (line.startsWith('### ')) {
+            return (
+              <div key={i} className="flex items-center gap-3 mt-8">
+                <div className={`w-2 h-8 bg-gradient-to-b ${gradients[subbabNo - 1]} rounded-full`}></div>
+                <h3 className="text-2xl font-bold text-gray-900">{line.replace('### ', '')}</h3>
+              </div>
+            );
+          }
+          if (line.startsWith('- **')) {
+            const match = line.match(/- \*\*(.+?)\*\*:?\s*(.*)/);
+            if (match) {
+              return (
+                <Card key={i} glass className="p-4 ml-2">
+                  <div className="flex items-start gap-3">
+                    <div className={`w-3 h-3 bg-gradient-to-br ${gradients[subbabNo - 1]} rounded-full mt-1.5 flex-shrink-0`}></div>
+                    <div>
+                      <span className="font-bold text-gray-900">{match[1]}</span>
+                      {match[2] && <span className="text-gray-700">: {match[2]}</span>}
+                    </div>
+                  </div>
+                </Card>
+              );
+            }
+          }
+          if (line.startsWith('- ')) {
+            return (
+              <div key={i} className="flex items-start gap-3 ml-2">
+                <div className={`w-2 h-2 bg-gradient-to-br ${gradients[subbabNo - 1]} rounded-full mt-2.5 flex-shrink-0`}></div>
+                <span className="text-gray-700 text-lg">{line.replace('- ', '')}</span>
+              </div>
+            );
+          }
+          if (line.startsWith('✏️')) {
+            return (
+              <Card key={i} gradient="orange" className="p-6 my-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-black text-white text-lg mb-2">Catat di Buku Tulismu!</p>
+                    <p className="text-orange-50 text-lg leading-relaxed">{line.replace('✏️ ', '')}</p>
+                  </div>
+                </div>
+              </Card>
+            );
+          }
+          if (line.trim() === '') {
+            return <div key={i} className="h-3" />;
+          }
+          return <p key={i} className="text-gray-700 mb-4 leading-relaxed text-lg">{line}</p>;
+        })}
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 bg-animated opacity-10"></div>
+      
+      {/* Floating Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-20 h-20 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
+        <div className="absolute top-40 right-20 w-32 h-32 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style={{ animationDelay: '2s' }}></div>
+      </div>
+
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Link href="/belajar" className="p-2 hover:bg-gray-100 rounded-lg">
-              <ArrowLeft size={20} />
+      <header className="relative z-10 glass border-b border-white/20">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center gap-4">
+            <Link href="/belajar" className="p-2 glass rounded-xl hover:scale-105 transition-transform">
+              <ArrowLeft size={24} className="text-gray-900" />
             </Link>
             <div className="flex-1">
-              <p className="text-xs text-gray-500">Subbab {subbabNo}</p>
-              <h1 className="text-sm font-semibold text-gray-800">{judul}</h1>
+              <div className="flex items-center gap-2 mb-1">
+                <div className={`px-3 py-1 bg-gradient-to-r ${gradients[subbabNo - 1]} rounded-full`}>
+                  <span className="text-xs font-black text-white">SUBBAB {subbabNo}</span>
+                </div>
+              </div>
+              <h1 className="text-xl font-black text-gray-900">{judul}</h1>
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               {[1, 2, 3].map(i => (
                 <div
                   key={i}
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                    i <= benar ? 'bg-amber-400 text-white' : 'bg-gray-200 text-gray-400'
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-black transition-all ${
+                    i <= benar ? 'bg-gradient-to-br from-green-500 to-emerald-500 text-white shadow-lg' : 'bg-gray-200 text-gray-500'
                   }`}
                 >
-                  ✓
+                  {i <= benar ? <CheckCircle size={20} /> : i}
                 </div>
               ))}
             </div>
@@ -72,20 +167,20 @@ export default function BelajarSubbabClient({ subbabNo, judul, materi, videoUrl,
       </header>
 
       {/* Tabs */}
-      <div className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="flex overflow-x-auto">
+      <div className="relative z-10 glass border-b border-white/20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex overflow-x-auto gap-2 py-3">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold whitespace-nowrap transition-all ${
                   activeTab === tab.id
-                    ? 'border-indigo-600 text-indigo-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ? `bg-gradient-to-r ${tab.gradient} text-white shadow-lg scale-105`
+                    : 'glass text-gray-700 hover:scale-105'
                 }`}
               >
-                <tab.icon size={16} />
+                <tab.icon size={20} />
                 {tab.label}
               </button>
             ))}
@@ -94,125 +189,106 @@ export default function BelajarSubbabClient({ subbabNo, judul, materi, videoUrl,
       </div>
 
       {/* Content */}
-      <main className="max-w-4xl mx-auto px-4 py-6">
-        {/* Reminder */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6">
-          <p className="text-sm text-blue-800">
-            📒 Tulis semua coretan/langkah pengerjaanmu di buku tulis!
-          </p>
-        </div>
-
+      <main className="relative z-10 max-w-6xl mx-auto px-6 py-8">
         {activeTab === 'materi' && (
-          <div className="bg-white rounded-2xl shadow-sm p-6">
-            <div className="prose prose-sm max-w-none">
-              {materi.split('\n').map((line, i) => {
-                if (line.startsWith('## ')) {
-                  return <h2 key={i} className="text-xl font-bold text-gray-800 mb-3">{line.replace('## ', '')}</h2>;
-                }
-                if (line.startsWith('### ')) {
-                  return <h3 key={i} className="text-lg font-semibold text-gray-700 mb-2 mt-4">{line.replace('### ', '')}</h3>;
-                }
-                if (line.startsWith('- **')) {
-                  const match = line.match(/- \*\*(.+?)\*\*:?\s*(.*)/);
-                  if (match) {
-                    return (
-                      <li key={i} className="ml-4 mb-1">
-                        <strong>{match[1]}</strong>: {match[2]}
-                      </li>
-                    );
-                  }
-                }
-                if (line.startsWith('- ')) {
-                  return <li key={i} className="ml-4 mb-1">{line.replace('- ', '')}</li>;
-                }
-                if (line.startsWith('✏️')) {
-                  return (
-                    <div key={i} className="bg-yellow-50 border-l-4 border-yellow-400 p-3 my-3 rounded">
-                      <p className="text-sm text-yellow-800">{line}</p>
-                    </div>
-                  );
-                }
-                if (line.trim() === '') {
-                  return <br key={i} />;
-                }
-                return <p key={i} className="text-gray-700 mb-2">{line}</p>;
-              })}
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'video' && (
-          <div className="bg-white rounded-2xl shadow-sm p-6">
-            {isVideoPlaceholder ? (
-              <div className="text-center py-12">
-                <div className="text-5xl mb-4">🎬</div>
-                <p className="text-gray-600">Video menyusul — silakan pelajari materi dan contoh soal dulu.</p>
-              </div>
-            ) : (
-              <div className="aspect-video">
-                <iframe
-                  src={videoUrl}
-                  className="w-full h-full rounded-lg"
-                  allowFullScreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                />
-              </div>
-            )}
-          </div>
+          <Card glass className="p-8">
+            {renderMateri()}
+          </Card>
         )}
 
         {activeTab === 'contoh' && (
-          <div className="bg-white rounded-2xl shadow-sm p-6">
-            <h3 className="text-lg font-semibold mb-4">Contoh Soal Subbab {subbabNo}</h3>
-            <div className="space-y-4">
-              <div className="border-l-4 border-indigo-500 pl-4">
-                <p className="font-medium text-gray-800 mb-2">Contoh 1</p>
-                <p className="text-gray-600 text-sm">Contoh soal akan ditampilkan di sini setelah generator soal aktif.</p>
+          <div className="space-y-6">
+            <Card gradient="yellow" className="p-6">
+              <div className="flex items-center gap-3">
+                <Lightbulb className="w-8 h-8 text-white" />
+                <p className="text-white text-lg font-semibold">
+                  Pelajari contoh soal berikut untuk memahami cara menyelesaikan soal-soal di subbab ini!
+                </p>
               </div>
-              <div className="border-l-4 border-green-500 pl-4">
-                <p className="font-medium text-gray-800 mb-2">Contoh 2</p>
-                <p className="text-gray-600 text-sm">Contoh soal akan ditampilkan di sini setelah generator soal aktif.</p>
-              </div>
-            </div>
+            </Card>
+
+            {[1, 2].map(num => (
+              <Card key={num} glass hover className="overflow-hidden">
+                <div className={`bg-gradient-to-r ${gradients[subbabNo - 1]} p-6`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                      <span className="text-2xl font-black text-white">{num}</span>
+                    </div>
+                    <h3 className="text-2xl font-black text-white">Contoh Soal {num}</h3>
+                  </div>
+                </div>
+                <div className="p-6 space-y-4">
+                  <Card className="p-5 bg-gray-50">
+                    <p className="text-gray-900 font-semibold mb-2 flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-yellow-500" />
+                      Soal:
+                    </p>
+                    <p className="text-gray-700 text-lg">
+                      Contoh soal untuk Subbab {subbabNo} akan ditampilkan di sini.
+                    </p>
+                  </Card>
+
+                  <Card className="p-5 bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200">
+                    <p className="text-gray-900 font-semibold mb-2 flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      Pembahasan:
+                    </p>
+                    <p className="text-gray-700 text-lg">
+                      Langkah-langkah penyelesaian akan ditampilkan di sini.
+                    </p>
+                  </Card>
+                </div>
+              </Card>
+            ))}
           </div>
         )}
 
         {activeTab === 'simulasi' && (
-          <div className="bg-white rounded-2xl shadow-sm p-6">
-            <h3 className="text-lg font-semibold mb-4">Simulasi Interaktif</h3>
-            <div className="text-center py-12">
-              <div className="text-5xl mb-4">🎮</div>
-              <p className="text-gray-600">Simulasi interaktif untuk Subbab {subbabNo} akan segera tersedia.</p>
-            </div>
+          <div className="space-y-6">
+            <Card gradient="blue" className="p-6">
+              <div className="flex items-center gap-3">
+                <Settings className="w-8 h-8 text-white" />
+                <p className="text-white text-lg font-semibold">
+                  Eksplorasi konsep melalui simulasi visual yang interaktif!
+                </p>
+              </div>
+            </Card>
+
+            <Card glass className="p-12 text-center">
+              <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl flex items-center justify-center mb-6 shadow-lg animate-float">
+                <Settings className="w-12 h-12 text-white" />
+              </div>
+              <h3 className="text-2xl font-black text-gray-900 mb-2">Simulasi Interaktif</h3>
+              <p className="text-gray-600 mb-6">Fitur simulasi untuk Subbab {subbabNo} akan segera tersedia</p>
+              <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full font-bold">
+                <Sparkles className="w-5 h-5" />
+                Coming Soon
+              </div>
+            </Card>
           </div>
         )}
 
         {activeTab === 'asesmen' && (
-          <div className="bg-white rounded-2xl shadow-sm p-6">
-            <h3 className="text-lg font-semibold mb-4">Asesmen Formatif</h3>
-            <div className="text-center py-8">
-              <p className="text-gray-600 mb-4">
-                Kumpulkan <strong>3 jawaban benar</strong> untuk lulus subbab ini.
-              </p>
-              <div className="flex justify-center gap-2 mb-6">
-                {[1, 2, 3].map(i => (
-                  <div
-                    key={i}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold ${
-                      i <= benar ? 'bg-amber-400 text-white' : 'bg-gray-200 text-gray-400'
-                    }`}
-                  >
-                    ✓
-                  </div>
-                ))}
+          <div className="space-y-6">
+            <SoalRunner subbabNo={subbabNo} siswaId={siswaId} />
+            
+            {/* Tutor Sebaya Button */}
+            <Card gradient="purple" className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <HelpCircle className="w-10 h-10 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-black text-white text-2xl mb-2">Butuh Bantuan?</h4>
+                  <p className="text-purple-100 mb-4 text-lg">
+                    Panggil tutor sebaya yang akan menghampirimu secara langsung di kelas!
+                  </p>
+                  <Button variant="secondary" size="lg">
+                    Panggil Tutor Sebaya
+                  </Button>
+                </div>
               </div>
-              <button
-                onClick={() => alert('Generator soal akan diintegrasikan di sini')}
-                className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors"
-              >
-                Mulai Asesmen
-              </button>
-            </div>
+            </Card>
           </div>
         )}
       </main>
