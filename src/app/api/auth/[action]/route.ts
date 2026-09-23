@@ -6,7 +6,34 @@ import { createSession, destroySession, hashPassword, verifyPassword } from "@/l
 
 const bad = (msg: string, status = 400) => NextResponse.json({ error: msg }, { status });
 
+function serverError(e: unknown) {
+  console.error("[auth] server error:", e);
+  const msg = e instanceof Error ? e.message : String(e);
+  const missingTable = /relation .* does not exist|does not exist/i.test(msg);
+  return NextResponse.json(
+    {
+      error: "Terjadi kesalahan server (500).",
+      detail: msg,
+      hint: missingTable
+        ? "Tabel database belum dibuat di server. POST ke /api/setup {\"seed\": true} atau jalankan db/schema.sql — lihat README.md."
+        : "Periksa DATABASE_URL di environment variables dan log runtime.",
+    },
+    { status: 500 }
+  );
+}
+
 export async function POST(
+  req: NextRequest,
+  context: { params: Promise<{ action: string }> }
+) {
+  try {
+    return await handlePost(req, context);
+  } catch (e) {
+    return serverError(e);
+  }
+}
+
+async function handlePost(
   req: NextRequest,
   context: { params: Promise<{ action: string }> }
 ) {
