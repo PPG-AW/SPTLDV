@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 interface CardProps {
   children: ReactNode;
   className?: string;
-  gradient?: 'purple' | 'pink' | 'blue' | 'green' | 'orange' | 'yellow' | 'none';
+  gradient?: 'blue' | 'tosca' | 'yellow' | 'success' | 'warm' | 'purple' | 'orange' | 'none';
   glass?: boolean;
   hover?: boolean;
   hoverable?: boolean;
@@ -20,23 +20,25 @@ export function Card({
   glow = false
 }: CardProps) {
   const gradients = {
-    purple: 'bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600',
-    pink: 'bg-gradient-to-br from-pink-500 via-rose-500 to-red-500',
-    blue: 'bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500',
-    green: 'bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500',
-    orange: 'bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500',
-    yellow: 'bg-gradient-to-br from-yellow-400 via-yellow-500 to-orange-500',
-    none: 'bg-white'
+    blue: 'gradient-blue',
+    tosca: 'bg-gradient-to-br from-[#4EA8DE] via-[#7EC8E3] to-[#A7D8F0]',
+    yellow: 'bg-gradient-to-br from-[#FFD166] via-[#F4B942] to-[#FB923C]',
+    success: 'gradient-success',
+    warm: 'gradient-warm',
+    purple: 'bg-gradient-to-br from-[#7209B7] via-[#560BAD] to-[#3A0CA3]',
+    orange: 'bg-gradient-to-br from-[#FB8500] via-[#FB923C] to-[#F4B942]',
+    none: 'bg-white',
   };
 
   const shouldHover = hover || hoverable;
 
   const baseClasses = `
     rounded-2xl
-    ${glass ? 'glass' : ''}
+    ${glass && gradient === 'none' ? 'glass' : ''}
     ${shouldHover ? 'hover-lift' : ''}
-    ${glow ? 'shadow-glow' : 'shadow-modern'}
+    ${glow ? 'shadow-glow-blue' : gradient === 'none' ? 'shadow-soft' : 'shadow-medium'}
     transition-all duration-300
+    ${gradient !== 'none' ? 'text-white' : ''}
     ${className}
   `;
 
@@ -47,41 +49,17 @@ export function Card({
   );
 }
 
-interface CardHeaderProps {
-  children: ReactNode;
-  className?: string;
-}
-
+interface CardHeaderProps { children: ReactNode; className?: string; }
 export function CardHeader({ children, className = '' }: CardHeaderProps) {
-  return (
-    <div className={`px-6 py-5 border-b border-white/20 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`px-6 py-5 border-b border-gray-100 ${className}`}>{children}</div>;
 }
 
-interface CardBodyProps {
-  children: ReactNode;
-  className?: string;
-}
-
+interface CardBodyProps { children: ReactNode; className?: string; }
 export function CardBody({ children, className = '' }: CardBodyProps) {
-  return (
-    <div className={`px-6 py-6 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`px-6 py-5 ${className}`}>{children}</div>;
 }
 
-interface CardFooterProps {
-  children: ReactNode;
-  className?: string;
-}
-
+interface CardFooterProps { children: ReactNode; className?: string; }
 export function CardFooter({ children, className = '' }: CardFooterProps) {
-  return (
-    <div className={`px-6 py-4 border-t border-white/20 bg-white/5 ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`px-6 py-4 border-t border-gray-100 bg-gray-50/50 rounded-b-2xl ${className}`}>{children}</div>;
 }
