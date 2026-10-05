@@ -54,7 +54,8 @@ export async function GET(req: NextRequest) {
 
   const misconception = Array.from({ length: TOTAL_SUBBAB }, (_, i) => {
     const sub = i + 1;
-    const errs = logs.filter((l) => l.subbab === sub && !l.isCorrect);
+    const all = logs.filter((l) => l.subbab === sub);
+    const errs = all.filter((l) => !l.isCorrect);
     const detailCount = new Map<string, number>();
     for (const l of errs) {
       const key = (l.errorDetail ?? "Jawaban belum tepat").slice(0, 90);
@@ -64,12 +65,25 @@ export async function GET(req: NextRequest) {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3)
       .map(([detail, count]) => ({ detail, count }));
+    // template yang paling sering salah pada sub-bab ini
+    const tplCount = new Map<string, number>();
+    for (const l of errs) tplCount.set(l.templateId, (tplCount.get(l.templateId) ?? 0) + 1);
+    const topTemplates = [...tplCount.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([templateId, count]) => ({ templateId, count }));
+    const hinted = all.filter((l) => l.hintLevel > 0);
     return {
       subbab: sub,
       errorCount: errs.length,
       uniqueStudents: new Set(errs.map((l) => l.studentId)).size,
-      attempts: logs.filter((l) => l.subbab === sub).length,
+      attempts: all.length,
       common,
+      topTemplates,
+      hintCount: hinted.length,
+      hintTotal: all.reduce((a, l) => a + l.hintLevel, 0),
+      hintStudents: new Set(hinted.map((l) => l.studentId)).size,
+      hintH3: all.filter((l) => l.hintLevel >= 3).length,
     };
   });
 

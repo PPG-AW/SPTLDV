@@ -16,6 +16,7 @@ import {
   linExpr,
   neg,
   num,
+  simplifyLine,
   stepsInterceptX,
   stepsInterceptY,
   stepsMixedMethod,
@@ -25,6 +26,7 @@ import {
   hintMixedMethod,
   hintTestPoint,
   hintObjective,
+  tableText,
 } from "./mathfmt";
 
 // ── Tipe ─────────────────────────────────────────────────────────────────────
@@ -90,6 +92,17 @@ export function parseNum(raw: unknown): number {
 }
 
 const pt = (x: number, y: number): Pt => ({ x, y });
+
+/** Garis dari dua titik potong sumbu, disederhanakan sampai FPB(a,b,c) = 1. */
+function intLine(p: number, q: number): { a: number; b: number; c: number } {
+  const l = lineFromIntercepts(p, q);
+  return simplifyLine(l.a, l.b, l.c);
+}
+
+/** Pastikan pertidaksamaan tampil dalam bentuk paling sederhana. */
+function simp<T extends { a: number; b: number; c: number }>(l: T): T {
+  return { ...l, ...simplifyLine(l.a, l.b, l.c) };
+}
 const SYM: Record<Sign, string> = { "<=": "≤", ">=": "≥", "<": "<", ">": ">" };
 const isDashed = (s: Sign) => s === "<" || s === ">";
 const flip = (s: Sign): Sign => ({ "<=": ">=", ">=": "<=", "<": ">", ">": "<" } as Record<Sign, Sign>)[s];
@@ -209,7 +222,7 @@ function integerCornerSystem(forceTwoLines = false): { ineqs: IneqSpec[]; lines:
     const mode = forceTwoLines ? ri(1, 3) : ri(0, 3);
     let lines: IneqSpec[];
     if (mode === 0) {
-      lines = [{ ...lineFromIntercepts(ri(3, 8), ri(3, 8)), sign: "<=" }];
+      lines = [simp({ ...lineFromIntercepts(ri(3, 8), ri(3, 8)), sign: "<=" })];
     } else if (mode === 1) {
       const px = ri(1, 4), py = ri(1, 4);
       lines = [
@@ -359,7 +372,7 @@ function sub2Line() {
   const p = ri(2, 7);
   const q = ri(2, 7);
   const negY = Math.random() < 0.4; // titik potong sumbu Y negatif → gradien positif
-  const line = lineFromIntercepts(p, negY ? -q : q);
+  const line = intLine(p, negY ? -q : q);
   return { p, q: negY ? -q : q, line };
 }
 
@@ -437,7 +450,138 @@ function sub3Ineq(): IneqSpec {
   const p = ri(2, 6);
   const q = ri(2, 6);
   const negY = Math.random() < 0.35;
-  return { ...lineFromIntercepts(p, negY ? -q : q), sign: pick<Sign>(["<=", ">=", "<", ">"]) };
+  return simp({ ...lineFromIntercepts(p, negY ? -q : q), sign: pick<Sign>(["<=", ">=", "<", ">"]) });
+}
+
+// ═══ Soal khusus Sub-Bab 2.0 — menyederhanakan pertidaksamaan ════════════════
+
+/** Bentuk belum sederhana: ambil garis sederhana lalu kalikan semuanya dgn m. */
+function unsimplified() {
+  const p = ri(2, 6);
+  const q0 = ri(2, 6);
+  const base = intLine(p, q0);
+  const m = pick([2, 3, 4]);
+  const sign = pick<Sign>(["<=", ">="]);
+  const shown = { a: base.a * m, b: base.b * m, c: base.c * m, sign };
+  return { shown, base: { ...base, sign }, m, sign };
+}
+
+function t201(): Question {
+  const u = unsimplified();
+  const text = eqStr(u.shown.a, u.shown.b, u.shown.c, SYM[u.sign]);
+  const simpleText = eqStr(u.base.a, u.base.b, u.base.c, SYM[u.sign]);
+  const steps =
+    `${text}\n` +
+    `> Hitung FPB dari ${u.shown.a}, ${u.shown.b}, dan ${u.shown.c}:\n` +
+    `> Pembagi persekutuan terbesar adalah ${u.m}.\n` +
+    `> Bagi ketiga suku dengan ${u.m} (tanda tidak berubah karena dibagi bilangan positif):\n` +
+    `${u.shown.a}x/${u.m} + ${u.shown.b}y/${u.m} ≤ ${u.shown.c}/${u.m}\n` +
+    `${simpleText}`;
+  const q = baseQ(2, "2.0.1", "fill",
+    "Sederhanakan pertidaksamaan berikut sampai bentuk paling sederhana, lalu isikan nilai koefisien x, koefisien y, dan konstantanya.",
+    [
+      "Menyederhanakan artinya membagi seluruh suku dengan faktor persekutuan yang sama.",
+      `Carilah FPB dari ${u.shown.a}, ${u.shown.b}, dan ${u.shown.c} — coba pembagi terbesar yang membagi habis ketiganya.`,
+      `FPB ketiganya adalah ${u.m}. Bagilah ketiga suku (${u.shown.a}x, ${u.shown.b}y, dan ${u.shown.c}) satu per satu dengan ${u.m}. Tanda pertidaksamaan tidak berubah.`,
+    ],
+    `Bentuk paling sederhananya adalah ${simpleText}.`,
+    {
+      math: text,
+      fillFields: [
+        { key: "a", label: "a (koefisien x)" },
+        { key: "b", label: "b (koefisien y)" },
+        { key: "c", label: "c (konstanta)" },
+      ],
+      explainSteps: steps,
+    });
+  q.check = fillCheck(
+    { a: u.base.a, b: u.base.b, c: u.base.c },
+    { a: "a", b: "b", c: "c" }
+  );
+  return q;
+}
+
+function t202(): Question {
+  // satu opsi FPB = 1, sisanya FPB ≥ 2
+  const gg = (x: number, y: number): number => {
+    x = Math.abs(x); y = Math.abs(y);
+    while (y) [x, y] = [y, x % y];
+    return x || 1;
+  };
+  const fpb3 = (a: number, b: number, c: number) => gg(gg(a, b), c);
+
+  const okBase = intLine(ri(2, 7), ri(3, 7));
+  const correctText = eqStr(okBase.a, okBase.b, okBase.c, "≤");
+
+  const used = new Set<string>([correctText]);
+  const distractors: { label: string; why: string }[] = [];
+  let guard = 0;
+  while (distractors.length < 3 && guard++ < 40) {
+    const b = intLine(ri(2, 6), ri(3, 6));
+    const f = pick([2, 3, 4]);
+    const shown = { a: b.a * f, b: b.b * f, c: b.c * f };
+    const label = eqStr(shown.a, shown.b, shown.c, "≤");
+    if (used.has(label)) continue;
+    if (fpb3(shown.a, shown.b, shown.c) < 2) continue;
+    used.add(label);
+    const g = fpb3(shown.a, shown.b, shown.c);
+    distractors.push({
+      label,
+      why: `FPB dari ${shown.a}, ${shown.b}, dan ${shown.c} adalah ${g}, jadi masih bisa dibagi ${g}.`,
+    });
+  }
+  while (distractors.length < 3) {
+    // cadangan deterministik yang pasti FPB ≥ 2 dan unik
+    const extra = [
+      { a: 2, b: 4, c: 12 }, { a: 6, b: 3, c: 15 }, { a: 4, b: 2, c: 10 },
+    ][distractors.length];
+    const label = eqStr(extra.a, extra.b, extra.c, "≤");
+    if (used.has(label)) continue;
+    used.add(label);
+    const g = fpb3(extra.a, extra.b, extra.c);
+    distractors.push({ label, why: `FPB dari ${extra.a}, ${extra.b}, dan ${extra.c} adalah ${g}, jadi masih bisa dibagi ${g}.` });
+  }
+
+  const variants = shuffle([{ label: correctText, why: "", ok: true }, ...distractors.map((d) => ({ ...d, ok: false }))]);
+  const opts = variants.map((v, i2) => ({ id: `o${i2}`, label: v.label }));
+  const notes: Record<string, string> = {};
+  variants.forEach((v, i2) => { if (!v.ok) notes[`o${i2}`] = v.why; });
+  const q = baseQ(2, "2.0.2", "mc",
+    "Manakah pertidaksamaan berikut yang SUDAH dalam bentuk paling sederhana (FPB koefisien dan konstantanya = 1)?",
+    [
+      "Menyederhanakan artinya seluruh suku tidak bisa lagi dibagi bilangan yang sama. Artinya FPB dari ketiga angkanya adalah 1.",
+      "Periksa setiap opsi satu per satu: hitung FPB dari koefisien x, koefisien y, dan konstantanya.",
+      "Cari pembagi persekutuan dari tiap angka di setiap pilihan. Opsi yang FPB-nya tepat 1 adalah jawabannya; sisanya masih bisa disederhanakan lagi.",
+    ],
+    `Hanya ${correctText} yang FPB-nya tepat 1, sehingga bentuk itulah yang sudah paling sederhana.`,
+    { mcOptions: opts });
+  q.check = mcCheck(opts[variants.findIndex((v) => v.ok)].id, notes);
+  return q;
+}
+function t203(): Question {
+  const u = unsimplified();
+  const text = eqStr(u.shown.a, u.shown.b, u.shown.c, SYM[u.sign]);
+  const simpleText = eqStr(u.base.a, u.base.b, u.base.c, SYM[u.sign]);
+  const q = baseQ(2, "2.0.3", "fill",
+    "Sebelum menyederhanakan pertidaksamaan ini, tentukan dahulu FPB dari koefisien x, koefisien y, dan konstantanya.",
+    [
+      "FPB adalah faktor persekutuan terbesar: angka terbesar yang membagi habis semua angka sekaligus.",
+      `Daftar pembagi dari ${u.shown.a}, dari ${u.shown.b}, dan dari ${u.shown.c}, lalu cari yang muncul di ketiganya.`,
+      "Cari pembagi paling besar yang sama di ketiga daftar pembagi. Mulai dari angka yang paling besar agar cepat ketemu.",
+    ],
+    `FPB dari ${u.shown.a}, ${u.shown.b}, dan ${u.shown.c} adalah ${u.m}, sehingga bentuk sederhannya ${simpleText}.`,
+    {
+      math: text,
+      fillFields: [{ key: "g", label: "FPB ketiga angka" }],
+      explainSteps:
+        `${text}\n` +
+        `> Daftar pembagi ketiga angka, lalu sama-sama dicari:\n` +
+        `> Pembagi persekutuan terbesarnya adalah ${u.m}.\n` +
+        `> Maka bentuk paling sederhana (dibagi ${u.m}):\n` +
+        `${simpleText}`,
+    });
+  q.check = fillCheck({ g: u.m }, { g: "FPB" });
+  return q;
 }
 
 function t31(): Question {
@@ -491,8 +635,8 @@ function t32(): Question {
   const p = ri(2, 6), q0 = ri(2, 6);
   const sign = pick<Sign>(["<=", ">=", "<", ">"]);
   const dashed = isDashed(sign);
-  const line = lineFromIntercepts(p, q0);
-  const wrongLine = lineFromIntercepts(q0 === p ? p + 2 : q0, p); // titik potong tertukar
+  const line = intLine(p, q0);
+  const wrongLine = lineFromIntercepts(q0 === p ? p + 2 : q0, p); // titik potong tertukar (distraktor visual)
   const xr = rangeFor([p, q0, wrongLine.c / wrongLine.a]);
   const yr = rangeFor([q0, p, wrongLine.c / wrongLine.b]);
   const mk = (l: { a: number; b: number; c: number }, dash: boolean): CanvasSpec => ({
@@ -533,7 +677,7 @@ function t32(): Question {
 
 function t33(): Question {
   const p = ri(2, 6), q0 = ri(2, 6);
-  const line = lineFromIntercepts(p, q0);
+  const line = intLine(p, q0);
   const sign = pick<Sign>(["<=", ">="]);
   const steps = `${stepsInterceptX(line.a, line.b, line.c)}\n${stepsInterceptY(line.a, line.b, line.c)}\n> Ketuk kedua titik tersebut, lalu hubungkan menjadi garis pembatas.`;
   const q = baseQ(3, "3.3", "points",
@@ -562,7 +706,7 @@ function sub4Ineq(): IneqSpec {
   let q0 = ri(3, 6);
   // pastikan p ≠ q0 supaya distraktor "koefisien tertukar" tidak kembar dengan kunci
   while (q0 === p) q0 = ri(3, 6);
-  return { ...lineFromIntercepts(p, q0), sign: pick<Sign>(["<=", ">="]) };
+  return simp({ ...lineFromIntercepts(p, q0), sign: pick<Sign>(["<=", ">="]) });
 }
 
 function t41(): Question {
@@ -650,25 +794,25 @@ function t43(): Question {
   const mk = (i: IneqSpec): CanvasSpec => ({ ...base, lines: [i], shadeIndices: [0] });
   const variants = shuffle([
     { spec: mk(ineq), why: "", ok: true },
-    { spec: mk({ ...ineq, sign: flip(ineq.sign) }), why: "Sisi yang diarsir terbalik. Ingat: yang diarsir adalah daerah yang BUKAN penyelesaian.", ok: false },
+    { spec: mk({ ...ineq, sign: flip(ineq.sign) }), why: "Sisi yang diarsir terbalik. Periksa: yang diarsir haruslah daerah penyelesaian sesuai hasil uji titik.", ok: false },
     { spec: mk({ ...ineq, dashed: true }), why: "Jenis garisnya keliru — tanda ≤ atau ≥ digambar dengan garis penuh.", ok: false },
     { spec: mk({ a: ineq.b, b: ineq.a, c: ineq.c, sign: ineq.sign }), why: "Garis pembatasnya bukan yang diminta; periksa kembali kedua titik potongnya.", ok: false },
   ]);
   const q = baseQ(4, "4.3", "graph",
-    "Manakah gambar yang TEPAT untuk pertidaksamaan berikut? (arsiran menandai daerah yang BUKAN penyelesaian)",
+    "Manakah gambar yang TEPAT untuk pertidaksamaan berikut? (daerah berwarna = daerah penyelesaian)",
     [
       "Tentukan dahulu garis pembatasnya melalui kedua titik potong, kemudian lakukan uji titik (0, 0).",
       `${hintInterceptX(ineq.a, ineq.b, ineq.c)}\n${hintInterceptY(ineq.a, ineq.b, ineq.c)}`,
-      `${hintTestPoint(ineq.a, ineq.b, ineq.c, SYM[ineq.sign], 0, 0)}\n> Ingat konvensinya: yang DIARSIR adalah daerah yang bukan penyelesaian, sehingga daerah penyelesaian justru tampil bersih.`,
+      `${hintTestPoint(ineq.a, ineq.b, ineq.c, SYM[ineq.sign], 0, 0)}\n> Ingat konvensinya: yang DIARSIR adalah daerah penyelesaian. Sisi mana yang diarsir ditentukan oleh hasil uji titik (0, 0).`,
     ],
-    `Garis penuh melalui (${num(ineq.c / ineq.a)}, 0) dan (0, ${num(ineq.c / ineq.b)}), dengan daerah bersih (penyelesaian) di sisi yang ${r.ok ? "memuat" : "tidak memuat"} titik (0, 0).`,
+    `Garis penuh melalui (${num(ineq.c / ineq.a)}, 0) dan (0, ${num(ineq.c / ineq.b)}), dengan daerah penyelesaian (yang diarsir) di sisi yang ${r.ok ? "memuat" : "tidak memuat"} titik (0, 0).`,
     {
       math: ineqStr(ineq),
       graphOptions: variants.map((v) => v.spec),
       explainSteps:
         `${stepsInterceptX(ineq.a, ineq.b, ineq.c)}\n${stepsInterceptY(ineq.a, ineq.b, ineq.c)}\n${r.text}\n` +
         `> Karena hasil uji ${r.ok ? "BENAR" : "SALAH"}, daerah penyelesaian ${r.ok ? "memuat" : "tidak memuat"} titik (0, 0).\n` +
-        `> Arsiran diletakkan pada daerah seberangnya, yaitu daerah yang BUKAN penyelesaian.`,
+        `> Arsiran diletakkan tepat pada daerah penyelesaian yang dipilih oleh uji titik.`,
     });
   q.check = graphCheck(variants);
   return q;
@@ -830,9 +974,9 @@ function t62(): Question {
     [
       "Periksa tiga hal pada setiap pilihan: sisi penyelesaian tiap kendala, penerapan kendala x ≥ 0 dan y ≥ 0, serta jenis garisnya.",
       `Lakukan uji titik (0, 0) pada kedua kendala:\n${hintTestPoint(l1.a, l1.b, l1.c, SYM[l1.sign], 0, 0)}`,
-      "Sekarang bandingkan setiap pilihan: apakah daerah bersihnya terkurung di Kuadran I? apakah sisi bersihnya sesuai hasil uji titikmu? apakah jenis garisnya sesuai tanda pada kendala? Hanya satu pilihan yang lolos ketiganya.",
+      "Sekarang bandingkan setiap pilihan: apakah daerah ungu (DHP) terkurung di Kuadran I? apakah sisi arsirannya sesuai hasil uji titikmu? apakah jenis garisnya sesuai tanda pada kendala? Hanya satu pilihan yang lolos ketiganya.",
     ],
-    "DHP yang benar adalah daerah bersih di Kuadran I yang dibatasi oleh kedua garis penuh serta kedua sumbu.",
+    "DHP yang benar adalah daerah ungu di Kuadran I yang dibatasi oleh kedua garis penuh serta kedua sumbu.",
     {
       math: `${ineqStr(l1)} ;  ${ineqStr(l2)} ;  x ≥ 0 ;  y ≥ 0`,
       graphOptions: variants.map((v) => v.spec),
@@ -840,7 +984,7 @@ function t62(): Question {
         `> Uji titik (0, 0) pada kendala pertama:\n${stepsTestPoint(l1.a, l1.b, l1.c, SYM[l1.sign], 0, 0).text}\n` +
         `> Uji titik (0, 0) pada kendala kedua:\n${stepsTestPoint(l2.a, l2.b, l2.c, SYM[l2.sign], 0, 0).text}\n` +
         `> Tambahkan kendala x ≥ 0 dan y ≥ 0 yang mengurung daerah di Kuadran I.\n` +
-        `> DHP adalah daerah bersih dengan titik pojok: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}.`,
+        `> DHP adalah daerah ungu dengan titik pojok: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}.`,
     });
   q.check = graphCheck(variants);
   return q;
@@ -850,13 +994,13 @@ function t63(): Question {
   const sys = integerCornerSystem(true);
   const [l1, l2] = sys.lines;
   const q = baseQ(6, "6.3", "region-tap",
-    "Ketuk satu titik berkoordinat bulat yang berada DI DALAM DHP sistem berikut (daerah bersih tanpa arsiran).",
+    "Ketuk satu titik berkoordinat bulat yang berada DI DALAM DHP sistem berikut (daerah ungu hasil irisan).",
     [
       "Titik di dalam DHP harus memenuhi SEMUA kendala, termasuk x ≥ 0 dan y ≥ 0.",
       `Pilih sebuah titik percobaan di Kuadran I, lalu substitusikan ke setiap kendala:\n${ineqStr(l1)}\n${ineqStr(l2)}`,
       "Perhatikan bahwa kedua kendala bertanda ≤. Artinya semakin kecil nilai x dan y, semakin besar peluang titik itu memenuhi keduanya. Uji dahulu titik pilihanmu dengan substitusi sebelum mengetuk grafik.",
     ],
-    "Setiap titik yang memenuhi seluruh kendala berada di dalam DHP, yaitu daerah bersih tanpa arsiran.",
+    "Setiap titik yang memenuhi seluruh kendala berada di dalam DHP, yaitu daerah ungu hasil irisan.",
     {
       math: `${ineqStr(l1)} ;  ${ineqStr(l2)} ;  x ≥ 0 ;  y ≥ 0`,
       canvas: specFor([l1, l2], { dhpIneqs: sys.ineqs }),
@@ -865,7 +1009,7 @@ function t63(): Question {
       explainSteps:
         `> Sebuah titik berada di dalam DHP bila memenuhi seluruh kendala:\n` +
         `${ineqStr(l1)}\n${ineqStr(l2)}\nx ≥ 0\ny ≥ 0\n` +
-        `> Titik pojok DHP ini: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}. Titik mana pun di dalam daerah bersih tersebut adalah jawaban yang benar.`,
+        `> Titik pojok DHP ini: ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}. Titik mana pun di dalam daerah ungu tersebut adalah jawaban yang benar.`,
     });
   const checker: CheckFn = (answer) => {
     const taps = (answer ?? []) as Pt[];
@@ -910,9 +1054,9 @@ function t71(): Question {
   const n = Math.min(Math.max(sys.corners.length, 2), 5);
   const opts = [2, 3, 4, 5].map((k, i) => ({ id: `o${i}`, label: `${k} titik`, k }));
   const q = baseQ(7, "7.1", "mc",
-    "Perhatikan DHP (daerah bersih tanpa arsiran) pada grafik. Berapa banyak titik pojok yang dimilikinya?",
+    "Perhatikan DHP (daerah ungu yang diarsir) pada grafik. Berapa banyak titik pojok yang dimilikinya?",
     [
-      "Titik pojok adalah sudut-sudut dari daerah bersih (tidak diarsir). Telusuri tepinya satu putaran penuh.",
+      "Titik pojok adalah sudut-sudut dari daerah ungu tersebut. Telusuri tepinya satu putaran penuh.",
       "Perhatikan setiap kali tepi daerah berbelok arah — di setiap belokan itulah terdapat sebuah titik pojok.",
       "Jangan sampai ada yang terlewat: hitung juga sudut yang dibentuk oleh sumbu X dengan sumbu Y, sudut tempat garis kendala memotong sumbu, serta sudut tempat dua garis kendala berpotongan.",
     ],
@@ -921,7 +1065,7 @@ function t71(): Question {
       canvas: cornerSpec(sys, { points: sys.corners.map((c) => ({ p: c, hollow: true, color: "#7C3AED" })) }),
       mcOptions: opts.map(({ id, label }) => ({ id, label })),
       explainSteps:
-        `> Telusuri tepi daerah bersih dan catat setiap sudutnya:\n` +
+        `> Telusuri tepi daerah ungu dan catat setiap sudutnya:\n` +
         sys.corners.map((c, i) => `> Sudut ke-${i + 1}: (${num(c.x)}, ${num(c.y)})`).join("\n") +
         `\n> Banyaknya titik pojok = ${n}.`,
     });
@@ -936,8 +1080,8 @@ function t72(): Question {
     `Ketuk SEMUA titik pojok DHP berikut (${need} titik, urutan bebas).`,
     [
       "Mulailah dari sudut yang paling mudah dibaca, yaitu perpotongan kedua sumbu dan perpotongan garis dengan sumbu.",
-      "Setelah itu, perhatikan sudut tempat dua garis kendala saling berpotongan — pastikan titik tersebut masih berada pada tepi daerah bersih.",
-      "Periksa ulang hasilmu: setiap titik pojok harus merupakan pertemuan dua garis pembatas DAN harus memenuhi seluruh kendala. Titik yang berada di luar daerah bersih bukan titik pojok.",
+      "Setelah itu, perhatikan sudut tempat dua garis kendala saling berpotongan — pastikan titik tersebut masih berada pada tepi daerah ungu.",
+      "Periksa ulang hasilmu: setiap titik pojok harus merupakan pertemuan dua garis pembatas DAN harus memenuhi seluruh kendala. Titik yang berada di luar daerah ungu bukan titik pojok.",
     ],
     `Titik pojok DHP ini adalah ${sys.corners.map((c) => `(${num(c.x)}, ${num(c.y)})`).join(", ")}.`,
     {
@@ -1151,14 +1295,31 @@ function t93(): Question {
 // ════════════════ SUB-BAB 10 ════════════════════════════════════════════════
 
 interface Story {
-  A: string; B: string; pa: number; pb: number; kap1: number; sat1: string;
-  kap2: number; ua: number; ub: number;
+  A: string; B: string;
+  pa1: number; pb1: number; kap1: number; sat1: string;
+  pa2: number; pb2: number; kap2: number; sat2: string;
+  ua: number; ub: number;
 }
+/** Semua angka dipilih agar FPB tiap kendala = 1 (bentuk paling sederhana). */
 const STORIES: Story[] = [
-  { A: "kursi", B: "meja", pa: 2, pb: 4, kap1: 32, sat1: "jam kerja", kap2: 10, ua: 40, ub: 60 },
-  { A: "kue bolu", B: "kue brownies", pa: 2, pb: 1, kap1: 24, sat1: "ons tepung", kap2: 15, ua: 5, ub: 4 },
-  { A: "kaos", B: "kemeja", pa: 1, pb: 2, kap1: 20, sat1: "meter kain", kap2: 12, ua: 30, ub: 50 },
+  { A: "kursi", B: "meja", pa1: 2, pb1: 3, kap1: 18, sat1: "jam kerja", pa2: 1, pb2: 2, kap2: 12, sat2: "peti gudang", ua: 40, ub: 60 },
+  { A: "kue bolu", B: "kue brownies", pa1: 2, pb1: 3, kap1: 24, sat1: "ons tepung", pa2: 1, pb2: 2, kap2: 16, sat2: "loyang oven", ua: 5, ub: 4 },
+  { A: "kaos", B: "kemeja", pa1: 1, pb1: 2, kap1: 20, sat1: "meter kain", pa2: 1, pb2: 3, kap2: 21, sat2: "kancing", ua: 30, ub: 50 },
 ];
+
+/** Tabel bantu cerita (monospace) untuk pembahasan Sub-Bab 10. */
+function tabelCerita(s: Story): string {
+  return tableText({
+    header: ["Sumber daya", `${s.A}(x)`, `${s.B}(y)`, "Tersedia"],
+    rows: [
+      [s.sat1, String(s.pa1), String(s.pb1), String(s.kap1)],
+      [s.sat2, String(s.pa2), String(s.pb2), String(s.kap2)],
+    ],
+  });
+}
+
+const kend1 = (s: Story) => `${linExpr(s.pa1, s.pb1)} ≤ ${s.kap1}`;
+const kend2 = (s: Story) => `${linExpr(s.pa2, s.pb2)} ≤ ${s.kap2}`;
 
 function t101(): Question {
   const s = pick(STORIES);
@@ -1187,30 +1348,31 @@ function t101(): Question {
 
 function t102(): Question {
   const s = pick(STORIES);
-  const correct = `${linExpr(s.pa, s.pb)} ≤ ${s.kap1}`;
+  const correct = kend1(s);
   const variants = shuffle([
     { label: correct, why: "", ok: true },
-    { label: `${linExpr(s.pa, s.pb)} ≥ ${s.kap1}`, why: "Sumber daya yang \"tersedia\" adalah batas ATAS, sehingga tandanya ≤.", ok: false },
-    { label: `${linExpr(s.pb, s.pa)} ≤ ${s.kap1}`, why: "Koefisien kebutuhan kedua objek tertukar.", ok: false },
-    { label: `${linExpr(s.pa, s.pb)} = ${s.kap1}`, why: "Bahan tidak harus habis persis; cukup tidak melebihi kapasitas.", ok: false },
+    { label: `${linExpr(s.pa1, s.pb1)} ≥ ${s.kap1}`, why: "Sumber daya yang \"tersedia\" adalah batas ATAS, sehingga tandanya ≤.", ok: false },
+    { label: `${linExpr(s.pb1, s.pa1)} ≤ ${s.kap1}`, why: "Koefisien kebutuhan kedua objek tertukar.", ok: false },
+    { label: `${linExpr(s.pa1, s.pb1)} = ${s.kap1}`, why: "Sumber daya tidak harus habis persis; cukup tidak melebihi kapasitas.", ok: false },
   ]);
   const opts = variants.map((v, i) => ({ id: `o${i}`, label: v.label }));
   const notes: Record<string, string> = {};
   variants.forEach((v, i) => { if (!v.ok) notes[`o${i}`] = v.why; });
   const q = baseQ(10, "10.2", "mc",
-    `Setiap ${s.A} memerlukan ${s.pa} ${s.sat1} dan setiap ${s.B} memerlukan ${s.pb} ${s.sat1}. Total yang tersedia adalah ${s.kap1} ${s.sat1}. Kendala yang tepat adalah…`,
+    `Setiap ${s.A} memerlukan ${s.pa1} ${s.sat1} dan setiap ${s.B} memerlukan ${s.pb1} ${s.sat1}. Total yang tersedia adalah ${s.kap1} ${s.sat1}. Kendala yang tepat adalah…`,
     [
       "Susun bentuk total kebutuhannya: (kebutuhan per unit) dikali (banyaknya), untuk kedua objek.",
-      `Kebutuhan untuk ${s.A} adalah ${s.pa === 1 ? "x" : `${s.pa}x`} dan kebutuhan untuk ${s.B} adalah ${s.pb === 1 ? "y" : `${s.pb}y`}. Jumlahkan keduanya.`,
+      `Kebutuhan untuk ${s.A} adalah ${s.pa1 === 1 ? "x" : `${s.pa1}x`} dan kebutuhan untuk ${s.B} adalah ${s.pb1 === 1 ? "y" : `${s.pb1}y`}. Jumlahkan keduanya.`,
       "Sekarang tentukan tandanya. Kata \"tersedia\" menunjukkan batas maksimum: pemakaian boleh kurang dari itu, tetapi tidak boleh melebihi, dan tidak harus habis persis. Pastikan pula koefisiennya tidak tertukar.",
     ],
-    `Total kebutuhan ${linExpr(s.pa, s.pb)} tidak boleh melebihi ${s.kap1}, sehingga kendalanya adalah ${correct}.`,
+    `Total kebutuhan ${linExpr(s.pa1, s.pb1)} tidak boleh melebihi ${s.kap1}, sehingga kendalanya adalah ${correct}.`,
     {
       mcOptions: opts,
       explainSteps:
-        `> Kebutuhan untuk ${s.A}:\n${s.pa === 1 ? "x" : `${s.pa}x`}\n` +
-        `> Kebutuhan untuk ${s.B}:\n${s.pb === 1 ? "y" : `${s.pb}y`}\n` +
-        `> Total kebutuhan:\n${linExpr(s.pa, s.pb)}\n` +
+        `> Susun tabel bantu dari data kebutuhan terlebih dahulu:\n${tabelCerita(s)}\n` +
+        `> Dari baris tabel, kebutuhan untuk ${s.A}:\n${s.pa1 === 1 ? "x" : `${s.pa1}x`}\n` +
+        `> Kebutuhan untuk ${s.B}:\n${s.pb1 === 1 ? "y" : `${s.pb1}y`}\n` +
+        `> Total kebutuhan:\n${linExpr(s.pa1, s.pb1)}\n` +
         `> Total tidak boleh melebihi ${s.kap1} ${s.sat1}:\n${correct}`,
     });
   q.check = mcCheck(opts[variants.findIndex((v) => v.ok)].id, notes);
@@ -1219,8 +1381,8 @@ function t102(): Question {
 
 function t103(): Question {
   const s = pick(STORIES);
-  const k1 = `${linExpr(s.pa, s.pb)} ≤ ${s.kap1}`;
-  const k2 = `${linExpr(1, 1)} ≤ ${s.kap2}`;
+  const k1 = kend1(s);
+  const k2 = kend2(s);
   const obj = `f(x, y) = ${linExpr(s.ua, s.ub)}`;
   const correct = `Maksimumkan ${obj} dengan kendala ${k1} ; ${k2} ; x ≥ 0 ; y ≥ 0`;
   const variants = shuffle([
@@ -1243,33 +1405,61 @@ function t103(): Question {
     {
       mcOptions: opts,
       explainSteps:
+        `> Susun tabel bantu dari soal cerita:\n${tabelCerita(s)}\n` +
         `> Fungsi tujuan dari keuntungan per unit:\n${obj}\n` +
         `> Kendala sumber daya:\n${k1}\n${k2}\n` +
-        `> Kendala non-negatif (wajib):\nx ≥ 0\ny ≥ 0\n` +
+        `> Kendala non-negatif (wajib ditambahkan):\nx ≥ 0\ny ≥ 0\n` +
         `> Karena yang dicari keuntungan terbesar, fungsi tujuan DIMAKSIMUMKAN.`,
     });
   q.check = mcCheck(opts[variants.findIndex((v) => v.ok)].id, notes);
   return q;
 }
-
 // ════════════════════════════════════════════════════════════════════════════
 
-const GENERATORS: Record<number, (() => Question)[]> = {
-  1: [t11, t12, t13], 2: [t21, t22, t23], 3: [t31, t32, t33], 4: [t41, t42, t43],
-  5: [t51, t52, t53], 6: [t61, t62, t63], 7: [t71, t72, t73], 8: [t81, t82, t83],
-  9: [t91, t92, t93], 10: [t101, t102, t103],
+const GENERATORS: Record<number, { id: string; gen: () => Question }[]> = {
+  1: [
+    { id: "1.1", gen: t11 }, { id: "1.2", gen: t12 }, { id: "1.3", gen: t13 },
+  ],
+  2: [
+    { id: "2.0.1", gen: t201 }, { id: "2.0.2", gen: t202 }, { id: "2.0.3", gen: t203 },
+    { id: "2.1", gen: t21 }, { id: "2.2", gen: t22 }, { id: "2.3", gen: t23 },
+  ],
+  3: [
+    { id: "3.1", gen: t31 }, { id: "3.2", gen: t32 }, { id: "3.3", gen: t33 },
+  ],
+  4: [
+    { id: "4.1", gen: t41 }, { id: "4.2", gen: t42 }, { id: "4.3", gen: t43 },
+  ],
+  5: [
+    { id: "5.1", gen: t51 }, { id: "5.2", gen: t52 }, { id: "5.3", gen: t53 },
+  ],
+  6: [
+    { id: "6.1", gen: t61 }, { id: "6.2", gen: t62 }, { id: "6.3", gen: t63 },
+  ],
+  7: [
+    { id: "7.1", gen: t71 }, { id: "7.2", gen: t72 }, { id: "7.3", gen: t73 },
+  ],
+  8: [
+    { id: "8.1", gen: t81 }, { id: "8.2", gen: t82 }, { id: "8.3", gen: t83 },
+  ],
+  9: [
+    { id: "9.1", gen: t91 }, { id: "9.2", gen: t92 }, { id: "9.3", gen: t93 },
+  ],
+  10: [
+    { id: "10.1", gen: t101 }, { id: "10.2", gen: t102 }, { id: "10.3", gen: t103 },
+  ],
 };
 
 export function generateQuestion(subbab: number, avoidTemplateId?: string): Question {
   const gens = GENERATORS[Math.min(Math.max(subbab, 1), 10)] ?? GENERATORS[1];
   let q: Question | null = null;
   for (let i = 0; i < 10; i++) {
-    const cand = pick(gens)();
+    const cand = pick(gens).gen();
     if (avoidTemplateId && cand.templateId === avoidTemplateId && gens.length > 1) continue;
     q = cand;
     break;
   }
-  if (!q) q = gens[0]();
+  if (!q) q = gens[0].gen();
   q.answerKey = q.check.key;
   return q;
 }
@@ -1277,4 +1467,20 @@ export function generateQuestion(subbab: number, avoidTemplateId?: string): Ques
 /** Semua generator (dipakai oleh skrip audit kunci jawaban). */
 export const ALL_GENERATORS = GENERATORS;
 
-export type { IneqSpec, Pt, Sign };
+/** Daftar template yang tersedia per sub-bab, untuk pemilih kasus guru. */
+export function templateIdsFor(subbab: number): string[] {
+  const gens = GENERATORS[Math.min(Math.max(subbab, 1), 10)] ?? [];
+  return gens.map((g) => g.id);
+}
+
+/** Membuat soal dari template tertentu, mis. "4.2" (dipakai Case Picker guru). */
+export function generateByTemplate(templateId: string): Question | null {
+  const sb = Number(templateId.split(".")[0]); // "2.0.1" → sub-bab 2, pencocokan id dilakukan penuh
+  const gens = GENERATORS[sb];
+  if (!gens) return null;
+  const entry = gens.find((g) => g.id === templateId);
+  if (!entry) return null;
+  const q = entry.gen();
+  q.answerKey = q.check.key;
+  return q;
+}

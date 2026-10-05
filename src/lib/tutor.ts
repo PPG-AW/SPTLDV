@@ -90,13 +90,38 @@ export async function getTutorList(classId: number): Promise<TutorInfo[]> {
 
 /** Ringkasan state lengkap mahasiswa untuk polling HP siswa. */
 export async function getStudentFullState(student: Student) {
-  await expireStaleRequests(student.classId);
-  const [cls] = await db.select().from(classes).where(eq(classes.id, student.classId)).limit(1);
+  // Siswa belum bergabung ke kelas: kirim state minimal untuk layar gabung kelas
+  if (student.classId == null) {
+    return {
+      student: {
+        id: student.id,
+        name: student.name,
+        currentSubbab: student.currentSubbab,
+        completed: student.completedSubbabs ?? [],
+        streak: student.streakCorrect,
+        errors: student.consecutiveErrors,
+        status: student.status,
+        lastActiveAt: student.lastActiveAt,
+      },
+      class: { id: 0, name: "", code: "", locked: false, size: 0, tutorQuota: 1 },
+      needsClass: true as const,
+      isTutor: false,
+      tutorBusy: false,
+      teaching: null,
+      incomingRequests: [],
+      myRequest: null,
+      myTeacherCallOpen: false,
+      summative: { unlocked: false, submitted: false, totalScore: null, scoreDetails: null },
+    };
+  }
+  const classId2 = student.classId;
+  await expireStaleRequests(classId2);
+  const [cls] = await db.select().from(classes).where(eq(classes.id, classId2)).limit(1);
   const classSize = (
-    await db.select().from(students).where(eq(students.classId, student.classId))
+    await db.select().from(students).where(eq(students.classId, classId2))
   ).length;
-  const tutorIds = await computeTutorIds(student.classId);
-  const busy = await busyTutorIds(student.classId);
+  const tutorIds = await computeTutorIds(classId2);
+  const busy = await busyTutorIds(classId2);
   const isTutor = tutorIds.includes(student.id);
   const tutorBusy = busy.has(student.id);
 
@@ -106,7 +131,7 @@ export async function getStudentFullState(student: Student) {
     .from(tutorSessions)
     .where(
       and(
-        eq(tutorSessions.classId, student.classId),
+        eq(tutorSessions.classId, classId2),
         eq(tutorSessions.tutorId, student.id),
         eq(tutorSessions.status, "ACTIVE")
       )
@@ -131,7 +156,7 @@ export async function getStudentFullState(student: Student) {
       .from(tutorSessions)
       .where(
         and(
-          eq(tutorSessions.classId, student.classId),
+          eq(tutorSessions.classId, classId2),
           eq(tutorSessions.status, "REQUESTED"),
           isNull(tutorSessions.tutorId)
         )
@@ -208,7 +233,7 @@ export async function getStudentFullState(student: Student) {
       lastActiveAt: student.lastActiveAt,
     },
     class: {
-      id: cls?.id ?? student.classId,
+      id: cls?.id ?? classId2,
       name: cls?.className ?? "",
       code: cls?.classCode ?? "",
       locked: cls?.isLocked ?? false,

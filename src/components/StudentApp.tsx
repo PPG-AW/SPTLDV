@@ -44,6 +44,7 @@ export interface StudentState {
   incomingRequests: { id: number; requesterName: string; subbab: number; ageSec: number }[];
   myRequest: { id: number; status: string; tutorName: string | null } | null;
   myTeacherCallOpen: boolean;
+  needsClass?: boolean;
   summative: { unlocked: boolean; submitted: boolean; totalScore: number | null; scoreDetails: unknown };
 }
 
@@ -131,6 +132,11 @@ export default function StudentApp({ initial }: { initial: StudentState }) {
       }
     } catch { /* abaikan */ }
   };
+
+  // ── Siswa belum bergabung ke kelas: tampilkan layar kode kelas dulu ──
+  if (st.needsClass) {
+    return <JoinClassView name={st.student.name} onJoined={refresh} />;
+  }
 
   const content = getSubbab(sel);
   const completed = new Set(st.student.completed);
@@ -307,7 +313,7 @@ export default function StudentApp({ initial }: { initial: StudentState }) {
               ) : section === "materi" ? (
                 <MateriView subbabId={sel} />
               ) : section === "video" ? (
-                <VideoView query={content.videoQuery} />
+                <VideoView subbabId={sel} />
               ) : section === "contoh" ? (
                 <ContohView subbabId={sel} />
               ) : section === "simulasi" ? (
@@ -544,6 +550,91 @@ export default function StudentApp({ initial }: { initial: StudentState }) {
   );
 }
 
+// ─── Layar gabung kelas (sebelum memasukkan kode kelas) ─────────────────────
+function JoinClassView({ name, onJoined }: { name: string; onJoined: () => void }) {
+  const [code, setCode] = useState("");
+  const [busy2, setBusy2] = useState(false);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+  const [okMsg, setOkMsg] = useState<string | null>(null);
+
+  const join = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusy2(true);
+    setErrMsg(null);
+    try {
+      const res = await fetch("/api/me/class", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ classCode: code }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErrMsg(data.error ?? "Gagal bergabung. Periksa kodenya lagi.");
+        return;
+      }
+      setOkMsg(`Kamu berhasil bergabung ke "${data.className}". Selamat belajar!`);
+      setTimeout(onJoined, 900);
+    } finally {
+      setBusy2(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#0A0A0A] p-5">
+      <div className="pointer-events-none absolute inset-0 opacity-70 [background:radial-gradient(700px_circle_at_50%_-10%,rgba(59,130,246,0.2),transparent_55%)]" />
+      <div className="relative w-full max-w-md">
+        <div className="mb-6 flex items-center gap-3">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[#0A0A0A]">
+            <GraduationCap size={20} />
+          </span>
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">Selamat datang</p>
+            <h1 className="font-display text-2xl font-bold tracking-tight text-white">Halo, {name}</h1>
+            <p className="text-xs text-white/45">Satu langkah lagi sebelum mulai belajar.</p>
+          </div>
+        </div>
+        <form onSubmit={join} className="rounded-3xl bg-white p-6 sm:p-7">
+          <p className="text-sm font-bold text-[#1A1A1A]">Masukkan kode kelas dari gurumu</p>
+          <p className="mt-1 text-xs leading-relaxed text-[#737373]">
+            Kode kelas biasanya dibagikan guru di papan tulis atau grup kelas, contohnya MTK-XA-2024. Tanpa kode ini
+            kamu belum bisa bergabung ke rombel.
+          </p>
+          <input
+            value={code}
+            onChange={(e) => setCode(e.target.value.toUpperCase())}
+            placeholder="Contoh: MTK-XA-2024"
+            autoFocus
+            className="mt-4 h-14 w-full rounded-xl border-2 border-[#E5E5E5] px-4 text-center font-mono text-lg font-bold uppercase tracking-[0.2em] outline-none transition focus:border-[#1A1A1A] focus:shadow-[0_0_0_3px_rgba(26,26,26,0.08)]"
+          />
+          {errMsg && (
+            <p className="mt-3 rounded-xl border border-[#EF4444]/30 bg-[#FEF2F2] px-3.5 py-2.5 text-xs text-[#991B1B]">{errMsg}</p>
+          )}
+          {okMsg && (
+            <p className="mt-3 flex items-center gap-2 rounded-xl border border-[#10B981]/30 bg-[#ECFDF5] px-3.5 py-2.5 text-xs text-[#065F46]">
+              <Check size={14} /> {okMsg}
+            </p>
+          )}
+          <button
+            type="submit"
+            disabled={busy2 || code.trim().length < 4 || !!okMsg}
+            className="mt-4 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-[#1A1A1A] text-sm font-bold text-white transition active:scale-[0.98] disabled:opacity-40"
+          >
+            {busy2 ? <Loader2 size={17} className="animate-spin" /> : <ArrowRight size={16} />}
+            {okMsg ? "Membuka kelas…" : "Gabung ke Kelas"}
+          </button>
+          <button
+            type="button"
+            onClick={async () => { await fetch("/api/auth/logout", { method: "POST" }); location.href = "/"; }}
+            className="mt-2.5 min-h-[44px] w-full rounded-xl border border-[#E5E5E5] text-sm font-semibold text-[#525252]"
+          >
+            Bukan kamu? Keluar akun
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 function Modal({ children, onClose }: { children: React.ReactNode; onClose?: () => void }) {
   return (
     <div className="fixed inset-0 z-[90] flex items-end justify-center bg-black/55 p-4 backdrop-blur-sm sm:items-center">
@@ -582,6 +673,31 @@ function MateriView({ subbabId }: { subbabId: number }) {
                 </ol>
               )}
 
+              {m.table && (
+                <div className="mt-3 overflow-x-auto rounded-xl border border-[#E5E5E5]">
+                  <table className="w-full border-collapse text-left">
+                    <thead>
+                      <tr className="bg-[#1A1A1A] text-white">
+                        {m.table.header.map((h, j) => (
+                          <th key={j} className="whitespace-nowrap px-3 py-2 text-[11px] font-bold">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {m.table.rows.map((row, ri2) => (
+                        <tr key={ri2} className={ri2 % 2 === 0 ? "bg-[#FAFAFA]" : "bg-white"}>
+                          {row.map((cell, ci) => (
+                            <td key={ci} className="px-3 py-2 text-[12.5px] leading-relaxed text-[#404040]">
+                              <MathInline text={cell} />
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
               {m.steps && <div className="mt-3"><MathSteps text={m.steps} /></div>}
 
               {m.math && (
@@ -607,25 +723,41 @@ function MateriView({ subbabId }: { subbabId: number }) {
   );
 }
 
-// ─── Video ───────────────────────────────────────────────────────────────────
-function VideoView({ query }: { query: string }) {
-  const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+// ─── Video (embed YouTube asli) ─────────────────────────────────────────────
+function VideoView({ subbabId }: { subbabId: number }) {
+  const c = getSubbab(subbabId);
+  // sub-bab 8 tidak punya video khusus → tampilkan video Sub-Bab 7
+  const id = c.videoId ?? getSubbab(7).videoId;
+  const watchUrl = `https://www.youtube.com/watch?v=${id}`;
   return (
-    <div className="overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white">
-      <a href={url} target="_blank" rel="noreferrer" className="group relative block aspect-video bg-[#0A0A0A]">
-        <div className="absolute inset-0 opacity-40 [background:radial-gradient(circle_at_30%_20%,#3B82F6_0,transparent_50%),radial-gradient(circle_at_75%_80%,#8B5CF6_0,transparent_45%)]" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 ring-2 ring-white/30 transition group-hover:scale-110 group-hover:bg-[#EF4444]">
-            <Play size={26} className="ml-1" fill="currentColor" />
-          </span>
-          <p className="text-sm font-semibold">Tonton video pembelajaran</p>
-          <p className="flex items-center gap-1.5 text-[11px] text-white/60">Slot video guru <ExternalLink size={11} /></p>
+    <div className="space-y-3">
+      {c.videoNote && (
+        <div className="rounded-2xl border border-[#3B82F6]/30 bg-[#EFF6FF] px-4 py-3 text-xs leading-relaxed text-[#1E40AF]">
+          {c.videoNote}
         </div>
-      </a>
-      <div className="flex items-center gap-3 px-4 py-3">
-        <MonitorPlay size={16} className="text-[#737373]" />
-        <p className="flex-1 truncate text-xs text-[#737373]">Topik: “{query}”</p>
-        <a href={url} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-bold text-[#1D4ED8]">Buka YouTube</a>
+      )}
+      <div className="overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white">
+        <div className="relative aspect-video w-full bg-[#0A0A0A]">
+          <iframe
+            key={id}
+            src={`https://www.youtube-nocookie.com/embed/${id}?rel=0`}
+            title={`Video pembelajaran ${c.title}`}
+            className="absolute inset-0 h-full w-full"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        </div>
+        <div className="flex items-center gap-3 px-4 py-3">
+          <MonitorPlay size={16} className="shrink-0 text-[#737373]" />
+          <p className="min-w-0 flex-1 truncate text-xs text-[#737373]">
+            Terjadi kendala menonton? Buka langsung di YouTube.
+          </p>
+          <a href={watchUrl} target="_blank" rel="noreferrer"
+            className="flex shrink-0 items-center gap-1 text-xs font-bold text-[#1D4ED8]">
+            Tonton di YouTube <ExternalLink size={11} />
+          </a>
+        </div>
       </div>
     </div>
   );

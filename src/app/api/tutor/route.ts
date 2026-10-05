@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, desc, eq, gt, or, sql } from "drizzle-orm";
+import { and, desc, eq, gt, or } from "drizzle-orm";
 import { db } from "@/db";
 import { teacherCalls, tutorSessions } from "@/db/schema";
 import { getSessionIdentity } from "@/lib/auth";
@@ -16,6 +16,10 @@ export async function POST(req: NextRequest) {
   const identity = await getSessionIdentity();
   if (!identity || identity.type !== "student") return err("Unauthorized", 401);
   const me = identity.student;
+  const classId = me.classId;
+  if (classId == null) {
+    return err("Bergabunglah ke sebuah kelas terlebih dahulu dengan kode dari gurumu.", 409);
+  }
 
   let body: { action?: string; subbab?: number; sessionId?: number };
   try {
@@ -30,7 +34,7 @@ export async function POST(req: NextRequest) {
     if (me.consecutiveErrors < 2 && me.status !== "MACET") {
       return err("Tombol ini baru aktif setelah 2 kali kesalahan beruntun.", 403);
     }
-    await expireStaleRequests(me.classId);
+    await expireStaleRequests(classId);
     const [openReq] = await db
       .select({ id: tutorSessions.id })
       .from(tutorSessions)
@@ -44,8 +48,8 @@ export async function POST(req: NextRequest) {
       .limit(1);
     if (openReq) return err("Kamu sudah punya permintaan bantuan yang berjalan.", 409);
 
-    const tutorIds = (await computeTutorIds(me.classId)).filter((id) => id !== me.id);
-    const busy = await busyTutorIds(me.classId);
+    const tutorIds = (await computeTutorIds(classId)).filter((id) => id !== me.id);
+    const busy = await busyTutorIds(classId);
     const available = tutorIds.filter((id) => !busy.has(id));
     if (available.length === 0) {
       return NextResponse.json({ ok: false, reason: "ALL_BUSY" });
@@ -53,7 +57,7 @@ export async function POST(req: NextRequest) {
     const subbab = Math.min(Math.max(Number(body.subbab) || me.currentSubbab, 1), 10);
     const [sess] = await db
       .insert(tutorSessions)
-      .values({ classId: me.classId, requesterId: me.id, subbab, status: "REQUESTED" })
+      .values({ classId, requesterId: me.id, subbab, status: "REQUESTED" })
       .returning();
     return NextResponse.json({ ok: true, sessionId: sess.id });
   }
@@ -76,9 +80,9 @@ export async function POST(req: NextRequest) {
   if (action === "accept") {
     const sessionId = Number(body.sessionId);
     if (!sessionId) return err("sessionId wajib ada.");
-    const tutorIds = await computeTutorIds(me.classId);
+    const tutorIds = await computeTutorIds(classId);
     if (!tutorIds.includes(me.id)) return err("Kamu bukan tutor aktif saat ini.", 403);
-    const busy = await busyTutorIds(me.classId);
+    const busy = await busyTutorIds(classId);
     if (busy.has(me.id)) return err("Kamu sedang mengajar. Selesaikan dulu sesimu.", 409);
     const updated = await db
       .update(tutorSessions)
@@ -110,7 +114,7 @@ export async function POST(req: NextRequest) {
 
   // ── Tutor sebaya memanggil guru ──────────────────────────────────────────
   if (action === "call-teacher") {
-    const tutorIds = await computeTutorIds(me.classId);
+    const tutorIds = await computeTutorIds(classId);
     if (!tutorIds.includes(me.id)) return err("Fitur ini khusus Tutor Sebaya.", 403);
     const [open] = await db
       .select({ id: teacherCalls.id })
@@ -120,7 +124,7 @@ export async function POST(req: NextRequest) {
       .limit(1);
     if (open) return NextResponse.json({ ok: true, already: true });
     await db.insert(teacherCalls).values({
-      classId: me.classId,
+      classId,
       tutorId: me.id,
       message: "Meminta konfirmasi/klarifikasi materi",
     });
@@ -134,6 +138,8 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   const identity = await getSessionIdentity();
   if (!identity || identity.type !== "student") return err("Unauthorized", 401);
-  const tutors = await getTutorList(identity.student.classId);
+  const classId = identity.student.classId;
+  if (classId == null) return err("Belum tergabung dalam kelas.", 409);
+  const tutors = await getTutorList(classId);
   return NextResponse.json({ tutors });
 }

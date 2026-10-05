@@ -84,41 +84,32 @@ async function handlePost(
     return NextResponse.json({ ok: true, role: "teacher" });
   }
 
-  // ── Siswa ───────────────────────────────────────────────────────────────
-  const classCode = (body.classCode ?? "").trim().toUpperCase();
-  if (!classCode) return bad("Kode kelas wajib diisi.");
-  const [cls] = await db
-    .select()
-    .from(classes)
-    .where(eq(classes.classCode, classCode))
-    .limit(1);
-  if (!cls) return bad("Kode kelas tidak ditemukan. Tanyakan ke gurumu.", 404);
-
+  // ── Siswa (masuk/daftar tanpa kode kelas; kode kelas diminta setelahnya) ──
   if (action === "register-student") {
-    const [exists] = await db
+    const dupes = await db
       .select({ id: students.id })
       .from(students)
-      .where(and(eq(students.classId, cls.id), sql`lower(${students.name}) = lower(${name})`))
+      .where(sql`lower(${students.name}) = lower(${name})`)
       .limit(1);
-    if (exists) return bad("Nama ini sudah terdaftar di kelas tersebut. Silakan masuk.", 409);
+    if (dupes.length > 0) return bad("Nama ini sudah dipakai. Silakan masuk dengan nama tersebut.", 409);
     const [student] = await db
       .insert(students)
-      .values({ name, passwordHash: hashPassword(password), classId: cls.id })
+      .values({ name, passwordHash: hashPassword(password) })
       .returning();
     await createSession({ studentId: student.id });
-    return NextResponse.json({ ok: true, role: "student", className: cls.className });
+    return NextResponse.json({ ok: true, role: "student" });
   }
 
   if (action === "login-student") {
     const rows = await db
       .select()
       .from(students)
-      .where(and(eq(students.classId, cls.id), sql`lower(${students.name}) = lower(${name})`))
+      .where(sql`lower(${students.name}) = lower(${name})`)
       .limit(5);
     const student = rows.find((s) => verifyPassword(password, s.passwordHash));
-    if (!student) return bad("Nama, kata sandi, atau kode kelas salah.", 401);
+    if (!student) return bad("Nama atau kata sandi salah.", 401);
     await createSession({ studentId: student.id });
-    return NextResponse.json({ ok: true, role: "student", className: cls.className });
+    return NextResponse.json({ ok: true, role: "student" });
   }
 
   return bad("Aksi tidak dikenal.", 404);

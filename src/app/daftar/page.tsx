@@ -28,7 +28,7 @@ export default async function DaftarSiswa() {
         <div className="rounded-3xl border-2 border-[#1A1A1A] bg-white p-5 shadow-[6px_6px_0_#E5E5E5] sm:p-7">
           <AuthForm role="student" mode="register" />
           <p className="mt-4 text-center text-[11px] leading-relaxed text-[#A3A3A3]">
-            Mintalah <b>kode kelas</b> kepada gurumu sebelum mendaftar. Satu nama hanya bisa dipakai satu kali per rombel.
+            Cukup nama dan kata sandi untuk mendaftar. Kode kelas dari guru baru diminta setelah kamu masuk.
           </p>
         </div>
       </div>

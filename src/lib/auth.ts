@@ -57,7 +57,7 @@ export async function destroySession() {
 }
 
 export type SessionIdentity =
-  | { type: "student"; student: Student; classRow: ClassRow }
+  | { type: "student"; student: Student; classRow: ClassRow | null }
   | { type: "teacher"; teacher: Teacher };
 
 export async function getSessionIdentity(): Promise<SessionIdentity | null> {
@@ -77,9 +77,12 @@ export async function getSessionIdentity(): Promise<SessionIdentity | null> {
     const s = await db.select().from(students).where(eq(students.id, session.studentId)).limit(1);
     const student = s[0];
     if (!student) return null;
+    // Siswa baru (belum memasukkan kode kelas) tidak memiliki rombel
+    if (student.classId == null) {
+      return { type: "student", student, classRow: null };
+    }
     const c = await db.select().from(classes).where(eq(classes.id, student.classId)).limit(1);
-    const classRow = c[0];
-    if (!classRow) return null;
+    const classRow = c[0] ?? null;
     return { type: "student", student, classRow };
   }
 

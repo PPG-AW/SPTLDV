@@ -18,13 +18,20 @@ import {
   Plus,
   Presentation,
   Radio,
+  RefreshCw,
   Trash2,
   Users,
   X,
 } from "lucide-react";
-import { getSubbab, TOTAL_SUBBAB } from "@/lib/curriculum";
-import { generateQuestion, type Question } from "@/lib/templates";
+import { getSubbab, SUBBABS, TOTAL_SUBBAB } from "@/lib/curriculum";
+import {
+  generateByTemplate,
+  generateQuestion,
+  templateIdsFor,
+  type Question,
+} from "@/lib/templates";
 import CartesianCanvas from "./CartesianCanvas";
+import MathSteps from "./MathText";
 
 // ── tipe data telemetri ──────────────────────────────────────────────────────
 interface StudentRow {
@@ -39,7 +46,12 @@ interface StudentRow {
 interface Telemetry {
   class: { id: number; classCode: string; className: string; isLocked: boolean };
   students: StudentRow[];
-  misconception: { subbab: number; errorCount: number; uniqueStudents: number; attempts: number; common: { detail: string; count: number }[] }[];
+  misconception: {
+    subbab: number; errorCount: number; uniqueStudents: number; attempts: number;
+    common: { detail: string; count: number }[];
+    topTemplates: { templateId: string; count: number }[];
+    hintCount: number; hintTotal: number; hintStudents: number; hintH3: number;
+  }[];
   tutors: { id: number; name: string; status: string }[];
   calls: { id: number; tutorName: string; message: string; ageSec: number }[];
   distribution: { subbab: number; active: number; completed: number }[];
@@ -48,15 +60,21 @@ interface ClassInfo {
   id: number; classCode: string; className: string; isLocked: boolean; studentCount: number;
 }
 
-type Tab = "telemetri" | "petunjuk" | "miskonsepsi" | "tutor" | "panggilan" | "nilai" | "siswa";
+type Tab = "telemetri" | "analitik" | "tutor" | "panggilan" | "nilai" | "siswa";
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: "telemetri", label: "Telemetri Kelas", icon: <Radio size={15} /> },
-  { id: "petunjuk", label: "Pemakaian Petunjuk", icon: <Lightbulb size={15} /> },
-  { id: "miskonsepsi", label: "Miskonsepsi", icon: <BarChart3 size={15} /> },
+  { id: "analitik", label: "Analitik Belajar", icon: <BarChart3 size={15} /> },
   { id: "tutor", label: "Tutor Sebaya", icon: <Users size={15} /> },
   { id: "panggilan", label: "Panggilan", icon: <MonitorPlay size={15} /> },
   { id: "nilai", label: "Nilai Sumatif", icon: <ClipboardList size={15} /> },
   { id: "siswa", label: "Data & Sandi Siswa", icon: <KeyRound size={15} /> },
+];
+
+/** Sub-tab di dalam Analitik Belajar */
+type SubTab = "miskonsepsi" | "petunjuk";
+const SUBTABS: { id: SubTab; label: string; icon: React.ReactNode }[] = [
+  { id: "miskonsepsi", label: "Kesalahan Jawaban", icon: <AlertTriangle size={14} /> },
+  { id: "petunjuk", label: "Pemakaian Petunjuk", icon: <Lightbulb size={14} /> },
 ];
 
 export default function TeacherApp({
@@ -331,64 +349,10 @@ export default function TeacherApp({
                 <div className="flex h-40 items-center justify-center"><Loader2 className="animate-spin text-[#A3A3A3]" /></div>
               ) : tab === "telemetri" ? (
                 <TelemetryView tele={tele} />
-              ) : tab === "petunjuk" ? (
-                <HintView tele={tele} />
               ) : tab === "siswa" ? (
                 <StudentAdminView tele={tele} onChanged={loadTelemetry} />
-              ) : tab === "miskonsepsi" ? (
-                <div className="space-y-3">
-                  {worst && (
-                    <div className="rounded-2xl border-2 border-[#F59E0B] bg-[#FFFBEB] p-4">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <AlertTriangle size={20} className="text-[#D97706]" />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-bold">Kasus Prioritas: Sub-Bab {worst.subbab} — {getSubbab(worst.subbab).title}</p>
-                          <p className="text-xs text-[#92400E]">{worst.errorCount} kesalahan dari {worst.uniqueStudents} siswa. Cocok dibedah di pleno!</p>
-                        </div>
-                        <button
-                          onClick={() => { setCaseQuestion(generateQuestion(worst.subbab)); setShowAnswer(false); }}
-                          className="flex min-h-[44px] items-center gap-2 rounded-xl bg-[#F59E0B] px-4 text-xs font-black text-white transition active:scale-95"
-                        >
-                          <Eye size={14} /> PROYEKSIKAN KASUS
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  {caseQuestion && <CaseCard q={caseQuestion} showAnswer={showAnswer} onToggle={() => setShowAnswer((s) => !s)} />}
-                  <div className="space-y-2.5">
-                    {tele.misconception.filter((m) => m.errorCount > 0 || m.attempts > 0).map((m) => (
-                      <div key={m.subbab} className="rounded-2xl border border-[#E5E5E5] bg-white p-4">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F5F5F5] font-mono text-xs font-bold">{m.subbab}</span>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm font-bold">{getSubbab(m.subbab).title}</p>
-                            <p className="text-[11px] text-[#A3A3A3]">{m.errorCount} salah / {m.attempts} percobaan · {m.uniqueStudents} siswa</p>
-                          </div>
-                          <div className="w-32 sm:w-44">
-                            <div className="h-2.5 overflow-hidden rounded-full bg-[#F0F0F0]">
-                              <div className="h-full rounded-full bg-[#EF4444]" style={{ width: `${(m.errorCount / maxErrors) * 100}%` }} />
-                            </div>
-                          </div>
-                        </div>
-                        {m.common.length > 0 && (
-                          <div className="mt-2.5 space-y-1.5 border-t border-[#F5F5F5] pt-2.5">
-                            {m.common.map((c, i) => (
-                              <p key={i} className="flex items-start gap-2 text-xs leading-relaxed text-[#737373]">
-                                <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#EF4444]" />
-                                <span>{c.detail} <span className="font-bold text-[#1A1A1A]">×{c.count}</span></span>
-                              </p>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                    {tele.misconception.every((m) => m.errorCount === 0) && (
-                      <p className="rounded-2xl border border-dashed border-[#D9D9D9] bg-white px-6 py-10 text-center text-sm text-[#A3A3A3]">
-                        Belum ada data kesalahan — analitik muncul saat siswa mulai menjawab soal.
-                      </p>
-                    )}
-                  </div>
-                </div>
+              ) : tab === "analitik" ? (
+                <AnalyticsView tele={tele} />
               ) : tab === "tutor" ? (
                 <div className="grid gap-2.5 sm:grid-cols-2">
                   {tele.tutors.length === 0 && (
@@ -659,6 +623,199 @@ function TelemetryView({ tele }: { tele: Telemetry }) {
   );
 }
 
+// ══ Analitik Belajar: Kesalahan Jawaban + Pemakaian Petunjuk ════════════════
+function AnalyticsView({ tele }: { tele: Telemetry }) {
+  const [sub, setSub] = useState<SubTab>("miskonsepsi");
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-1.5 rounded-xl border border-[#E5E5E5] bg-white p-1.5">
+        {SUBTABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setSub(t.id)}
+            className={`flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-lg text-xs font-bold transition ${
+              sub === t.id ? "bg-[#1A1A1A] text-white" : "text-[#737373] hover:bg-[#F5F5F5]"
+            }`}
+          >
+            {t.icon} {t.label}
+          </button>
+        ))}
+      </div>
+      {sub === "miskonsepsi" ? <MisconceptionView tele={tele} /> : <HintView tele={tele} />}
+    </div>
+  );
+}
+
+// ── Analitik kesalahan jawaban + Case Picker bebas ──────────────────────────
+function MisconceptionView({ tele }: { tele: Telemetry }) {
+  const [caseQuestion, setCaseQuestion] = useState<Question | null>(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [pickerSubbab, setPickerSubbab] = useState<number>(() => {
+    const worst = [...tele.misconception].sort((a, b) => b.errorCount - a.errorCount)[0];
+    return worst?.subbab ?? 1;
+  });
+  const [pickerTemplate, setPickerTemplate] = useState<string>("acak");
+
+  const maxErrors = Math.max(1, ...tele.misconception.map((m) => m.errorCount));
+  const ranked = [...tele.misconception]
+    .filter((m) => m.attempts > 0 || m.errorCount > 0)
+    .sort((a, b) => b.errorCount - a.errorCount);
+  const worst = ranked.find((m) => m.errorCount > 0) ?? null;
+
+  const openCase = (subbab: number, templateId?: string) => {
+    const q = templateId && templateId !== "acak"
+      ? generateByTemplate(templateId)
+      : generateQuestion(subbab);
+    if (q) {
+      setCaseQuestion(q);
+      setShowAnswer(false);
+      setPickerSubbab(q.subbab);
+      setPickerTemplate(templateId ?? "acak");
+    }
+  };
+
+  const templates = templateIdsFor(pickerSubbab);
+
+  return (
+    <div className="space-y-3">
+      {/* ── CASE PICKER: guru bebas memilih sub-bab & nomor soal ── */}
+      <div className="rounded-2xl border-2 border-[#1A1A1A] bg-white p-4 shadow-[4px_4px_0_#E5E5E5]">
+        <div className="flex items-center gap-2">
+          <Presentation size={15} className="text-[#F59E0B]" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A3A3A3]">
+            Pemilih Kasus untuk Dibedah Bersama
+          </p>
+        </div>
+        <p className="mt-1.5 text-xs leading-relaxed text-[#737373]">
+          Pilih sub-bab dan nomor soal mana pun untuk diproyeksikan ke layar depan. Tidak terbatas pada kasus dengan
+          kesalahan terbanyak.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]">
+          <select
+            value={pickerSubbab}
+            onChange={(e) => { setPickerSubbab(Number(e.target.value)); setPickerTemplate("acak"); }}
+            className="h-11 w-full rounded-xl border border-[#E5E5E5] bg-white px-3 text-sm font-medium outline-none focus:border-[#1A1A1A]"
+          >
+            {SUBBABS.map((sb) => {
+              const m = tele.misconception.find((x) => x.subbab === sb.id);
+              return (
+                <option key={sb.id} value={sb.id}>
+                  Sub-Bab {sb.id}: {sb.title}
+                  {m && m.errorCount > 0 ? ` — ${m.errorCount} kesalahan` : ""}
+                </option>
+              );
+            })}
+          </select>
+          <select
+            value={pickerTemplate}
+            onChange={(e) => setPickerTemplate(e.target.value)}
+            className="h-11 rounded-xl border border-[#E5E5E5] bg-white px-3 font-mono text-sm outline-none focus:border-[#1A1A1A]"
+          >
+            <option value="acak">Soal acak</option>
+            {templates.map((t) => (
+              <option key={t} value={t}>Template {t}</option>
+            ))}
+          </select>
+          <button
+            onClick={() => openCase(pickerSubbab, pickerTemplate)}
+            className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#F59E0B] px-5 text-xs font-black text-white transition active:scale-95"
+          >
+            <Eye size={14} /> PROYEKSIKAN
+          </button>
+        </div>
+      </div>
+
+      {caseQuestion && (
+        <CaseCard
+          q={caseQuestion}
+          showAnswer={showAnswer}
+          onToggle={() => setShowAnswer((s) => !s)}
+          onShuffle={() => openCase(pickerSubbab, pickerTemplate)}
+          onClose={() => setCaseQuestion(null)}
+        />
+      )}
+
+      {worst && (
+        <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[#F59E0B]/50 bg-[#FFFBEB] px-4 py-3">
+          <AlertTriangle size={17} className="text-[#D97706]" />
+          <p className="min-w-0 flex-1 text-xs leading-relaxed text-[#92400E]">
+            <b>Saran prioritas:</b> Sub-Bab {worst.subbab} ({getSubbab(worst.subbab).title}) memiliki kesalahan
+            terbanyak — {worst.errorCount} kesalahan dari {worst.uniqueStudents} siswa.
+          </p>
+          <button
+            onClick={() => openCase(worst.subbab)}
+            className="min-h-[38px] shrink-0 rounded-xl border-2 border-[#D97706] px-3 text-xs font-bold text-[#92400E] transition active:scale-95"
+          >
+            Bedah Ini
+          </button>
+        </div>
+      )}
+
+      {/* ── daftar seluruh sub-bab, masing-masing bisa dibedah ── */}
+      <div className="space-y-2.5">
+        {ranked.map((m) => (
+          <div key={m.subbab} className="rounded-2xl border border-[#E5E5E5] bg-white p-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F5F5F5] font-mono text-xs font-bold">
+                {m.subbab}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold">{getSubbab(m.subbab).title}</p>
+                <p className="text-[11px] text-[#A3A3A3]">
+                  {m.errorCount} salah / {m.attempts} percobaan · {m.uniqueStudents} siswa
+                </p>
+              </div>
+              <div className="hidden w-32 sm:block">
+                <div className="h-2.5 overflow-hidden rounded-full bg-[#F0F0F0]">
+                  <div className="h-full rounded-full bg-[#EF4444]" style={{ width: `${(m.errorCount / maxErrors) * 100}%` }} />
+                </div>
+              </div>
+              <button
+                onClick={() => openCase(m.subbab)}
+                className="flex min-h-[38px] shrink-0 items-center gap-1.5 rounded-xl border-2 border-[#1A1A1A] px-3 text-xs font-bold transition active:scale-95"
+              >
+                <Eye size={13} /> Bedah
+              </button>
+            </div>
+            {m.common.length > 0 && (
+              <div className="mt-2.5 space-y-1.5 border-t border-[#F5F5F5] pt-2.5">
+                {m.common.map((c, i) => (
+                  <p key={i} className="flex items-start gap-2 text-xs leading-relaxed text-[#737373]">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#EF4444]" />
+                    <span>{c.detail} <span className="font-bold text-[#1A1A1A]">×{c.count}</span></span>
+                  </p>
+                ))}
+              </div>
+            )}
+            {m.topTemplates.length > 0 && (
+              <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-[#F5F5F5] pt-2.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#A3A3A3]">
+                  Soal tersering salah:
+                </span>
+                {m.topTemplates.map((t) => (
+                  <button
+                    key={t.templateId}
+                    onClick={() => openCase(m.subbab, t.templateId)}
+                    title={`Bedah template ${t.templateId}`}
+                    className="flex items-center gap-1 rounded-lg border border-[#EF4444]/35 bg-[#FEF2F2] px-2 py-1 font-mono text-[10px] font-bold text-[#991B1B] transition hover:bg-[#FEE2E2] active:scale-95"
+                  >
+                    {t.templateId} <span className="text-[#DC2626]">×{t.count}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+        {ranked.length === 0 && (
+          <p className="rounded-2xl border border-dashed border-[#D9D9D9] bg-white px-6 py-10 text-center text-sm text-[#A3A3A3]">
+            Belum ada data kesalahan. Anda tetap dapat memproyeksikan soal mana pun melalui pemilih kasus di atas.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Pemakaian petunjuk per siswa ────────────────────────────────────────────
 function HintView({ tele }: { tele: Telemetry }) {
   const [open, setOpen] = useState<number | null>(null);
@@ -680,6 +837,45 @@ function HintView({ tele }: { tele: Telemetry }) {
             <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#A3A3A3]">{s.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* sebaran petunjuk per sub-bab */}
+      <div className="rounded-2xl border border-[#E5E5E5] bg-white p-4">
+        <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[#A3A3A3]">
+          Sub-Bab yang Paling Butuh Petunjuk
+        </p>
+        <p className="mb-3 text-[11px] leading-relaxed text-[#737373]">
+          Materi dengan pemakaian petunjuk tinggi menandakan konsepnya belum kokoh, walaupun jawaban akhirnya benar.
+        </p>
+        {(() => {
+          const rows2 = tele.misconception.filter((m) => m.hintTotal > 0).sort((a, b) => b.hintTotal - a.hintTotal);
+          const maxHint = Math.max(1, ...rows2.map((m) => m.hintTotal));
+          if (rows2.length === 0) {
+            return <p className="py-4 text-center text-xs text-[#A3A3A3]">Belum ada petunjuk yang dibuka siswa.</p>;
+          }
+          return (
+            <div className="space-y-2">
+              {rows2.map((m) => (
+                <div key={m.subbab} className="flex items-center gap-2.5">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#FFFBEB] font-mono text-[11px] font-bold text-[#B45309]">
+                    {m.subbab}
+                  </span>
+                  <span className="hidden min-w-0 flex-1 truncate text-xs font-semibold text-[#404040] sm:block">
+                    {getSubbab(m.subbab).title}
+                  </span>
+                  <div className="min-w-0 flex-1 sm:max-w-[180px]">
+                    <div className="h-2.5 overflow-hidden rounded-full bg-[#F0F0F0]">
+                      <div className="h-full rounded-full bg-[#F59E0B]" style={{ width: `${(m.hintTotal / maxHint) * 100}%` }} />
+                    </div>
+                  </div>
+                  <span className="shrink-0 whitespace-nowrap font-mono text-[11px] font-bold text-[#B45309]">
+                    {m.hintTotal} · {m.hintStudents} siswa
+                  </span>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white">
@@ -867,12 +1063,31 @@ function StudentAdminView({ tele, onChanged }: { tele: Telemetry; onChanged: () 
 }
 
 // ── Kartu proyeksi kasus untuk pleno ────────────────────────────────────────
-function CaseCard({ q, showAnswer, onToggle }: { q: Question; showAnswer: boolean; onToggle: () => void }) {
+function CaseCard({
+  q, showAnswer, onToggle, onShuffle, onClose,
+}: {
+  q: Question; showAnswer: boolean; onToggle: () => void;
+  onShuffle?: () => void; onClose?: () => void;
+}) {
   return (
     <div className="overflow-hidden rounded-2xl border-2 border-[#1A1A1A] bg-white shadow-[4px_4px_0_#E5E5E5]">
       <div className="flex items-center gap-2 bg-[#1A1A1A] px-4 py-2.5">
         <Presentation size={14} className="text-[#F59E0B]" />
-        <p className="text-xs font-bold text-white">Kasus Pleno · Sub-Bab {q.subbab} · Template {q.templateId}</p>
+        <p className="flex-1 truncate text-xs font-bold text-white">
+          Kasus Pleno · Sub-Bab {q.subbab} · Template {q.templateId}
+        </p>
+        {onShuffle && (
+          <button onClick={onShuffle} title="Ganti variasi angka"
+            className="flex h-7 items-center gap-1 rounded-lg border border-white/25 px-2 text-[10px] font-bold text-white/80 transition hover:bg-white/10">
+            <RefreshCw size={11} /> Variasi Lain
+          </button>
+        )}
+        {onClose && (
+          <button onClick={onClose} title="Tutup kasus"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/25 text-white/70 transition hover:bg-white/10">
+            <X size={13} />
+          </button>
+        )}
       </div>
       <div className="space-y-3 p-4 sm:p-5">
         <p className="text-sm font-medium leading-relaxed sm:text-base">{q.prompt}</p>
@@ -892,9 +1107,17 @@ function CaseCard({ q, showAnswer, onToggle }: { q: Question; showAnswer: boolea
         )}
         {q.mcOptions && (
           <div className="grid gap-1.5 sm:grid-cols-2">
-            {q.mcOptions.map((o) => (
-              <div key={o.id} className="rounded-lg border border-[#E5E5E5] px-3 py-2 font-mono text-xs">{o.label}</div>
-            ))}
+            {q.mcOptions.map((o) => {
+              const correct = showAnswer && q.answerKey === o.id;
+              return (
+                <div key={o.id}
+                  className={`rounded-lg border px-3 py-2 font-mono text-xs ${
+                    correct ? "border-[#10B981] bg-[#ECFDF5] font-bold text-[#065F46]" : "border-[#E5E5E5]"
+                  }`}>
+                  {correct && "✓ "}{o.label}
+                </div>
+              );
+            })}
           </div>
         )}
         <div className="flex flex-wrap gap-2 pt-1">
@@ -906,9 +1129,17 @@ function CaseCard({ q, showAnswer, onToggle }: { q: Question; showAnswer: boolea
           <Eye size={14} /> {showAnswer ? "Sembunyikan Pembahasan" : "Tampilkan Pembahasan"}
         </button>
         {showAnswer && (
-          <p className="rounded-xl border border-[#10B981]/30 bg-[#ECFDF5] px-4 py-3 text-sm leading-relaxed text-[#065F46]">
-            {q.explain}
-          </p>
+          <div className="space-y-2">
+            {q.explainSteps && (
+              <div className="rounded-xl border border-[#E5E5E5] bg-[#FAFAFA] p-3.5">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#A3A3A3]">Langkah Pengerjaan</p>
+                <MathSteps text={q.explainSteps} size="sm" tone="plain" />
+              </div>
+            )}
+            <p className="rounded-xl border border-[#10B981]/30 bg-[#ECFDF5] px-4 py-3 text-sm leading-relaxed text-[#065F46]">
+              <b>Kunci:</b> {q.explain}
+            </p>
+          </div>
         )}
       </div>
     </div>

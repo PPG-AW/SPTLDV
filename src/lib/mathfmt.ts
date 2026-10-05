@@ -25,6 +25,40 @@ export function gcd(a: number, b: number): number {
   return a || 1;
 }
 
+export function gcd3(a: number, b: number, c: number): number {
+  return gcd(gcd(a, b), c);
+}
+
+/** Sederhanakan pertidaksamaan: FPB = 1 dan koefisien x selalu positif. */
+export function simplifyLine(a: number, b: number, c: number): { a: number; b: number; c: number } {
+  let A = a, B = b, C = c;
+  const g = gcd3(A, B, C);
+  if (g > 1) { A /= g; B /= g; C /= g; }
+  // kanonis: koefisien x selalu positif (tanda garis tidak berubah secara geometri)
+  if (A < 0) { A = -A; B = -B; C = -C; }
+  return { a: A, b: B, c: C };
+}
+
+export interface TabelBantu {
+  header: string[];
+  rows: string[][];
+}
+
+/** Tabel monospasi rata kolom untuk langkah pembahasan. */
+export function tableText(t: TabelBantu): string {
+  const cols = t.header.length;
+  const widths = Array.from({ length: cols }, (_, i) =>
+    Math.max(
+      t.header[i].length,
+      ...t.rows.map((r) => (r[i] ?? "").length)
+    )
+  );
+  const line = (cells: string[]) =>
+    cells.map((c, i) => c.padEnd(widths[i])).join("  ").trimEnd();
+  const div = widths.map((w) => "─".repeat(w)).join("──");
+  return [line(t.header), div, ...t.rows.map(line)].join("\n");
+}
+
 /** Token pecahan; otomatis menjadi bilangan bulat bila habis dibagi. */
 export function frac(n: number, d: number): string {
   if (d === 0) return "∞";
@@ -193,29 +227,41 @@ export function stepsMixedMethod(
 // ─── Versi PETUNJUK: berhenti sebelum nilai akhir muncul ─────────────────────
 // Dipakai untuk H1–H3 agar siswa tetap harus menghitung sendiri.
 
-/** Petunjuk titik potong sumbu X — berhenti pada bentuk ax = c. */
+/** Petunjuk titik potong sumbu X — tidak pernah menulis nilai akhir x. */
 export function hintInterceptX(a: number, b: number, c: number): string {
   const L: string[] = [];
   L.push(eqStr(a, b, c));
   L.push("> Titik potong sumbu X dicari saat y = 0, maka:");
   L.push(`${term(a, "x", true)}${subst(b, 0, false)} = ${neg(c)}`);
-  L.push(`${term(a, "x", true)} = ${neg(c)}`);
-  L.push(`> Tinggal satu langkah lagi: bagi kedua ruas dengan ${neg(a)} untuk memperoleh nilai x.`);
+  if (a === 1) {
+    L.push(`> Koefisien x-nya 1, jadi setelah menyederhanakan ruas kanan, nilai x langsung terlihat tanpa perlu membagi apa pun.`);
+  } else {
+    L.push(`${term(a, "x", true)} = ${neg(c)}`);
+    L.push(
+      a < 0
+        ? `> Tinggal dibagi dengan ${neg(a)}. Membagi dengan bilangan negatif membuat tanda hasilnya berbalik, perhatikan!`
+        : `> Tinggal satu langkah lagi: bagi kedua ruas dengan ${neg(a)} untuk memperoleh nilai x.`
+    );
+  }
   return L.join("\n");
 }
 
-/** Petunjuk titik potong sumbu Y — berhenti pada bentuk by = c. */
+/** Petunjuk titik potong sumbu Y — tidak pernah menulis nilai akhir y. */
 export function hintInterceptY(a: number, b: number, c: number): string {
   const L: string[] = [];
   L.push(eqStr(a, b, c));
   L.push("> Titik potong sumbu Y dicari saat x = 0, maka:");
   L.push(`${subst(a, 0, true)}${term(b, "y", false)} = ${neg(c)}`);
-  L.push(`${term(b, "y", true)} = ${neg(c)}`);
-  L.push(
-    b < 0
-      ? `> Tinggal bagi kedua ruas dengan ${neg(b)}. Hati-hati: membagi dengan bilangan negatif mengubah tanda hasilnya.`
-      : `> Tinggal satu langkah lagi: bagi kedua ruas dengan ${neg(b)} untuk memperoleh nilai y.`
-  );
+  if (b === 1) {
+    L.push(`> Koefisien y-nya 1, jadi setelah menyederhanakan ruas kanan, nilai y langsung terlihat tanpa perlu membagi apa pun.`);
+  } else {
+    L.push(`${term(b, "y", true)} = ${neg(c)}`);
+    L.push(
+      b < 0
+        ? `> Tinggal bagi kedua ruas dengan ${neg(b)}. Hati-hati: membagi dengan bilangan negatif mengubah tanda hasilnya.`
+        : `> Tinggal satu langkah lagi: bagi kedua ruas dengan ${neg(b)} untuk memperoleh nilai y.`
+    );
+  }
   return L.join("\n");
 }
 

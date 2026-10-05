@@ -13,7 +13,6 @@ export default function AuthForm({ role, mode }: Props) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [classCode, setClassCode] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -29,7 +28,7 @@ export default function AuthForm({ role, mode }: Props) {
       const res = await fetch(`/api/auth/${action}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, password, classCode }),
+        body: JSON.stringify({ name, password }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -63,18 +62,6 @@ export default function AuthForm({ role, mode }: Props) {
           required
         />
       </div>
-      {isStudent && (
-        <div>
-          <label className="mb-1.5 block text-xs font-bold text-[#525252]">Kode Kelas</label>
-          <input
-            value={classCode}
-            onChange={(e) => setClassCode(e.target.value.toUpperCase())}
-            placeholder="mis. MTK-XA-2024"
-            className={`${inputCls} font-mono uppercase tracking-widest`}
-            required
-          />
-        </div>
-      )}
       <div>
         <label className="mb-1.5 block text-xs font-bold text-[#525252]">Kata Sandi</label>
         <div className="relative">
@@ -116,8 +103,13 @@ export default function AuthForm({ role, mode }: Props) {
         )}
         {mode === "login"
           ? isStudent ? "Masuk & Mulai Belajar" : "Masuk Dashboard Guru"
-          : isStudent ? "Daftar & Masuk Kelas" : "Daftar sebagai Guru"}
+          : isStudent ? "Daftar & Mulai" : "Daftar sebagai Guru"}
       </button>
+      {isStudent && (
+        <p className="text-center text-[11px] leading-relaxed text-[#A3A3A3]">
+          Setelah masuk, kamu akan diminta memasukkan kode kelas dari guru untuk bergabung ke rombel.
+        </p>
+      )}
     </form>
   );
 }

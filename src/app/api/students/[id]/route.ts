@@ -20,6 +20,7 @@ export async function PATCH(
 
   const [student] = await db.select().from(students).where(eq(students.id, studentId)).limit(1);
   if (!student) return err("Siswa tidak ditemukan.", 404);
+  if (student.classId == null) return err("Siswa ini belum bergabung ke rombel mana pun.", 404);
 
   // pastikan siswa berada di rombel milik guru ini
   const [cls] = await db
@@ -47,15 +48,10 @@ export async function PATCH(
   if (typeof body.name === "string" && body.name.trim() !== student.name) {
     const name = body.name.trim();
     if (name.length < 2) return err("Nama minimal 2 karakter.");
-    const dupes = await db
-      .select({ id: students.id })
-      .from(students)
-      .where(eq(students.classId, student.classId));
-    const all = await db.select().from(students).where(eq(students.classId, student.classId));
+    const all = await db.select().from(students);
     if (all.some((s) => s.id !== studentId && s.name.toLowerCase() === name.toLowerCase())) {
-      return err("Nama tersebut sudah dipakai siswa lain di rombel ini.", 409);
+      return err("Nama tersebut sudah dipakai siswa lain.", 409);
     }
-    void dupes;
     set.name = name;
   }
 
@@ -82,6 +78,7 @@ export async function DELETE(
   const studentId = Number(id);
   const [student] = await db.select().from(students).where(eq(students.id, studentId)).limit(1);
   if (!student) return err("Siswa tidak ditemukan.", 404);
+  if (student.classId == null) return err("Siswa ini belum bergabung ke rombel mana pun.", 404);
   const [cls] = await db
     .select()
     .from(classes)

@@ -44,12 +44,18 @@ const specSignature = (s) =>
     pts: (s.points ?? []).map((p) => [p.p.x, p.p.y]),
   });
 
+const gg = (x, y) => { x = Math.abs(x); y = Math.abs(y); while (y) [x, y] = [y, x % y]; return x || 1; };
+const fpb3 = (a, b, c) => gg(gg(a, b), c);
+// Semua garis yang ditampilkan harus dalam bentuk paling sederhana,
+// KECUALI soal 2.0.x yang justru sengaja belum disederhanakan.
+const SKIP_FPB = new Set(["2.0.1", "2.0.2", "2.0.3"]);
+
 for (const [subbab, gens] of Object.entries(ALL_GENERATORS)) {
   for (let gi = 0; gi < gens.length; gi++) {
     for (let it = 0; it < ITER; it++) {
       let q;
       try {
-        q = gens[gi]();
+        q = gens[gi].gen();
       } catch (e) {
         problems.push(`[SB${subbab} gen#${gi}] generator melempar error: ${e.message}`);
         break;
@@ -107,6 +113,19 @@ for (const [subbab, gens] of Object.entries(ALL_GENERATORS)) {
         for (const f of q.fillFields ?? []) bogus[f.key] = 99999;
         if (q.check(bogus).ok) problems.push(`[${id}] jawaban asal diterima`);
       }
+      // 5b. FPB aturan: garis pada soal utama harus bentuk paling sederhana.
+      // (grafik distraktor pada soal pilihan-grafik hanya visual, tanpa koefisien teks)
+      if (!SKIP_FPB.has(q.templateId)) {
+        const allLines = [
+          ...(q.canvas?.lines ?? []), ...(q.canvas?.dhpIneqs ?? []),
+        ];
+        for (const l of allLines) {
+          const g = fpb3(l.a, l.b, l.c);
+          if (g > 1) {
+            problems.push(`[${id}] garis belum disederhanakan (FPB=${g}): ${l.a}x + ${l.b}y = ${l.c}`);
+          }
+        }
+      }
       // 6. ketuk titik: target harus muat di kanvas
       if (q.kind === "points" || q.kind === "region-tap") {
         const spec = q.canvas;
@@ -137,8 +156,9 @@ for (const [subbab, gens] of Object.entries(ALL_GENERATORS)) {
           const val = String(v).replace("-", "[−-]");
           const vn = k === "v" || k === "max" || k === "min" ? "(f|nilai|maksimum|minimum)" : k;
           const leak = new RegExp(`^\\s*${vn}\\s*=\\s*${val}\\s*$`, "im");
+          const matchedLine = hintText.split("\n").find((l) => leak.test(l));
           if (leak.test(hintText)) {
-            problems.push(`[${id}] petunjuk membocorkan hasil akhir ${k} = ${v}`);
+            problems.push(`[${id}] petunjuk membocorkan hasil akhir ${k} = ${v}  →  baris: "${(matchedLine ?? "").slice(0, 60)}"`);
           }
         }
         // bentuk "f(a, b) = nilai" juga termasuk membocorkan

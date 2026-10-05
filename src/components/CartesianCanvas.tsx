@@ -26,54 +26,6 @@ const C = {
 
 const LINE_COLORS = [C.line, C.line2, "#059669", "#D97706"];
 
-/**
- * Arsiran gaya buku cetak: PITA TIPIS berisi garis-garis miring, digambar
- * pada sisi garis yang BUKAN daerah penyelesaian (lebarnya secukupnya saja).
- */
-function drawHatchBand(
-  ctx: CanvasRenderingContext2D,
-  P1: { x: number; y: number },
-  P2: { x: number; y: number },
-  normal: { x: number; y: number }, // arah piksel menuju sisi BUKAN penyelesaian
-  width: number
-) {
-  const dx = P2.x - P1.x;
-  const dy = P2.y - P1.y;
-  const len = Math.hypot(dx, dy);
-  if (len < 1) return;
-  const tx = dx / len;
-  const ty = dy / len;
-  const ox = normal.x * width;
-  const oy = normal.y * width;
-
-  // pita tipis sebagai latar
-  ctx.save();
-  ctx.beginPath();
-  ctx.moveTo(P1.x, P1.y);
-  ctx.lineTo(P2.x, P2.y);
-  ctx.lineTo(P2.x + ox, P2.y + oy);
-  ctx.lineTo(P1.x + ox, P1.y + oy);
-  ctx.closePath();
-  ctx.fillStyle = C.hatchBg;
-  ctx.fill();
-  ctx.clip();
-
-  // garis-garis arsir miring di dalam pita
-  ctx.strokeStyle = C.hatch;
-  ctx.lineWidth = 1.1;
-  const gap = Math.max(6, width * 0.55);
-  const slant = width * 0.55;
-  ctx.beginPath();
-  for (let d = -slant; d <= len + slant; d += gap) {
-    const bx = P1.x + tx * d;
-    const by = P1.y + ty * d;
-    ctx.moveTo(bx, by);
-    ctx.lineTo(bx + ox + tx * slant, by + oy + ty * slant);
-  }
-  ctx.stroke();
-  ctx.restore();
-}
-
 export interface Props {
   spec: CanvasSpec;
   height?: number;
@@ -168,21 +120,44 @@ export default function CartesianCanvas({
       ctx.stroke();
     }
 
-    // ── Daerah penyelesaian dibiarkan BERSIH; hanya diberi warna sangat tipis ──
+    // ── DAERAH YANG DIARSIR = DAERAH PENYELESAIAN (konvensi standar buku) ──
     const shadeIneqs: IneqSpec[] =
       spec.dhpIneqs && spec.dhpIneqs.length
         ? spec.dhpIneqs
         : (spec.shadeIndices ?? []).map((i) => (spec.lines ?? [])[i]).filter(Boolean);
 
     if (shadeIneqs.length > 0) {
-      const keep = feasiblePolygon(shadeIneqs, spec.xRange, spec.yRange);
-      if (keep.length >= 3) {
-        ctx.fillStyle = "rgba(16, 185, 129, 0.08)";
+      const solution = feasiblePolygon(shadeIneqs, spec.xRange, spec.yRange);
+      const isDhp = !!(spec.dhpIneqs && spec.dhpIneqs.length);
+
+      if (isDhp) {
+        // Lapisan tipis tiap kendala (biru/merah) agar siswa melihat irisan
+        const layerColors = ["rgba(59, 130, 246, 0.14)", "rgba(239, 68, 68, 0.13)"];
+        shadeIneqs.forEach((in2, li) => {
+          if (li > 1) return; // kendala sumbu tak perlu dilapisi
+          const poly = feasiblePolygon([in2], spec.xRange, spec.yRange);
+          if (poly.length >= 3) {
+            ctx.fillStyle = layerColors[li % layerColors.length];
+            ctx.beginPath();
+            ctx.moveTo(PX(poly[0].x), PY(poly[0].y));
+            for (const p of poly.slice(1)) ctx.lineTo(PX(p.x), PY(p.y));
+            ctx.closePath();
+            ctx.fill();
+          }
+        });
+      }
+
+      // Arsiran utama = daerah penyelesaian (biru) atau DHP (ungu gelap)
+      if (solution.length >= 3) {
+        ctx.fillStyle = isDhp ? "rgba(147, 51, 234, 0.5)" : "rgba(59, 130, 246, 0.28)";
         ctx.beginPath();
-        ctx.moveTo(PX(keep[0].x), PY(keep[0].y));
-        for (const p of keep.slice(1)) ctx.lineTo(PX(p.x), PY(p.y));
+        ctx.moveTo(PX(solution[0].x), PY(solution[0].y));
+        for (const p of solution.slice(1)) ctx.lineTo(PX(p.x), PY(p.y));
         ctx.closePath();
         ctx.fill();
+        ctx.strokeStyle = isDhp ? "rgba(147, 51, 234, 0.9)" : "rgba(37, 99, 235, 0.7)";
+        ctx.lineWidth = mini ? 1.4 : 2;
+        ctx.stroke();
       }
     }
 
@@ -246,33 +221,6 @@ export default function CartesianCanvas({
       ctx.textAlign = "right";
       ctx.fillStyle = "#9CA3AF";
       ctx.fillText("0", PX(0) - 4, PY(0) + fontSize + 2);
-    }
-
-    // ── PITA ARSIRAN pada sisi yang BUKAN daerah penyelesaian ──
-    if (shadeIneqs.length > 0) {
-      const band = mini ? Math.max(7, scale * 0.42) : Math.max(11, Math.min(20, scale * 0.6));
-      for (const ineq of shadeIneqs) {
-        const seg = lineRectSegment(ineq, spec.xRange, spec.yRange);
-        if (!seg) continue;
-        // normal kartesius (a, b) menunjuk ke arah ax + by membesar
-        const dir = ineq.sign === "<=" || ineq.sign === "<" ? 1 : -1;
-        const nxC = ineq.a * dir;
-        const nyC = ineq.b * dir;
-        // konversi ke piksel (sumbu y terbalik), lalu normalisasi
-        let nx = nxC;
-        let ny = -nyC;
-        const nl = Math.hypot(nx, ny);
-        if (nl < 1e-9) continue;
-        nx /= nl;
-        ny /= nl;
-        drawHatchBand(
-          ctx,
-          { x: PX(seg[0].x), y: PY(seg[0].y) },
-          { x: PX(seg[1].x), y: PY(seg[1].y) },
-          { x: nx, y: ny },
-          band
-        );
-      }
     }
 
     // ── garis pembatas ──
@@ -359,7 +307,8 @@ export default function CartesianCanvas({
 
     // ── legenda arsiran ──
     if (shadeIneqs.length > 0 && !hideLegend && !mini) {
-      const label = "Arsiran = BUKAN daerah penyelesaian";
+      const isDhp = !!(spec.dhpIneqs && spec.dhpIneqs.length);
+      const label = isDhp ? "Daerah ungu = DHP (irisan semua kendala)" : "Daerah berwarna = daerah penyelesaian";
       ctx.font = "600 9.5px 'Inter', sans-serif";
       const tw = ctx.measureText(label).width;
       ctx.fillStyle = "rgba(255,255,255,0.93)";

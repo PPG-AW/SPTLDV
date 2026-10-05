@@ -36,8 +36,8 @@ export const students = pgTable("students", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   passwordHash: text("password_hash").notNull(),
+  // NULL sampai siswa memasukkan kode kelas setelah login
   classId: integer("class_id")
-    .notNull()
     .references(() => classes.id, { onDelete: "cascade" }),
   currentSubbab: integer("current_subbab").notNull().default(1),
   completedSubbabs: jsonb("completed_subbabs")
@@ -50,7 +50,7 @@ export const students = pgTable("students", {
   lastActiveAt: timestamp("last_active_at", { withTimezone: true }).notNull().defaultNow(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }, (t) => [
-  uniqueIndex("students_class_name_uq").on(t.classId, t.name),
+  uniqueIndex("students_name_uq").on(t.name),
   index("students_class_idx").on(t.classId),
 ]);
 

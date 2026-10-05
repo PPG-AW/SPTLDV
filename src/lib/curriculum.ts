@@ -1,8 +1,13 @@
 // ─── Kurikulum SPtLDV Fase E (Kelas X) — 10 Sub-Bab ─────────────────────────
-// Catatan penulisan: gunakan sintaks MathSteps → baris ">" = kalimat penjelas,
-// frac(a,b) = pecahan atas-bawah, "=" otomatis disejajarkan.
+// Bahasa sederhana untuk siswa Kelas X. Tanpa tanda pisah em-dash.
+// Sintaks langkah: baris ">" = kalimat penjelas, frac(a,b) = pecahan atas bawah.
 
 export type SimulationKind = "line" | "region" | "system" | "corner";
+
+export interface MateriTable {
+  header: string[];
+  rows: string[][];
+}
 
 export interface MateriBlock {
   title: string;
@@ -11,6 +16,7 @@ export interface MateriBlock {
   steps?: string;
   math?: string[];
   tip?: string;
+  table?: MateriTable;
 }
 
 export interface ContohStage {
@@ -25,147 +31,201 @@ export interface SubbabContent {
   levelRef: string;
   focus: string;
   materi: MateriBlock[];
-  videoQuery: string;
+  /** ID video YouTube yang di-embed, null bila tidak ada video khusus */
+  videoId: string | null;
+  videoNote?: string;
   contoh: { soal: string; math?: string[]; stages: ContohStage[]; jawaban: string };
   simulation: SimulationKind | null;
 }
 
 export const SUBBABS: SubbabContent[] = [
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 1,
     title: "Pengenalan PtLDV",
-    levelRef: "Level 1–2",
-    focus: "Bentuk umum, unsur-unsur, verbal ke matematika",
+    levelRef: "Level 1",
+    focus: "Bentuk umum, unsur, cara memeriksa titik",
+    videoId: "nZqBMyDW1s0",
     materi: [
       {
-        title: "Dari persamaan menuju pertidaksamaan",
+        title: "Dari persamaan ke pertidaksamaan",
         body:
-          "Kamu sudah mengenal persamaan linear dua variabel seperti x + y = 10, yang berarti jumlah dua bilangan TEPAT sepuluh. Namun kenyataan sehari-hari jarang sekaku itu. Uang saku yang kamu bawa \"paling banyak\" Rp20.000, waktu belajar \"minimal\" 2 jam, muatan truk \"tidak melebihi\" 5 ton. Batasan seperti inilah yang dimodelkan oleh pertidaksamaan: bukan menyatakan satu nilai pasti, melainkan satu RENTANG nilai yang diperbolehkan.",
+          "Selama ini kamu akrab dengan persamaan seperti x + y = 10. Artinya jumlah kedua nilai TEPAT sepuluh, tidak boleh kurang dan tidak boleh lebih. Kenyataan di sekitar kita tidak selalu seketat itu. Uang saku yang dibawa paling banyak Rp20.000, waktu belajar minimal 2 jam, muatan truk tidak melebihi 5 ton. Semua batasan itu menyatakan rentang, bukan satu nilai pasti. Batasan rentang seperti ini dimodelkan oleh pertidaksamaan.",
       },
       {
-        title: "Definisi dan bentuk umum",
+        title: "Mengenal tanda pertidaksamaan",
         body:
-          "Pertidaksamaan Linear Dua Variabel (PtLDV) adalah kalimat terbuka yang memuat dua variabel, masing-masing berpangkat satu, dan dihubungkan oleh salah satu tanda ketidaksamaan. Ada empat bentuk umum yang mungkin:",
-        list: [
-          "ax + by < c  (kurang dari)",
-          "ax + by > c  (lebih dari)",
-          "ax + by ≤ c  (kurang dari atau sama dengan)",
-          "ax + by ≥ c  (lebih dari atau sama dengan)",
-        ],
+          "Ada empat tanda yang dipakai dalam pertidaksamaan. Hafalkan nama dan artinya karena semua langkah berikutnya tergantung pada tanda ini.",
+        table: {
+          header: ["Tanda", "Nama", "Artinya"],
+          rows: [
+            ["<", "Kurang dari", "Nilai kiri lebih kecil, tanpa boleh sama"],
+            ["≤", "Kurang dari atau sama dengan", "Nilai kiri lebih kecil atau boleh sama"],
+            [">", "Lebih dari", "Nilai kiri lebih besar, tanpa boleh sama"],
+            ["≥", "Lebih dari atau sama dengan", "Nilai kiri lebih besar atau boleh sama"],
+          ],
+        },
         tip:
-          "Syarat penting: a dan b tidak boleh keduanya nol. Jika keduanya nol, tidak ada variabel yang tersisa sehingga bentuknya bukan lagi pertidaksamaan dua variabel.",
+          "Kalimat tidak lebih dari dan paling banyak memakai ≤. Kalimat tidak kurang dari, paling sedikit, dan minimal memakai ≥.",
       },
       {
-        title: "Mengenali unsur-unsurnya satu per satu",
+        title: "Apa itu PtLDV",
         body:
-          "Setiap bagian pada bentuk ax + by ≤ c punya nama. Memahami nama ini penting karena semua langkah berikutnya (mencari titik potong, menguji titik) selalu merujuk pada bagian-bagian tersebut.",
+          "Pertidaksamaan Linear Dua Variabel, disingkat PtLDV, adalah kalimat terbuka yang memuat dua variabel, masing-masing berpangkat satu, dan dihubungkan salah satu dari empat tanda di atas. Ada empat bentuk umumnya:",
         list: [
-          "a disebut koefisien x — bilangan yang menempel pada variabel x",
-          "b disebut koefisien y — bilangan yang menempel pada variabel y",
-          "c disebut konstanta — suku yang tidak memuat variabel apa pun",
-          "x dan y disebut variabel — nilainya belum diketahui dan boleh berubah",
-          "Tanda <, >, ≤, atau ≥ disebut relasi ketidaksamaan",
+          "ax + by < c",
+          "ax + by ≤ c",
+          "ax + by > c",
+          "ax + by ≥ c",
+        ],
+      },
+      {
+        title: "Membedakan PtLDV dan bukan PtLDV",
+        body:
+          "Sebuah bentuk disebut PtLDV hanya jika memenuhi SEMUA syarat berikut: tepat dua variabel (x dan y), setiap variabel berpangkat satu, tidak ada perkalian antar variabel, tidak ada variabel di dalam akar atau penyebut, dan dihubungkan tanda ketidaksamaan. Satu syarat saja gagal, maka bentuknya bukan PtLDV.",
+        list: [
+          "2x + 3y ≤ 12 adalah PtLDV karena semua syarat terpenuhi",
+          "x² + y ≤ 6 bukan PtLDV karena x berpangkat dua",
+          "xy + 2y ≥ 8 bukan PtLDV karena ada perkalian x dengan y",
+          "2x + 3y = 12 bukan pertidaksamaan karena memakai tanda sama dengan",
+          "5x ≤ 20 bukan dua variabel karena hanya memuat x saja",
+        ],
+      },
+      {
+        title: "Memeriksa apakah sebuah titik memenuhi",
+        body:
+          "Menjawab pertanyaan apakah sebuah titik termasuk penyelesaian, caranya hanya substitusi. Masukkan nilai x dan y dari titik itu ke ruas kiri pertidaksamaan, lalu nilai benar atau salah pernyataannya. Bila pernyataan benar, titik itu memenuhi. Bila salah, titik itu tidak memenuhi.",
+        steps:
+          "> Periksa titik (1, 2) pada 3x + 2y ≤ 12:\n" +
+          "3(1) + 2(2) ≤ 12\n" +
+          "3 + 4 ≤ 12\n" +
+          "7 ≤ 12   → BENAR, maka titik (1, 2) memenuhi\n" +
+          "> Periksa titik (5, 3) pada pertidaksamaan yang sama:\n" +
+          "3(5) + 2(3) ≤ 12\n" +
+          "15 + 6 ≤ 12\n" +
+          "21 ≤ 12   → SALAH, maka titik (5, 3) tidak memenuhi",
+      },
+      {
+        title: "Unsur unsur di dalam PtLDV",
+        body:
+          "Setiap bagian kecil pada bentuk ax + by ≤ c punya nama resmi yang akan selalu dipakai di sub-bab berikutnya.",
+        list: [
+          "a disebut koefisien x, yaitu bilangan yang menempel pada x",
+          "b disebut koefisien y, termasuk tanda minusnya bila ada",
+          "c disebut konstanta, yaitu suku yang tidak memuat variabel",
+          "x dan y disebut variabel, nilainya belum diketahui dan boleh berubah",
         ],
         steps:
-          "> Perhatikan contoh berikut dan tentukan unsur-unsurnya:\n" +
+          "> Contoh pengenalan unsur:\n" +
           "3x + 2y ≤ 12\n" +
-          "> Koefisien x adalah 3, koefisien y adalah 2, konstanta adalah 12.\n" +
+          "a = 3, b = 2, c = 12\n" +
           "x − 4y > 8\n" +
-          "> Koefisien x adalah 1 (karena x sama dengan 1x), koefisien y adalah −4 (tanda minus IKUT), konstanta adalah 8.",
-        tip:
-          "Tanda negatif selalu ikut menjadi bagian koefisien. Pada x − 4y > 8, koefisien y bukan 4 melainkan −4.",
+          "a = 1 karena x sama dengan 1x\n" +
+          "b = −4 karena tanda minus ikut koefisien\n" +
+          "c = 8",
       },
       {
-        title: "Membedakan yang PtLDV dan yang bukan",
+        title: "Dari kalimat menjadi model matematika",
         body:
-          "Sebuah bentuk disebut PtLDV hanya jika memenuhi SEMUA syarat: memuat tepat dua variabel, setiap variabel berpangkat satu, tidak ada perkalian antarvariabel, tidak ada variabel di dalam akar atau penyebut, dan dihubungkan tanda ketidaksamaan. Berikut contoh yang GAGAL memenuhi syarat beserta alasannya:",
-        list: [
-          "x² + y ≤ 6  → gagal, karena x berpangkat dua (tidak linear)",
-          "xy + 2y ≥ 8  → gagal, karena ada perkalian antarvariabel xy",
-          "2x + 3y = 12  → gagal, karena memakai tanda sama dengan (ini persamaan)",
-          "5x ≤ 20  → gagal, karena hanya memuat satu variabel",
-          "frac(1,x) + y < 4  → gagal, karena variabel berada di penyebut",
-        ],
-      },
-      {
-        title: "Menerjemahkan kalimat menjadi model matematika",
-        body:
-          "Kemampuan menerjemahkan kalimat sehari-hari menjadi pertidaksamaan adalah inti dari pemodelan. Kuncinya ada pada frasa penanda. Hafalkan padanan berikut, karena akan terus dipakai sampai sub-bab terakhir:",
-        list: [
-          "\"tidak lebih dari\", \"paling banyak\", \"maksimal\", \"sebanyak-banyaknya\"  →  ≤",
-          "\"tidak kurang dari\", \"paling sedikit\", \"minimal\", \"sekurang-kurangnya\"  →  ≥",
-          "\"kurang dari\", \"di bawah\"  →  <",
-          "\"lebih dari\", \"melebihi\", \"di atas\"  →  >",
-        ],
+          "Soal cerita diubah menjadi pertidaksamaan dengan tiga langkah: misalkan objek sebagai x dan y, susun bentuk yang mewakili keadaan (biasanya total harga, total bahan, atau total waktu), lalu pilih tanda yang sesuai kata kuncinya.",
         steps:
-          "> Contoh penerjemahan: \"Dina membeli 3 buku dan 2 pensil dengan total belanja tidak lebih dari Rp20.000.\"\n" +
-          "> Langkah 1: misalkan x = harga sebuah buku, y = harga sebuah pensil.\n" +
-          "> Langkah 2: susun bentuk total belanjanya.\n" +
+          "> \"Dina membeli 3 buku dan 2 pensil dengan total tidak lebih dari Rp20.000\"\n" +
+          "> Pemisalan: x = harga sebuah buku, y = harga sebuah pensil\n" +
           "3x + 2y\n" +
-          "> Langkah 3: terjemahkan frasa \"tidak lebih dari\" menjadi tanda ≤, lalu tuliskan batasnya.\n" +
+          "> Frasa tidak lebih dari berarti ≤, maka:\n" +
           "3x + 2y ≤ 20000",
       },
     ],
-    videoQuery: "pengenalan pertidaksamaan linear dua variabel kelas 10",
     contoh: {
       soal:
-        "Harga sebuah buku tulis adalah x rupiah dan sebuah pensil adalah y rupiah. Rani membeli 4 buku tulis dan 3 pensil. Ia membayar dengan uang Rp50.000 dan masih menerima kembalian. Tuliskan model matematika dari situasi tersebut.",
+        "Periksa apakah ketiga titik berikut memenuhi 3x + 2y ≤ 12:\nA. Titik (1, 2)\nB. Titik (4, 1)\nC. Titik (0, 6)",
       stages: [
         {
-          label: "Memahami situasi",
+          label: "Menetapkan cara kerja",
           explain:
-            "Rani membayar Rp50.000 dan MASIH MENERIMA KEMBALIAN. Artinya total belanjanya tidak mungkin sama dengan Rp50.000, melainkan harus benar-benar kurang dari Rp50.000. Frasa ini akan menentukan tanda relasi yang kita pakai nanti.",
+            "Memeriksa titik itu mudah. Substitusikan x dan y dari titik ke ruas kiri, hitung hasilnya, lalu bandingkan dengan ruas kanan. Kita kerjakan titik per titik tanpa tergesa.",
         },
         {
-          label: "Menyusun bentuk total belanja",
+          label: "Titik A (1, 2)",
           explain:
-            "Harga sebuah buku tulis adalah x, maka harga 4 buku tulis adalah 4x. Harga sebuah pensil adalah y, maka harga 3 pensil adalah 3y. Total belanjanya adalah penjumlahan keduanya.",
-          steps: "> Total belanja Rani:\nTotal = 4x + 3y",
+            "Nilai x adalah 1 dan nilai y adalah 2. Substitusikan keduanya ke bentuk 3x + 2y.",
+          steps: "3(1) + 2(2) = 3 + 4\n3(1) + 2(2) = 7\n7 ≤ 12   → BENAR\n> Titik A memenuhi.",
         },
         {
-          label: "Memilih tanda relasi",
+          label: "Titik B (4, 1)",
           explain:
-            "Karena Rani masih menerima kembalian, total belanja harus KURANG DARI Rp50.000 (bukan ≤, sebab bila tepat Rp50.000 tidak akan ada kembalian).",
-          steps: "4x + 3y < 50000",
+            "Lakukan cara yang sama dengan nilai x yaitu 4 dan nilai y yaitu 1.",
+          steps: "3(4) + 2(1) = 12 + 2\n3(4) + 2(1) = 14\n14 ≤ 12   → SALAH\n> Titik B tidak memenuhi.",
         },
         {
-          label: "Menambahkan syarat wajar",
+          label: "Titik C (0, 6)",
           explain:
-            "Harga barang tidak mungkin negatif, sehingga secara matematis kita tambahkan syarat x ≥ 0 dan y ≥ 0. Syarat semacam ini akan selalu muncul kembali pada soal-soal program linear.",
-          steps: "4x + 3y < 50000\nx ≥ 0\ny ≥ 0",
+            "Kali ini x nya nol sehingga perhitungannya lebih singkat. Perhatikan bahwa nilai ruas kiri tepat sama dengan ruas kanan. Karena tandanya ≤ (boleh sama), titik ini tetap memenuhi.",
+          steps: "3(0) + 2(6) = 0 + 12\n3(0) + 2(6) = 12\n12 ≤ 12   → BENAR\n> Titik C memenuhi.",
         },
       ],
-      jawaban: "4x + 3y < 50000, dengan x ≥ 0 dan y ≥ 0",
+      jawaban: "Titik A dan titik C memenuhi; hanya titik B yang tidak memenuhi",
     },
     simulation: null,
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 2,
     title: "Titik Potong pada PtLDV",
-    levelRef: "Level 3",
-    focus: "Titik potong sumbu X dan sumbu Y",
+    levelRef: "Level 2",
+    focus: "Menyederhanakan dulu, lalu titik potong sumbu",
+    videoId: "1hg5reqZJTw",
     materi: [
       {
-        title: "Mengapa harus mencari titik potong?",
+        title: "Mengapa perlu titik potong",
         body:
-          "Untuk menggambar sebuah garis, kita cukup memerlukan DUA titik, lalu menghubungkannya dengan penggaris. Dari sekian banyak titik yang dilalui garis, dua titik yang paling mudah dihitung adalah titik potong dengan sumbu X dan titik potong dengan sumbu Y. Alasannya sederhana: pada kedua titik itu, salah satu koordinatnya bernilai nol sehingga perhitungannya menjadi jauh lebih ringan.",
+          "Untuk menggambar sebuah garis kita hanya butuh dua titik. Dari semua titik yang dilalui garis, dua yang paling mudah dihitung adalah titik potong dengan sumbu X dan titik potong dengan sumbu Y. Alasannya sederhana: pada kedua titik itu, salah satu koordinatnya selalu nol, sehingga perhitungannya ringan.",
       },
       {
-        title: "Gagasan kuncinya: nol-kan salah satu variabel",
+        title: "Menyederhanakan pertidaksamaan terlebih dahulu",
         body:
-          "Perhatikan ciri khas kedua sumbu. Setiap titik yang terletak pada sumbu X selalu berbentuk (p, 0) — koordinat y-nya nol. Sebaliknya, setiap titik pada sumbu Y selalu berbentuk (0, q) — koordinat x-nya nol. Dari sinilah aturan pengerjaan kita berasal.",
+          "Sebelum mencari titik potong, periksa dulu bentuk pertidaksamaannya. Bila koefisien x, koefisien y, dan konstantanya punya faktor persekutuan yang sama, bagi semuanya dengan faktor itu. Proses ini disebut menyederhanakan. Hasilnya jauh lebih mudah dihitung dan gambar garisnya tetap sama.",
         list: [
-          "Mencari titik potong sumbu X  →  substitusikan y = 0, lalu hitung nilai x",
-          "Mencari titik potong sumbu Y  →  substitusikan x = 0, lalu hitung nilai y",
+          "Cari FPB dari ketiga angka: koefisien x, koefisien y, dan konstanta",
+          "Jika FPB-nya lebih dari satu, bagi ketiga suku dengan FPB itu",
+          "Jika FPB-nya satu, pertidaksamaan memang sudah paling sederhana",
+          "Tanda pertidaksamaan tidak berubah selama kita membagi dengan bilangan positif",
+        ],
+        steps:
+          "> Periksa bentuk 6x + 4y ≤ 24:\n" +
+          "> FPB dari 6, 4, dan 24 adalah 2\n" +
+          "6x/2 + 4y/2 ≤ 24/2\n" +
+          "3x + 2y ≤ 12",
+      },
+      {
+        title: "Tabel cek: sudah sederhana atau belum",
+        body:
+          "Banyak soal langsung memberi bentuk sederhana, tetapi sebagian tidak. Biasakan selalu mengecek seperti tabel berikut sebelum lanjut menghitung.",
+        table: {
+          header: ["Pertidaksamaan", "FPB", "Kesimpulan"],
+          rows: [
+            ["6x + 4y ≤ 24", "2", "Belum, bagi dengan 2 menjadi 3x + 2y ≤ 12"],
+            ["5x + 3y ≤ 15", "1", "Sudah sederhana, langsung dikerjakan"],
+            ["9x + 6y ≥ 18", "3", "Belum, bagi dengan 3 menjadi 3x + 2y ≥ 6"],
+            ["4x + 2y = 8", "2", "Belum, bagi dengan 2 menjadi 2x + y = 4"],
+            ["3x + 2y = 12", "1", "Sudah sederhana"],
+          ],
+        },
+      },
+      {
+        title: "Idenya: jadikan satu variabel nol",
+        body:
+          "Perhatikan ciri sumbu koordinat. Semua titik pada sumbu X berbentuk (p, 0). Semua titik pada sumbu Y berbentuk (0, q). Karena ada bagian yang selalu nol, kita dapat memanfaatkannya: nolkan variabel yang tepat, lalu hitung variabel satunya.",
+        list: [
+          "Titik potong sumbu X dicari dengan mensubstitusi y = 0",
+          "Titik potong sumbu Y dicari dengan mensubstitusi x = 0",
         ],
       },
       {
         title: "Langkah lengkap titik potong sumbu X",
         body:
-          "Ubah dahulu pertidaksamaan menjadi persamaan (ganti tandanya dengan =), karena yang kita gambar adalah garis pembatasnya. Kemudian kerjakan langkah demi langkah seperti berikut.",
+          "Ubah dulu pertidaksamaan menjadi persamaan karena yang kita gambar adalah garis pembatasnya. Kemudian kerjakan langkah berikut tanpa melompat.",
         steps:
           "2x + 3y = 12\n" +
           "> Kita ubah y = 0, maka:\n" +
@@ -179,7 +239,7 @@ export const SUBBABS: SubbabContent[] = [
       {
         title: "Langkah lengkap titik potong sumbu Y",
         body:
-          "Prosesnya serupa, hanya variabel yang di-nol-kan berbeda. Sekarang giliran x yang kita jadikan nol.",
+          "Prosesnya sama persis, hanya variabel yang dijadikan nol berbeda. Sekarang giliran x yang kita nolkan.",
         steps:
           "2x + 3y = 12\n" +
           "> Kita ubah x = 0, maka:\n" +
@@ -190,12 +250,12 @@ export const SUBBABS: SubbabContent[] = [
           "y = 4\n" +
           "> Jadi titik potong dengan sumbu Y adalah (0, 4).",
         tip:
-          "Jangan tertukar dalam menuliskan koordinat. Hasil perhitungan sumbu X ditulis (6, 0) — angkanya di depan; hasil perhitungan sumbu Y ditulis (0, 4) — angkanya di belakang.",
+          "Jangan tertukar. Hasil hitungan sumbu X ditulis (6, 0) dengan angka di depan, sedangkan hasil sumbu Y ditulis (0, 4) dengan angka di belakang.",
       },
       {
-        title: "Ketika koefisiennya negatif",
+        title: "Bila ada koefisien negatif",
         body:
-          "Bila ada koefisien bernilai negatif, langkahnya sama persis. Yang perlu ekstra hati-hati hanyalah operasi pembagian dengan bilangan negatif: hasil bagi dua bilangan yang berbeda tanda selalu negatif.",
+          "Langkahnya tidak berubah. Yang perlu dijaga hanyalah pembagian dengan bilangan negatif: membagi bilangan positif dengan bilangan negatif menghasilkan bilangan negatif.",
         steps:
           "3x − 7y = 21\n" +
           "> Kita ubah x = 0, maka:\n" +
@@ -203,366 +263,371 @@ export const SUBBABS: SubbabContent[] = [
           "−7y = 21\n" +
           "y = frac(21,−7)\n" +
           "y = −3\n" +
-          "> Jadi titik potong dengan sumbu Y adalah (0, −3), yaitu di bawah titik asal.",
+          "> Titik potong dengan sumbu Y adalah (0, −3), di bawah titik asal.",
       },
       {
-        title: "Kasus khusus: garis melalui titik asal",
+        title: "Kasus khusus: garis lewat titik asal",
         body:
-          "Jika konstanta c bernilai nol (misalnya 2x − y = 0), maka substitusi y = 0 menghasilkan x = 0 juga. Kedua titik potong berimpit di (0, 0), sehingga kita hanya punya satu titik. Solusinya: pilih sembarang nilai x lain, misalnya x = 2, lalu hitung y-nya untuk mendapatkan titik kedua.",
+          "Bila konstantanya nol (misalnya 2x − y = 0), mensubstitusi y = 0 memberi x = 0 juga. Kedua titik potong berimpit di (0, 0) sehingga kita hanya punya satu titik. Jalan keluarnya: pilih nilai x lain yang mudah, misalnya x = 2, hitung y nya, dan pakai itu sebagai titik kedua.",
         steps:
           "2x − y = 0\n" +
-          "> Ambil x = 2, maka:\n" +
+          "> Kita ambil x = 2, maka:\n" +
           "2(2) − y = 0\n" +
           "4 − y = 0\n" +
           "y = 4\n" +
           "> Titik kedua yang dilalui garis adalah (2, 4).",
       },
     ],
-    videoQuery: "titik potong sumbu x dan y garis ax+by=c",
     contoh: {
-      soal: "Tentukan titik potong garis 4x + 5y = 20 dengan kedua sumbu koordinat.",
+      soal:
+        "Sederhanakan pertidaksamaan 6x + 4y ≤ 24, kemudian tentukan titik potong garis pembatasnya dengan kedua sumbu.",
       stages: [
         {
-          label: "Menentukan rencana pengerjaan",
+          label: "Mengecek FPB dulu",
           explain:
-            "Ada dua hal yang diminta, sehingga kita kerjakan dalam dua perhitungan terpisah. Untuk sumbu X kita nol-kan y, dan untuk sumbu Y kita nol-kan x. Jangan mencampur keduanya dalam satu baris pengerjaan.",
+            "Sebelum mencari titik potong, selalu periksa apakah bentuknya sudah paling sederhana. Cari FPB dari 6, 4, dan 24. Ketiganya habis dibagi 2, sehingga FPB-nya adalah 2. Karena lebih dari satu, pertidaksamaan ini belum paling sederhana.",
         },
         {
-          label: "Menghitung titik potong sumbu X",
+          label: "Menyederhanakan",
           explain:
-            "Substitusikan y = 0 ke dalam persamaan. Suku 5y akan hilang karena 5 dikali 0 sama dengan 0, menyisakan persamaan satu variabel yang mudah diselesaikan.",
-          steps:
-            "4x + 5y = 20\n" +
-            "> Kita ubah y = 0, maka:\n" +
-            "4x + 5(0) = 20\n" +
-            "4x = 20\n" +
-            "x = frac(20,4)\n" +
-            "x = 5",
+            "Bagi seluruh suku dengan FPB yang tadi ditemukan. Tanda pertidaksamaan tidak berubah karena kita membagi dengan bilangan positif.",
+          steps: "6x + 4y ≤ 24\n> Bagi ketiga suku dengan 2:\n6x/2 + 4y/2 ≤ 24/2\n3x + 2y ≤ 12",
         },
         {
-          label: "Menghitung titik potong sumbu Y",
+          label: "Titik potong sumbu X",
           explain:
-            "Sekarang substitusikan x = 0. Kali ini suku 4x yang hilang, sehingga tersisa persamaan dalam variabel y saja.",
+            "Ubah pertidaksamaan menjadi persamaan, lalu substitusikan y = 0 dan hitung nilai x.",
           steps:
-            "4x + 5y = 20\n" +
-            "> Kita ubah x = 0, maka:\n" +
-            "4(0) + 5y = 20\n" +
-            "5y = 20\n" +
-            "y = frac(20,5)\n" +
-            "y = 4",
+            "3x + 2y = 12\n" +
+            "> Kita ubah y = 0, maka:\n3x + 2(0) = 12\n3x = 12\nx = frac(12,3)\nx = 4",
         },
         {
-          label: "Menuliskan kesimpulan",
-          explain:
-            "Tuliskan kedua hasil dalam bentuk pasangan koordinat. Perhatikan letak angkanya: hasil dari sumbu X berpasangan dengan 0 di belakang, dan hasil dari sumbu Y berpasangan dengan 0 di depan.",
+          label: "Titik potong sumbu Y",
+          explain: "Sekarang substitusikan x = 0 dan hitung nilai y dengan cara yang sama.",
           steps:
-            "> Titik potong sumbu X:\n(5, 0)\n> Titik potong sumbu Y:\n(0, 4)",
+            "3x + 2y = 12\n" +
+            "> Kita ubah x = 0, maka:\n3(0) + 2y = 12\n2y = 12\ny = frac(12,2)\ny = 6",
+        },
+        {
+          label: "Latihan singkat dua kasus lagi",
+          explain:
+            "Agar terbiasa mengecek: 5x + 3y ≤ 15 memiliki FPB satu sehingga sudah sederhana dan boleh langsung dikerjakan. Sedangkan 9x + 6y ≥ 18 memiliki FPB 3, sehingga harus dibagi 3 dulu menjadi 3x + 2y ≥ 6.",
         },
       ],
-      jawaban: "Titik potong sumbu X adalah (5, 0) dan titik potong sumbu Y adalah (0, 4)",
+      jawaban: "Bentuk sederhananya 3x + 2y ≤ 12, dengan titik potong (4, 0) dan (0, 6)",
     },
     simulation: null,
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 3,
     title: "Menggambar Garis PtLDV",
-    levelRef: "Level 4–5",
-    focus: "Plot 2 titik → garis, jenis garis penuh/putus-putus",
+    levelRef: "Level 3",
+    focus: "Plot dua titik, jenis garis penuh atau putus",
+    videoId: "01xAzLU1Fb8",
     materi: [
       {
         title: "Empat langkah menggambar garis pembatas",
         body:
-          "Menggambar garis pembatas dari sebuah pertidaksamaan selalu mengikuti urutan yang sama. Hafalkan urutan ini agar tidak ada langkah yang terlewat:",
+          "Urutan kerjanya selalu sama, dari sub-bab ini sampai sistem yang rumit. Hafalkan urutan ini agar tidak ada bagian yang terlewat.",
         list: [
-          "Ubah tanda pertidaksamaan menjadi tanda sama dengan (=), sehingga diperoleh persamaan garis pembatas",
-          "Cari titik potong dengan sumbu X (nol-kan y) dan titik potong dengan sumbu Y (nol-kan x)",
-          "Gambar kedua titik tersebut pada bidang Kartesius dengan teliti",
-          "Hubungkan kedua titik menggunakan jenis garis yang sesuai dengan tanda aslinya",
+          "Ubah tanda pertidaksamaan menjadi tanda sama dengan, sehingga terbentuk persamaan garis pembatas",
+          "Cari titik potong garis dengan sumbu X dan dengan sumbu Y",
+          "Gambar kedua titik itu pada bidang Kartesius",
+          "Hubungkan kedua titik dengan jenis garis yang sesuai tanda aslinya",
         ],
       },
       {
-        title: "Menentukan jenis garis: penuh atau putus-putus",
+        title: "Tabel jenis garis: penuh atau putus putus",
         body:
-          "Inilah bagian yang paling sering keliru. Jenis garis ditentukan semata-mata oleh ADA atau TIDAKNYA unsur \"sama dengan\" pada tanda pertidaksamaan aslinya. Maknanya: apakah titik-titik yang tepat berada pada garis ikut menjadi penyelesaian atau tidak.",
-        list: [
-          "Tanda ≤ atau ≥ memuat \"sama dengan\" → titik pada garis IKUT menjadi penyelesaian → GARIS PENUH",
-          "Tanda < atau > tidak memuat \"sama dengan\" → titik pada garis TIDAK ikut → GARIS PUTUS-PUTUS",
-        ],
+          "Gaya garis ditentukan semata mata oleh tanda pertidaksamaan aslinya. Pertanyaan pengujinya: apakah titik yang tepat berada pada garis ikut menjadi penyelesaian atau tidak.",
+        table: {
+          header: ["Tanda", "Jenis garis", "Titik pada garis"],
+          rows: [
+            ["≤", "Penuh", "Ikut menjadi penyelesaian"],
+            ["≥", "Penuh", "Ikut menjadi penyelesaian"],
+            ["<", "Putus putus", "Tidak ikut menjadi penyelesaian"],
+            [">", "Putus putus", "Tidak ikut menjadi penyelesaian"],
+          ],
+        },
         steps:
           "2x + 3y ≤ 12\n" +
-          "> Tanda ≤ memuat \"sama dengan\", sehingga garis pembatas digambar PENUH.\n" +
+          "> Tanda ≤ memuat sama dengan, sehingga garis digambar PENUH.\n" +
           "2x + 3y < 12\n" +
-          "> Tanda < tidak memuat \"sama dengan\", sehingga garis pembatas digambar PUTUS-PUTUS.",
+          "> Tanda < tidak memuat sama dengan, sehingga garis digambar PUTUS PUTUS.",
         tip:
-          "Cara mengingat: garis putus-putus itu \"berlubang\", menandakan titik-titik di atasnya bolong alias tidak termasuk penyelesaian.",
+          "Ingat: garis putus putus itu berlubang, menandakan titik di atasnya tidak dihitung sebagai penyelesaian.",
       },
       {
-        title: "Ketelitian saat memplot titik",
+        title: "Garis horizontal dan garis vertikal",
         body:
-          "Kesalahan menggambar sering terjadi bukan karena hitungan salah, melainkan karena penempatan titik yang keliru. Ingat kembali aturan pembacaan koordinat: pasangan (x, y) berarti bergerak mendatar sejauh x lebih dahulu, baru kemudian bergerak tegak sejauh y.",
+          "Ada dua bentuk istimewa. Bila tidak ada suku y (misalnya x = 4), garisnya VERTIKAL memotong sumbu X di 4. Bila tidak ada suku x (misalnya y = 3), garisnya HORIZONTAL memotong sumbu Y di 3. Untuk keduanya cukup digambar langsung tanpa mencari dua titik.",
+        steps:
+          "> Garis x = 4 adalah garis tegak melalui titik (4, 0).\n" +
+          "> Garis y = 3 adalah garis datar melalui titik (0, 3).\n" +
+          "> Garis x = 0 adalah sumbu Y, dan garis y = 0 adalah sumbu X.",
+      },
+      {
+        title: "Ketelitian saat menaruh titik",
+        body:
+          "Garis yang salah seringnya bukan karena hitungan keliru, melainkan karena titiknya salah taruh. Ingat aturan membaca koordinat: angka pertama bergerak mendatar, angka kedua bergerak tegak.",
         list: [
-          "Titik (6, 0): dari titik asal bergerak 6 satuan ke kanan, tetap di sumbu X",
-          "Titik (0, 4): dari titik asal bergerak 4 satuan ke atas, tetap di sumbu Y",
-          "Titik (0, −3): dari titik asal bergerak 3 satuan ke bawah, di sumbu Y bagian negatif",
+          "Titik (6, 0) bergerak 6 satuan ke kanan dari titik asal, tetap pada sumbu X",
+          "Titik (0, 4) bergerak 4 satuan ke atas dari titik asal, tetap pada sumbu Y",
+          "Titik (0, −3) bergerak 3 satuan ke bawah dari titik asal, di bagian negatif sumbu Y",
         ],
       },
       {
-        title: "Membaca persamaan dari gambar garis",
+        title: "Cek arah miringnya untuk mengontrol diri",
         body:
-          "Kemampuan sebaliknya juga penting: bila diberikan gambar garis, kita harus dapat menemukan persamaannya. Caranya dengan membaca kedua titik potongnya, lalu memakai rumus cepat berikut. Jika garis memotong sumbu X di (p, 0) dan sumbu Y di (0, q), maka persamaannya adalah qx + py = pq.",
-        steps:
-          "> Misalkan sebuah garis memotong sumbu X di (4, 0) dan sumbu Y di (0, 2).\n" +
-          "> Berarti p = 4 dan q = 2, sehingga:\n" +
-          "qx + py = pq\n" +
-          "2x + 4y = 8\n" +
-          "> Sederhanakan dengan membagi kedua ruas dengan 2:\n" +
-          "x + 2y = 4",
+          "Pemeriksaan cepat sebelum menggambar: bila koefisien x dan y sama sama positif (misalnya 2x + 3y = 12), garis akan miring TURUN dari kiri atas ke kanan bawah. Bila salah satu koefisien negatif (misalnya 2x − 3y = 6), garis miring NAIK dari kiri bawah ke kanan atas. Cocokkan dugaan arah ini dengan gambarmu.",
       },
       {
-        title: "Kemiringan garis: naik atau turun?",
+        title: "Membaca kembali persamaan dari grafik",
         body:
-          "Perhatikan arah garis untuk memeriksa kembali gambarmu. Jika koefisien x dan y sama-sama positif (misalnya 2x + 3y = 12), garis akan miring TURUN dari kiri atas ke kanan bawah. Namun bila salah satu koefisien negatif (misalnya 2x − 3y = 6), garis akan miring NAIK dari kiri bawah ke kanan atas. Pemeriksaan sederhana ini sering menyelamatkanmu dari kesalahan menggambar.",
+          "Diberi gambar garis, kita juga bisa menemukan persamaannya. Baca kedua titik potongnya, lalu pakai rumus cepat: garis yang memotong sumbu X di (p, 0) dan sumbu Y di (0, q) punya persamaan qx + py = pq.",
+        steps:
+          "> Garis melalui (4, 0) dan (0, 2), berarti p = 4 dan q = 2:\n" +
+          "qx + py = pq\n" +
+          "2x + 4y = 8\n" +
+          "> Sederhanakan, dibagi 2:\n" +
+          "x + 2y = 4",
       },
     ],
-    videoQuery: "menggambar garis pembatas pertidaksamaan linear dua variabel",
     contoh: {
-      soal: "Gambarlah garis pembatas dari pertidaksamaan 3x + 4y ≥ 12, lalu tentukan jenis garisnya.",
+      soal: "Gambarlah garis pembatas dari 3x + 4y ≥ 12 dan tentukan jenis garisnya.",
       stages: [
         {
-          label: "Langkah 1 — Mengubah menjadi persamaan",
+          label: "Langkah 1: ubah menjadi persamaan",
           explain:
-            "Yang digambar adalah garis pembatasnya, maka tanda ≥ untuk sementara kita ganti dengan tanda sama dengan. Tanda aslinya jangan dilupakan, karena nanti dipakai untuk menentukan jenis garis.",
+            "Yang digambar adalah garis pembatasnya, maka tanda ≥ untuk sementara kita ubah menjadi tanda sama dengan. Tanda aslinya tetap diingat karena menentukan jenis garis nanti.",
           steps: "3x + 4y ≥ 12\n> Ubah menjadi persamaan garis pembatas:\n3x + 4y = 12",
         },
         {
-          label: "Langkah 2 — Titik potong sumbu X",
-          explain:
-            "Substitusikan y = 0. Suku 4y menjadi 4 dikali 0 yang hasilnya 0, sehingga hilang dari persamaan.",
-          steps:
-            "3x + 4y = 12\n> Kita ubah y = 0, maka:\n3x + 4(0) = 12\n3x = 12\nx = frac(12,3)\nx = 4\n> Titik potong sumbu X adalah (4, 0).",
+          label: "Langkah 2: titik potong sumbu X",
+          explain: "Substitusikan y = 0 sehingga suku 4y menjadi hilang.",
+          steps: "3x + 4y = 12\n> Kita ubah y = 0, maka:\n3x + 4(0) = 12\n3x = 12\nx = frac(12,3)\nx = 4\n> Titik potong sumbu X adalah (4, 0).",
         },
         {
-          label: "Langkah 3 — Titik potong sumbu Y",
-          explain:
-            "Sekarang substitusikan x = 0 sehingga suku 3x yang hilang, menyisakan persamaan dalam y.",
-          steps:
-            "3x + 4y = 12\n> Kita ubah x = 0, maka:\n3(0) + 4y = 12\n4y = 12\ny = frac(12,4)\ny = 3\n> Titik potong sumbu Y adalah (0, 3).",
+          label: "Langkah 3: titik potong sumbu Y",
+          explain: "Sekarang substitusikan x = 0 sehingga suku 3x yang hilang.",
+          steps: "3x + 4y = 12\n> Kita ubah x = 0, maka:\n3(0) + 4y = 12\n4y = 12\ny = frac(12,4)\ny = 3\n> Titik potong sumbu Y adalah (0, 3).",
         },
         {
-          label: "Langkah 4 — Menentukan jenis garis",
+          label: "Langkah 4: tentukan jenis garis",
           explain:
-            "Kembali lihat tanda aslinya, yaitu ≥. Tanda ini memuat unsur \"sama dengan\", artinya titik-titik yang tepat berada pada garis ikut menjadi penyelesaian. Oleh karena itu garis digambar penuh (tidak putus-putus).",
-          steps: "> Tanda asli: ≥ (memuat \"sama dengan\")\n> Kesimpulan: garis digambar PENUH.",
+            "Kembali ke tanda aslinya, yaitu ≥. Tanda ini memuat unsur sama dengan, artinya titik tepat pada garis ikut menjadi penyelesaian. Oleh karena itu garis digambar penuh.",
+          steps: "> Tanda asli: ≥ (memuat sama dengan)\n> Kesimpulan: garis digambar PENUH.",
         },
         {
-          label: "Langkah 5 — Menggambar",
+          label: "Langkah 5: gambarkan",
           explain:
-            "Plot titik (4, 0) pada sumbu X dan titik (0, 3) pada sumbu Y, lalu hubungkan keduanya dengan garis penuh dan perpanjang sedikit ke kedua ujungnya. Karena kedua koefisien positif, garis akan miring turun ke kanan — cocokkan dengan gambarmu sebagai pemeriksaan akhir.",
+            "Taruh titik (4, 0) pada sumbu X dan (0, 3) pada sumbu Y, hubungkan dengan garis penuh, lalu perpanjang sedikit keluar kedua ujungnya. Karena kedua koefisien positif, garisnya harus miring turun ke kanan.",
         },
       ],
-      jawaban: "Garis PENUH yang melalui titik (4, 0) dan (0, 3)",
+      jawaban: "Garis penuh yang melalui titik (4, 0) dan (0, 3)",
     },
     simulation: "line",
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 4,
     title: "Uji Titik & Daerah Penyelesaian",
-    levelRef: "Level 6",
-    focus: "Uji titik (0,0), menentukan daerah penyelesaian",
+    levelRef: "Level 4",
+    focus: "Uji titik, arsiran = daerah penyelesaian",
+    videoId: "pwAJn6GQYuc",
     materi: [
       {
-        title: "Garis membelah bidang menjadi dua daerah",
+        title: "Garis membagi bidang menjadi dua",
         body:
-          "Setelah garis pembatas tergambar, bidang koordinat otomatis terbagi menjadi dua bagian yang terpisah oleh garis tersebut. Salah satu bagian memuat semua titik yang memenuhi pertidaksamaan (inilah daerah penyelesaian), sedangkan bagian lainnya memuat titik-titik yang tidak memenuhi. Tugas kita adalah menentukan bagian yang mana.",
+          "Saat garis pembatas sudah tergambar, bidang koordinat otomatis terbelah menjadi dua bagian. Satu bagian berisi semua titik yang memenuhi pertidaksamaan, itulah daerah penyelesaian. Bagian lainnya berisi titik yang tidak memenuhi. Pekerjaan kita tinggal menentukan bagian yang mana.",
+      },
+      {
+        title: "Konvensi arsiran yang dipakai",
+        body:
+          "Sesuai standar pada buku dan video pembelajaran, yang kita ARSIR adalah daerah penyelesaian itu sendiri. Jadi nanti saat membaca gambar, daerah yang berwarnalah jawabannya. Daerah putih yang tidak diarsir berarti bukan penyelesaian.",
+        tip:
+          "Ingat kalimatnya: arsir daerah penyelesaian. Kebiasaan ini akan sangat membantu saat banyak kendala bertumpuk di sub-bab berikutnya.",
       },
       {
         title: "Metode uji titik",
         body:
-          "Cara termudah menentukan daerah penyelesaian adalah dengan mengambil satu titik sembarang yang TIDAK terletak pada garis, lalu memeriksa apakah titik itu memenuhi pertidaksamaan. Titik (0, 0) adalah pilihan paling favorit karena perhitungannya paling ringan. Namun bila garis justru melewati titik (0, 0), pilihlah titik lain misalnya (1, 0) atau (0, 1).",
+          "Cara menentukan sisi mana yang diarsir: ambil satu titik percobaan yang tidak terletak pada garis, lalu periksa apakah titik itu memenuhi pertidaksamaan. Titik (0, 0) adalah pilihan termudah karena menghitungnya paling ringan. Bila garis justru melalui (0, 0), pilih titik lain seperti (1, 0).",
         list: [
-          "Jika hasil substitusi BENAR → daerah penyelesaian adalah sisi yang memuat titik uji tersebut",
-          "Jika hasil substitusi SALAH → daerah penyelesaian adalah sisi seberangnya",
+          "Jika hasil substitusi BENAR, daerah penyelesaian ada di sisi yang memuat titik uji",
+          "Jika hasil substitusi SALAH, daerah penyelesaian ada di sisi seberangnya",
         ],
       },
       {
-        title: "Contoh pengerjaan uji titik",
+        title: "Contoh lengkap dengan tanda ≤",
         body:
-          "Perhatikan bagaimana substitusi dilakukan secara utuh, tidak dilompati. Tuliskan bentuk substitusinya lebih dahulu, baru hasil hitungnya.",
+          "Perhatikan cara menuliskan substitusi secara utuh, tanpa melompat langsung ke kesimpulan.",
         steps:
           "2x + 3y ≤ 12\n" +
           "> Ambil titik uji (0, 0), lalu substitusikan:\n" +
           "2(0) + 3(0) ≤ 12\n" +
-          "0 + 0 ≤ 12\n" +
           "0 ≤ 12   → BENAR\n" +
-          "> Karena pernyataannya BENAR, maka titik (0, 0) termasuk penyelesaian.\n" +
-          "> Daerah penyelesaian adalah sisi garis yang memuat titik (0, 0).",
+          "> Titik (0, 0) memenuhi, maka daerah berisi (0, 0)\n" +
+          "> yang kita arsir, yaitu sisi bawah kiri garis.",
       },
       {
-        title: "Contoh ketika hasilnya salah",
+        title: "Contoh lengkap dengan tanda ≥",
         body:
-          "Tidak semua uji titik menghasilkan pernyataan benar. Bila hasilnya salah, jangan panik — itu justru memberi tahu kita bahwa daerah penyelesaiannya berada di sisi seberang titik uji.",
+          "Sekarang coba tanda lain. Karena hasil ujinya salah, daerah penyelesaian justru ada di sisi yang tidak memuat titik uji.",
         steps:
           "4x + 5y ≥ 20\n" +
           "> Ambil titik uji (0, 0), lalu substitusikan:\n" +
           "4(0) + 5(0) ≥ 20\n" +
           "0 ≥ 20   → SALAH\n" +
-          "> Karena pernyataannya SALAH, titik (0, 0) bukan penyelesaian.\n" +
-          "> Daerah penyelesaian adalah sisi garis yang TIDAK memuat titik (0, 0).",
+          "> Titik (0, 0) tidak memenuhi, maka daerah penyelesaian\n" +
+          "> ada di sisi lain, yaitu di atas kanan garis. Itulah yang kita arsir.",
       },
       {
-        title: "Konvensi arsiran yang dipakai di sini",
+        title: "Peran x ≥ 0 dan y ≥ 0 di Kuadran I",
         body:
-          "Pada platform ini kita memakai konvensi yang lazim dipakai dalam program linear: yang DIARSIR adalah daerah yang BUKAN penyelesaian. Dengan begitu, daerah penyelesaian tampil bersih tanpa arsiran, sehingga mudah dibaca — terutama nanti ketika kendalanya sudah banyak dan arsiran saling bertumpuk.",
-        tip:
-          "Bacalah gambar dengan kalimat: \"daerah yang bersih itulah jawabannya\". Ini sangat membantu ketika nanti ada tiga atau empat kendala sekaligus.",
-      },
-      {
-        title: "Rangkuman alur satu pertidaksamaan",
-        body:
-          "Seluruh proses dari awal hingga akhir untuk satu PtLDV dapat diringkas dalam lima langkah berikut. Alur inilah yang nanti diulang berkali-kali saat menghadapi sistem.",
+          "Dalam soal kontekstual, x dan y biasanya menghitung banyaknya barang sehingga tidak mungkin negatif. Dua kendala ekstra ini menutup daerah hanya pada Kuadran I. Karena daerah penyelesaian yang diarsir, maka arsiran x ≥ 0 berada di kanan sumbu Y dan arsiran y ≥ 0 berada di atas sumbu X.",
         list: [
-          "Ubah pertidaksamaan menjadi persamaan",
-          "Cari titik potong kedua sumbu",
-          "Gambar garis (penuh untuk ≤ dan ≥, putus-putus untuk < dan >)",
-          "Uji satu titik di luar garis, biasanya (0, 0)",
-          "Tentukan daerah penyelesaian, lalu arsir daerah yang BUKAN penyelesaian",
+          "Kendala x ≥ 0: daerah yang diarsir berada di kanan sumbu Y",
+          "Kendala y ≥ 0: daerah yang diarsir berada di atas sumbu X",
+          "Akibat keduanya: daerah penyelesaian akhir selalu di Kuadran I",
+        ],
+      },
+      {
+        title: "Alur lengkap satu pertidaksamaan",
+        body:
+          "Rangkum seluruh proses dari nol sampai gambar selesai. Alur inilah yang akan diulang berkali kali saat menghadapi sistem.",
+        list: [
+          "Sederhanakan pertidaksamaan bila perlu",
+          "Ubah menjadi persamaan, cari titik potong kedua sumbu",
+          "Gambar garis dengan jenis garis yang sesuai tanda",
+          "Uji satu titik di luar garis untuk menentukan sisi penyelesaian",
+          "Arsir daerah penyelesaiannya",
         ],
       },
     ],
-    videoQuery: "uji titik daerah penyelesaian pertidaksamaan linear dua variabel",
     contoh: {
-      soal: "Tentukan daerah penyelesaian dari pertidaksamaan 2x + 3y ≤ 12.",
+      soal: "Tentukan dan gambarkan daerah penyelesaian dari 2x + 3y ≤ 12. Ingat yang diarsir adalah daerah penyelesaian.",
       stages: [
         {
-          label: "Langkah 1 — Menggambar garis pembatas",
+          label: "Langkah 1: garis pembatas",
           explain:
-            "Ubah tandanya menjadi sama dengan, lalu cari kedua titik potongnya seperti yang sudah dipelajari pada sub-bab sebelumnya.",
+            "Ubah tandanya menjadi sama dengan, cari kedua titik potongnya seperti sub-bab sebelumnya, lalu gambar garisnya.",
           steps:
             "2x + 3y = 12\n" +
             "> Kita ubah y = 0, maka:\n2x + 3(0) = 12\n2x = 12\nx = 6\n" +
             "> Kita ubah x = 0, maka:\n2(0) + 3y = 12\n3y = 12\ny = 4\n" +
-            "> Garis melalui titik (6, 0) dan (0, 4).",
+            "> Garis melalui (6, 0) dan (0, 4), digambar penuh karena tandanya ≤.",
         },
         {
-          label: "Langkah 2 — Menentukan jenis garis",
+          label: "Langkah 2: uji titik",
           explain:
-            "Tanda pada soal adalah ≤ yang memuat unsur \"sama dengan\", sehingga garis pembatas digambar penuh.",
-          steps: "> Tanda ≤ memuat \"sama dengan\" → GARIS PENUH.",
+            "Ambil titik (0, 0) karena garis tidak melewatinya dan perhitungannya paling mudah.",
+          steps: "2x + 3y ≤ 12\n> Substitusikan titik uji (0, 0):\n2(0) + 3(0) ≤ 12\n0 ≤ 12   → BENAR",
         },
         {
-          label: "Langkah 3 — Melakukan uji titik",
+          label: "Langkah 3: tentukan daerah yang diarsir",
           explain:
-            "Pilih titik (0, 0) karena garis tidak melewatinya dan perhitungannya paling mudah. Substitusikan secara lengkap.",
-          steps:
-            "2x + 3y ≤ 12\n" +
-            "> Substitusikan titik (0, 0):\n" +
-            "2(0) + 3(0) ≤ 12\n0 ≤ 12   → BENAR",
-        },
-        {
-          label: "Langkah 4 — Menyimpulkan daerahnya",
-          explain:
-            "Karena hasil uji titik bernilai BENAR, maka titik (0, 0) berada di dalam daerah penyelesaian. Jadi daerah penyelesaiannya adalah sisi garis yang memuat titik asal, yaitu daerah di bawah-kiri garis. Sesuai konvensi kita, yang diarsir justru daerah seberangnya (di atas-kanan garis).",
+            "Hasil uji benar, sehingga titik (0, 0) berada di dalam daerah penyelesaian. Karena konvensi kita mengarsir daerah penyelesaian, maka daerah sisi garis yang memuat (0, 0), yaitu sisi bawah kiri garis, yang diarsir berwarna.",
         },
       ],
       jawaban:
-        "Daerah penyelesaian adalah sisi garis yang memuat titik (0, 0), dengan garis pembatas penuh melalui (6, 0) dan (0, 4)",
+        "Arsir daerah sisi garis yang memuat (0, 0), yaitu bawah kiri garis penuh 2x + 3y = 12",
     },
     simulation: "region",
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 5,
     title: "Pengenalan SPtLDV",
-    levelRef: "Level 7 (intro)",
-    focus: "Konsep sistem dan irisan daerah",
+    levelRef: "Level 5",
+    focus: "Kendala bersamaan, irisan, cek titik sistem",
+    videoId: "nZqBMyDW1s0",
     materi: [
       {
         title: "Dari satu kendala menjadi banyak kendala",
         body:
-          "Dalam kehidupan nyata, jarang sekali hanya ada satu batasan. Seorang pengrajin dibatasi oleh persediaan bahan baku, sekaligus oleh jumlah jam kerja, sekaligus oleh kapasitas tempat penyimpanan. Semua batasan itu berlaku bersamaan — tidak boleh dipilih salah satu. Kumpulan dua pertidaksamaan atau lebih yang harus dipenuhi secara bersamaan inilah yang disebut Sistem Pertidaksamaan Linear Dua Variabel (SPtLDV).",
+          "Di dunia nyata jarang ada hanya satu batasan. Pengrajin dibatasi bahan baku, sekaligus jam kerja, sekaligus ruang penyimpanan. Ketiga batasan itu berlaku bersamaan, tidak boleh dipilih salah satu. Kumpulan dua PtLDV atau lebih yang harus dipenuhi secara bersamaan disebut Sistem Pertidaksamaan Linear Dua Variabel, disingkat SPtLDV.",
+      },
+      {
+        title: "Membandingkan PtLDV dengan SPtLDV",
+        body:
+          "Agar tidak tertukar antara satu pertidaksamaan dan sebuah sistem, bandingkan ciri keduanya pada tabel berikut.",
+        table: {
+          header: ["Aspek", "PtLDV", "SPtLDV"],
+          rows: [
+            ["Jumlah pertidaksamaan", "Satu", "Dua atau lebih"],
+            ["Daerah yang membentuk jawaban", "Satu daerah setengah bidang", "Irisan semua daerah, disebut DHP"],
+            ["Syarat titik menjadi jawaban", "Memenuhi pertidaksamaan itu", "Memenuhi semua pertidaksamaan"],
+            ["Contoh", "x + y ≤ 10", "x + y ≤ 10 dan 2x + y ≤ 14 dan x ≥ 0 dan y ≥ 0"],
+          ],
+        },
+      },
+      {
+        title: "Peran x ≥ 0 dan y ≥ 0 pada konteks nyata",
+        body:
+          "Dalam soal cerita, x dan y biasanya menghitung banyaknya benda: kursi, roti, kemasan, dan sebagainya. Banyak benda tidak mungkin negatif, sehingga otomatis berlaku x ≥ 0 dan y ≥ 0. Dua kendala ini sering tidak tertulis di soal, tetapi harus kamu tambahkan sendiri saat memodelkan.",
+      },
+      {
+        title: "Cara memeriksa titik pada sistem",
+        body:
+          "Memeriksa titik pada sistem sama mudahnya, hanya lebih rajin. Substitusikan titik ke SETIAP kendala satu per satu. Semua harus benar. Satu saja gagal, titik itu langsung gugur dan tidak perlu diperiksa lagi.",
         steps:
-          "> Contoh sebuah sistem dengan empat kendala:\n" +
-          "x + y ≤ 10\n2x + y ≤ 14\nx ≥ 0\ny ≥ 0",
-      },
-      {
-        title: "Kendala non-negatif dan Kuadran I",
-        body:
-          "Pada soal kontekstual, variabel biasanya menyatakan BANYAKNYA sesuatu: banyak kursi, banyak roti, banyak kemasan. Banyaknya benda tidak mungkin negatif, sehingga otomatis berlaku x ≥ 0 dan y ≥ 0. Kedua kendala inilah yang mengurung daerah penyelesaian di Kuadran I (bagian kanan atas bidang koordinat).",
-        list: [
-          "Kendala x ≥ 0 membatasi daerah agar berada di kanan sumbu Y",
-          "Kendala y ≥ 0 membatasi daerah agar berada di atas sumbu X",
-          "Akibatnya daerah penyelesaian terkurung di Kuadran I",
-        ],
-        tip:
-          "Kedua kendala ini sering TIDAK tertulis di soal cerita. Kamulah yang harus menambahkannya sendiri saat memodelkan.",
-      },
-      {
-        title: "Penyelesaian sistem adalah irisan",
-        body:
-          "Setiap pertidaksamaan menghasilkan satu daerah penyelesaian. Karena seluruh kendala harus dipenuhi secara BERSAMAAN, maka penyelesaian sistem adalah bagian yang menjadi anggota SEMUA daerah tersebut sekaligus — dalam bahasa himpunan disebut IRISAN. Daerah hasil irisan inilah yang dinamakan Daerah Himpunan Penyelesaian, disingkat DHP.",
-        tip:
-          "Irisan berbeda dengan gabungan. Kalau gabungan, cukup memenuhi salah satu kendala. Pada sistem, wajib memenuhi semuanya.",
-      },
-      {
-        title: "Memeriksa apakah sebuah titik merupakan penyelesaian",
-        body:
-          "Untuk memeriksa keanggotaan sebuah titik, substitusikan koordinatnya ke setiap kendala satu per satu. Bila SEMUA kendala menghasilkan pernyataan benar, titik itu penyelesaian. Bila ada SATU saja yang salah, titik itu langsung gugur — tidak perlu memeriksa sisanya.",
-        steps:
-          "> Periksa apakah (2, 3) memenuhi sistem berikut:\n" +
-          "x + y ≤ 10\n" +
-          "> Substitusikan:\n2 + 3 ≤ 10\n5 ≤ 10   → BENAR\n" +
-          "2x + y ≤ 14\n" +
-          "> Substitusikan:\n2(2) + 3 ≤ 14\n7 ≤ 14   → BENAR\n" +
-          "> Nilai x = 2 ≥ 0 dan y = 3 ≥ 0 juga terpenuhi.\n" +
-          "> Kesimpulan: (2, 3) adalah penyelesaian sistem.",
+          "> Sistem: x + y ≤ 10,  2x + y ≤ 14,  x ≥ 0,  y ≥ 0\n" +
+          "> Uji titik (2, 3):\n" +
+          "2 + 3 ≤ 10\n5 ≤ 10   → BENAR\n" +
+          "2(2) + 3 ≤ 14\n7 ≤ 14   → BENAR\n" +
+          "x = 2 ≥ 0 BENAR, y = 3 ≥ 0 BENAR\n" +
+          "> Karena semuanya benar, (2, 3) adalah penyelesaian sistem.",
       },
       {
         title: "Contoh titik yang gugur",
         body:
-          "Perhatikan contoh berikut, di mana sebuah titik lolos pada kendala pertama tetapi gagal pada kendala kedua. Satu kegagalan sudah cukup membuatnya bukan penyelesaian.",
+          "Berikut titik yang tampak dekat tetapi gagal di satu kendala. Satu kegagalan saja cukup membuatnya tidak menjadi penyelesaian.",
         steps:
-          "> Periksa apakah (6, 3) memenuhi sistem yang sama:\n" +
+          "> Uji titik (6, 3) pada sistem yang sama:\n" +
           "6 + 3 ≤ 10\n9 ≤ 10   → BENAR\n" +
           "2(6) + 3 ≤ 14\n15 ≤ 14   → SALAH\n" +
-          "> Karena ada satu kendala yang tidak terpenuhi, (6, 3) BUKAN penyelesaian sistem.",
+          "> Ada kendala yang gagal, maka (6, 3) BUKAN penyelesaian sistem.",
+      },
+      {
+        title: "Penyelesaian sistem adalah irisan",
+        body:
+          "Setiap kendala menghasilkan daerah penyelesaian tersendiri. Karena seluruh kendala harus dipenuhi bersamaan, jawaban sistem adalah bagian yang menjadi anggota SEMUA daerah itu sekaligus, dalam bahasa himpunan disebut IRISAN. Daerah hasil irisan inilah yang disebut Daerah Himpunan Penyelesaian atau DHP.",
+        tip:
+          "Irisan berbeda dengan gabungan. Kalau gabungan cukup memenuhi salah satu, sedangkan untuk sistem wajib memenuhi semuanya.",
       },
     ],
-    videoQuery: "sistem pertidaksamaan linear dua variabel konsep irisan",
     contoh: {
-      soal:
-        "Periksalah apakah titik (1, 4) merupakan penyelesaian dari sistem x + y ≤ 6, 3x + y ≥ 6, x ≥ 0, y ≥ 0.",
+      soal: "Periksalah apakah titik (1, 4) merupakan penyelesaian sistem x + y ≤ 6, 3x + y ≥ 6, x ≥ 0, y ≥ 0.",
       stages: [
         {
-          label: "Langkah 1 — Menyusun rencana",
+          label: "Langkah 1: rencana pemeriksaan",
           explain:
-            "Ada empat kendala yang harus diperiksa. Kita uji satu per satu secara berurutan. Jika sampai ada satu kendala yang menghasilkan pernyataan salah, pemeriksaan dapat langsung dihentikan.",
+            "Ada empat kendala yang harus diuji satu per satu. Begitu menemukan satu yang gagal, pemeriksaan bisa langsung berhenti.",
         },
         {
-          label: "Langkah 2 — Menguji kendala pertama",
-          explain: "Substitusikan x = 1 dan y = 4 ke dalam kendala x + y ≤ 6.",
+          label: "Langkah 2: kendala pertama",
+          explain: "Substitusikan x = 1 dan y = 4 ke kendala x + y ≤ 6.",
           steps: "x + y ≤ 6\n> Substitusikan (1, 4):\n1 + 4 ≤ 6\n5 ≤ 6   → BENAR",
         },
         {
-          label: "Langkah 3 — Menguji kendala kedua",
+          label: "Langkah 3: kendala kedua",
           explain:
-            "Lanjutkan ke kendala 3x + y ≥ 6. Perhatikan bahwa kali ini tandanya ≥, sehingga yang kita harapkan adalah hasil ruas kiri yang lebih besar atau sama dengan 6.",
+            "Lanjutkan ke kendala 3x + y ≥ 6. Kali ini tandanya ≥, jadi yang diharapkan adalah hasil yang lebih besar atau sama dengan 6.",
           steps: "3x + y ≥ 6\n> Substitusikan (1, 4):\n3(1) + 4 ≥ 6\n7 ≥ 6   → BENAR",
         },
         {
-          label: "Langkah 4 — Menguji kendala non-negatif",
-          explain:
-            "Terakhir periksa kendala x ≥ 0 dan y ≥ 0. Nilai x = 1 dan y = 4, keduanya bilangan positif sehingga jelas memenuhi.",
+          label: "Langkah 4: kendala non negatif",
+          explain: "Karena x = 1 dan y = 4 keduanya positif, dua kendala terakhir otomatis terpenuhi.",
           steps: "x = 1   → 1 ≥ 0 BENAR\ny = 4   → 4 ≥ 0 BENAR",
         },
         {
-          label: "Langkah 5 — Menyimpulkan",
+          label: "Langkah 5: simpulkan",
           explain:
-            "Keempat kendala menghasilkan pernyataan benar, artinya titik (1, 4) memenuhi seluruh kendala secara bersamaan. Dengan demikian titik tersebut berada di dalam DHP.",
+            "Semua kendala menghasilkan pernyataan benar, artinya titik (1, 4) memenuhi semuanya bersamaan dan berada di dalam DHP sistem ini.",
         },
       ],
       jawaban: "Ya, titik (1, 4) memenuhi semua kendala sehingga merupakan penyelesaian sistem",
@@ -570,89 +635,84 @@ export const SUBBABS: SubbabContent[] = [
     simulation: null,
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 6,
-    title: "Menggambar SPtLDV & DHP",
-    levelRef: "Level 7–8",
-    focus: "Banyak garis dalam satu bidang, menentukan DHP",
+    title: "Menggambar SPtLDV dan DHP",
+    levelRef: "Level 6",
+    focus: "Banyak garis satu bidang, arsiran DHP",
+    videoId: "An-olzAWm5E",
     materi: [
       {
-        title: "Menggambar beberapa garis dalam satu bidang",
+        title: "Menggambar banyak garis pada satu bidang",
         body:
-          "Prinsipnya tidak berubah dari sub-bab sebelumnya, hanya saja sekarang dikerjakan berulang untuk setiap kendala pada bidang koordinat yang SAMA. Kerjakan satu kendala sampai tuntas, baru lanjut ke kendala berikutnya, supaya tidak tertukar.",
+          "Prinsipnya tidak berubah, hanya sekarang dikerjakan berulang untuk setiap kendala pada bidang koordinat yang sama. Kerjakan satu kendala sampai tuntas dahulu, baru pindah ke kendala berikutnya agar tidak tertukar.",
         list: [
-          "Kerjakan kendala pertama: cari titik potong, gambar garis, tentukan daerah penyelesaiannya",
-          "Kerjakan kendala kedua dengan cara yang sama pada bidang yang sama",
-          "Ulangi untuk setiap kendala yang tersisa, termasuk x ≥ 0 dan y ≥ 0",
-          "Temukan daerah yang memenuhi SEMUA kendala sekaligus — itulah DHP",
+          "Kerjakan kendala pertama: cari titik potongnya, gambar garisnya, tentukan daerah penyelesaiannya",
+          "Kerjakan kendala kedua dengan cara sama pada bidang yang sama",
+          "Ulangi untuk kendala lain termasuk x ≥ 0 dan y ≥ 0",
+          "Terakhir, temukan daerah yang bersih yang memenuhi semua kendala sekaligus sebagai DHP",
         ],
       },
       {
-        title: "Menentukan skala gambar",
+        title: "Cara mengarsir DHP sebagai irisan",
         body:
-          "Sebelum menggambar, lihat dahulu seluruh titik potong yang akan muncul. Pilih jangkauan sumbu yang cukup lebar agar semua titik muat dan tidak berdesakan. Bila titik potong terbesar adalah 14, jangan menggambar sumbu yang hanya sampai 10.",
-        tip:
-          "Beri jarak antar-angka pada sumbu secara konsisten. Skala yang tidak konsisten membuat garis tergambar miring dan titik potongnya salah.",
-      },
-      {
-        title: "Kendala non-negatif juga punya garis pembatas",
-        body:
-          "Jangan lupakan kendala x ≥ 0 dan y ≥ 0 — keduanya juga merupakan pertidaksamaan yang punya garis pembatas. Garis pembatas x = 0 adalah sumbu Y itu sendiri, dan garis pembatas y = 0 adalah sumbu X. Daerah yang bukan penyelesaiannya pun ikut diarsir.",
+          "Tekniknya terlihat paling jelas seperti ini. Gambar arsiran daerah penyelesaian tiap kendala dengan warna tipis. Bagian yang ketumpuk oleh semua warna itulah IRISANnya. Irisan tersebut kita tebalkan warnanya menjadi daerah ungu yang satu itu, dan itulah DHP.",
         list: [
-          "Kendala x ≥ 0 → garis pembatasnya sumbu Y, daerah bukan penyelesaian ada di KIRI sumbu Y",
-          "Kendala y ≥ 0 → garis pembatasnya sumbu X, daerah bukan penyelesaian ada di BAWAH sumbu X",
+          "Arsir tipis daerah penyelesaian kendala pertama",
+          "Arsir tipis daerah penyelesaian kendala kedua",
+          "Bagian yang ketumpuk kedua arsiran, juga dibatasi kedua sumbu, adalah DHP",
+          "Perjelas DHP dengan warna ungu yang lebih pekat",
         ],
       },
       {
-        title: "Menemukan DHP",
+        title: "Kendala non negatif juga punya garis pembatas",
         body:
-          "Setelah semua daerah bukan penyelesaian diarsir, DHP adalah satu-satunya daerah yang tersisa bersih tanpa arsiran sama sekali. Inilah keunggulan konvensi \"arsir yang bukan penyelesaian\": semakin banyak kendala, daerah bersihnya justru semakin jelas terlihat.",
+          "Jangan lupa x ≥ 0 dan y ≥ 0 adalah pertidaksamaan yang juga punya garis pembatas. Garis x = 0 adalah sumbu Y, dengan daerah yang diarsir di kanannya. Garis y = 0 adalah sumbu X, dengan daerah yang diarsir di atasnya. Karena arsiran adalah daerah penyelesaian, maka arsiran di kiri sumbu Y secara otomatis BUKAN bagian DHP.",
       },
       {
-        title: "DHP terbatas dan tidak terbatas",
+        title: "DHP terbatas dan DHP tidak terbatas",
         body:
-          "Bentuk DHP bergantung pada arah pertidaksamaannya. Bila seluruh kendala bertanda ≤ (ditambah kendala non-negatif), DHP biasanya berupa bangun tertutup seperti segitiga atau segi empat — inilah DHP terbatas. Namun bila ada kendala bertanda ≥ yang mendominasi, daerahnya bisa memanjang tanpa ujung — disebut DHP tidak terbatas.",
+          "Bentuk DHP ditentukan arah tanda kendala. Bila kendalanya bertanda ≤ ditambah kendala non negatif, DHP biasanya berupa bangun tertutup seperti segitiga atau segi empat, ini disebut DHP terbatas. Bila ada kendala ≥ yang dominan, daerahnya bisa membentang tanpa ujung, disebut DHP tidak terbatas.",
         tip:
-          "Untuk mencari nilai maksimum, DHP terbatas selalu aman. Pada DHP tidak terbatas, nilai maksimum bisa jadi tidak ada.",
+          "Untuk nilai maksimum nanti, DHP terbatas selalu aman. Pada DHP tidak terbatas, nilai maksimum bisa saja tidak ada.",
+      },
+      {
+        title: "Menyediakan ruang gambar yang cukup",
+        body:
+          "Sebelum menggambar, perhatikan dahulu semua titik potong yang akan muncul. Pastikan skala sumbumu cukup lebar agar semua titik muat dan tidak bertumpuk. Jarak antar angka pada sumbu harus konsisten, kalau tidak konsisten garis akan terlihat miring dan titik potong menjadi salah.",
       },
     ],
-    videoQuery: "menggambar daerah himpunan penyelesaian sistem pertidaksamaan",
     contoh: {
       soal: "Gambarlah DHP dari sistem x + y ≤ 6, x + 2y ≤ 8, x ≥ 0, y ≥ 0.",
       stages: [
         {
-          label: "Langkah 1 — Garis pembatas pertama",
-          explain: "Kerjakan kendala x + y ≤ 6 sampai tuntas terlebih dahulu.",
+          label: "Langkah 1: kendala pertama",
+          explain: "Kerjakan x + y ≤ 6 sampai lengkap: garisnya dan daerah penyelesaiannya.",
           steps:
             "x + y = 6\n" +
-            "> Kita ubah y = 0, maka:\nx = 6\n" +
-            "> Kita ubah x = 0, maka:\ny = 6\n" +
-            "> Garis melalui (6, 0) dan (0, 6), digambar penuh karena tandanya ≤.",
+            "> y = 0 memberi x = 6. x = 0 memberi y = 6.\n" +
+            "> Garis penuh melalui (6, 0) dan (0, 6).\n" +
+            "> Uji (0, 0) pada pertidaksamaannya: 0 ≤ 6 BENAR, maka arsir sisi bawah garis.",
         },
         {
-          label: "Langkah 2 — Uji titik untuk kendala pertama",
-          explain: "Gunakan titik (0, 0) untuk menentukan sisi mana yang menjadi penyelesaian.",
-          steps: "> Substitusikan (0, 0) ke x + y ≤ 6:\n0 + 0 ≤ 6\n0 ≤ 6   → BENAR\n> Daerah penyelesaian ada di sisi yang memuat titik asal.",
-        },
-        {
-          label: "Langkah 3 — Garis pembatas kedua",
-          explain: "Sekarang kerjakan kendala x + 2y ≤ 8 dengan cara yang persis sama.",
+          label: "Langkah 2: kendala kedua",
+          explain: "Kerjakan x + 2y ≤ 8 dengan cara yang sama persis.",
           steps:
             "x + 2y = 8\n" +
-            "> Kita ubah y = 0, maka:\nx = 8\n" +
-            "> Kita ubah x = 0, maka:\n2y = 8\ny = frac(8,2)\ny = 4\n" +
-            "> Garis melalui (8, 0) dan (0, 4), juga digambar penuh.",
+            "> y = 0 memberi x = 8. x = 0 memberi y = 4, karena 2y = 8 dan y = 8/2.\n" +
+            "> Garis penuh melalui (8, 0) dan (0, 4).\n" +
+            "> Uji (0, 0): 0 ≤ 8 BENAR, maka arsir juga sisi bawah garis ini.",
         },
         {
-          label: "Langkah 4 — Uji titik untuk kendala kedua",
-          explain: "Kembali pakai titik (0, 0) karena garis kedua juga tidak melewatinya.",
-          steps: "> Substitusikan (0, 0) ke x + 2y ≤ 8:\n0 ≤ 8   → BENAR\n> Daerah penyelesaian juga di sisi yang memuat titik asal.",
-        },
-        {
-          label: "Langkah 5 — Menentukan DHP",
+          label: "Langkah 3: tambahkan kendala non negatif",
           explain:
-            "Tambahkan kendala x ≥ 0 dan y ≥ 0 yang mengurung daerah di Kuadran I. DHP adalah daerah bersih yang dibatasi oleh sumbu X, sumbu Y, serta kedua garis tadi. Bila diperiksa, sudut-sudutnya berada di (0, 0), (6, 0), (4, 2), dan (0, 4).",
+            "Kendala x ≥ 0 dan y ≥ 0 mengurung semuanya di Kuadran I, maka bagian arsiran di kiri sumbu Y dan di bawah sumbu X tidak ikut menjadi jawaban.",
+        },
+        {
+          label: "Langkah 4: temukan DHP",
+          explain:
+            "DHP adalah daerah yang ketumpuk semua arsiran, yaitu daerah di Kuadran I yang berada di bawah kedua garis. Bila diteliti, sudut sudutnya berada di (0, 0), (6, 0), (4, 2), dan (0, 4). Perjelas dengan warna ungu agar mudah dibaca.",
         },
       ],
       jawaban: "DHP berupa segi empat di Kuadran I dengan sudut (0, 0), (6, 0), (4, 2), dan (0, 4)",
@@ -660,93 +720,94 @@ export const SUBBABS: SubbabContent[] = [
     simulation: "system",
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 7,
     title: "Titik Pojok dari DHP",
-    levelRef: "Level 9.1",
-    focus: "Mengidentifikasi titik sudut DHP",
+    levelRef: "Level 7",
+    focus: "Tiga jenis titik pojok, cek keanggotaan di DHP",
+    videoId: "yGhEM3RTyqA",
     materi: [
       {
-        title: "Apa itu titik pojok?",
+        title: "Apa itu titik pojok",
         body:
-          "Titik pojok (disebut juga titik sudut atau titik ekstrem) adalah titik-titik yang menjadi sudut dari daerah himpunan penyelesaian. Secara teknis, titik pojok terbentuk dari perpotongan dua garis pembatas, dengan syarat titik perpotongan tersebut masih berada di dalam DHP.",
+          "Titik pojok, disebut juga titik sudut atau titik ekstrem, adalah titik titik yang menjadi sudut dari daerah himpunan penyelesaian. Setiap titik pojok lahir dari perpotongan dua garis pembatas, dan syaratnya titik itu harus masih berada di dalam DHP.",
       },
       {
-        title: "Mengapa titik pojok begitu penting?",
+        title: "Tiga jenis sumber titik pojok",
         body:
-          "Terdapat sebuah teorema penting dalam program linear: pada DHP yang terbatas, nilai maksimum maupun minimum dari fungsi tujuan PASTI tercapai di salah satu titik pojok, tidak pernah di tengah-tengah daerah. Berkat teorema ini, kita tidak perlu memeriksa titik yang jumlahnya tak terhingga — cukup beberapa titik sudut saja.",
-      },
-      {
-        title: "Tiga sumber titik pojok",
-        body:
-          "Ketika menelusuri batas DHP, titik pojok dapat berasal dari tiga jenis perpotongan berikut. Periksa ketiganya agar tidak ada yang terlewat:",
+          "Saat menelusuri tepi DHP satu putaran, semua titik pojok hanya bisa berasal dari tiga sumber berikut. Periksa ketiganya supaya tidak ada yang terlewat.",
         list: [
           "Perpotongan sumbu X dengan sumbu Y, yaitu titik asal (0, 0)",
-          "Perpotongan sebuah garis kendala dengan salah satu sumbu",
-          "Perpotongan dua garis kendala satu sama lain",
+          "Perpotongan satu garis kendala dengan salah satu sumbu",
+          "Perpotongan dua garis kendala satu dengan yang lain",
         ],
       },
       {
-        title: "Menentukan titik pojok dari gambar",
+        title: "Cara memeriksa titik benar benar ada di DHP",
         body:
-          "Cara termudah adalah menelusuri tepi DHP satu putaran penuh, misalnya searah jarum jam mulai dari titik asal. Setiap kali arah tepi berbelok, di situlah terdapat sebuah titik pojok. Hitung dan catat koordinatnya satu per satu.",
-        tip:
-          "Banyaknya titik pojok sama dengan banyaknya sudut pada bangun DHP. DHP berbentuk segitiga punya 3 titik pojok, segi empat punya 4 titik pojok.",
+          "Sebelum menuliskan sebuah titik sebagai titik pojok, pastikan dulu titik itu memenuhi SELURUH kendala. Caranya substitusikan koordinatnya ke setiap pertidaksamaan. Bila semuanya benar, titik itu sah menjadi titik pojok. Bila ada satu kendala yang gagal, titik itu dibuang.",
+        steps:
+          "> Misalkan dua garis berpotongan di (7, 2), misalkan kendala lain x + y ≤ 6.\n" +
+          "> Periksa titik itu:\n" +
+          "7 + 2 ≤ 6\n9 ≤ 6   → SALAH\n" +
+          "> Karena melanggar kendala, (7, 2) berada di luar DHP\n" +
+          "> sehingga meskipun perpotongan garis, ia BUKAN titik pojok.",
       },
       {
-        title: "Hati-hati: tidak semua perpotongan adalah titik pojok",
+        title: "Mengapa titik pojok sangat penting",
         body:
-          "Dua garis kendala selalu berpotongan di suatu titik (kecuali sejajar), tetapi titik potong itu belum tentu titik pojok. Syaratnya, titik tersebut harus memenuhi SELURUH kendala. Bila titik potong berada di luar DHP, ia harus dibuang.",
-        steps:
-          "> Misalkan dua garis berpotongan di titik (7, 2), sedangkan salah satu kendala lain adalah x + y ≤ 6.\n" +
-          "> Periksa titik tersebut:\n" +
-          "7 + 2 ≤ 6\n9 ≤ 6   → SALAH\n" +
-          "> Karena melanggar kendala, (7, 2) berada di LUAR DHP dan BUKAN titik pojok.",
+          "Ada teorema penting dalam program linear: pada DHP terbatas, nilai maksimum maupun minimum fungsi tujuan PASTI tercapai di salah satu titik pojok, tidak pernah di tengah daerah. Artinya kita hanya perlu memeriksa beberapa titik sudut, bukan semua titik yang jumlahnya tak terhingga.",
+      },
+      {
+        title: "Membaca banyaknya titik pojok dari gambar",
+        body:
+          "Cara termudah ialah menelusuri tepi DHP satu putaran, mulai dari titik asal searah putaran jam. Setiap kali arah tepi berbelok, di situ ada titik pojok. Catat koordinatnya satu per satu agar tidak ada yang terhitung dua kali.",
+        list: [
+          "DHP berbentuk segitiga memiliki 3 titik pojok",
+          "DHP berbentuk segi empat memiliki 4 titik pojok",
+        ],
       },
     ],
-    videoQuery: "menentukan titik pojok daerah himpunan penyelesaian program linear",
     contoh: {
       soal: "Tentukan semua titik pojok DHP dari sistem x + y ≤ 6, x + 2y ≤ 8, x ≥ 0, y ≥ 0.",
       stages: [
         {
-          label: "Langkah 1 — Titik pojok dari kedua sumbu",
-          explain:
-            "Perpotongan sumbu X dan sumbu Y menghasilkan titik asal. Titik ini perlu diperiksa apakah memenuhi semua kendala.",
-          steps: "> Periksa (0, 0):\n0 + 0 ≤ 6   → BENAR\n0 + 2(0) ≤ 8   → BENAR\n> Titik (0, 0) adalah titik pojok.",
+          label: "Langkah 1: titik pojok dari kedua sumbu",
+          explain: "Perpotongan sumbu X dan sumbu Y menghasilkan titik asal. Periksa apakah memenuhi semua kendala.",
+          steps: "> Periksa (0, 0):\n0 + 0 ≤ 6   → BENAR\n0 + 2(0) ≤ 8   → BENAR\n> Titik (0, 0) memenuhi, jadi ia titik pojok.",
         },
         {
-          label: "Langkah 2 — Titik pojok pada sumbu X",
+          label: "Langkah 2: titik pojok pada sumbu X",
           explain:
-            "Kedua garis memotong sumbu X di (6, 0) dan (8, 0). Yang menjadi titik pojok hanyalah yang memenuhi semua kendala, jadi keduanya harus diperiksa.",
+            "Kedua garis memotong sumbu X di (6, 0) dan (8, 0). Yang sah menjadi titik pojok hanyalah yang memenuhi kendala lainnya.",
           steps:
             "> Periksa (6, 0) pada kendala x + 2y ≤ 8:\n6 + 2(0) ≤ 8\n6 ≤ 8   → BENAR, jadi titik pojok.\n" +
-            "> Periksa (8, 0) pada kendala x + y ≤ 6:\n8 + 0 ≤ 6\n8 ≤ 6   → SALAH, jadi BUKAN titik pojok.",
+            "> Periksa (8, 0) pada kendala x + y ≤ 6:\n8 + 0 ≤ 6\n8 ≤ 6   → SALAH, jadi bukan titik pojok.",
         },
         {
-          label: "Langkah 3 — Titik pojok pada sumbu Y",
-          explain: "Dengan cara yang sama, periksa titik potong kedua garis dengan sumbu Y, yaitu (0, 6) dan (0, 4).",
+          label: "Langkah 3: titik pojok pada sumbu Y",
+          explain: "Periksa dengan cara sama untuk kandidat (0, 6) dan (0, 4).",
           steps:
             "> Periksa (0, 6) pada kendala x + 2y ≤ 8:\n0 + 2(6) ≤ 8\n12 ≤ 8   → SALAH, bukan titik pojok.\n" +
             "> Periksa (0, 4) pada kendala x + y ≤ 6:\n0 + 4 ≤ 6\n4 ≤ 6   → BENAR, jadi titik pojok.",
         },
         {
-          label: "Langkah 4 — Perpotongan kedua garis (metode campuran)",
+          label: "Langkah 4: perpotongan dua garis (metode campuran)",
           explain:
-            "Titik pojok terakhir berasal dari perpotongan kedua garis kendala. Hitung dengan metode campuran, yaitu eliminasi lebih dahulu kemudian substitusi.",
+            "Titik pojok terakhir lahir dari perpotongan kedua garis kendala. Hitunglah dengan metode campuran: eliminasi dahulu, lalu substitusi.",
           steps:
             "> Persamaan garis pembatas:\nx + y = 6   …(1)\nx + 2y = 8   …(2)\n" +
-            "> LANGKAH 1 — ELIMINASI x:\n" +
-            "> Koefisien x sudah sama, maka kurangkan (2) − (1):\n" +
+            "> LANGKAH 1, eliminasi x:\n" +
+            "> Koefisien x sama, maka kurangkan (2) dikurangi (1):\n" +
             "y = 2\n" +
-            "> LANGKAH 2 — SUBSTITUSI y = 2 ke persamaan (1):\n" +
+            "> LANGKAH 2, substitusi y = 2 ke persamaan (1):\n" +
             "x + 2 = 6\nx = 4\n" +
-            "> Diperoleh titik (4, 2).",
+            "> Diperoleh titik pojok (4, 2).",
         },
         {
-          label: "Langkah 5 — Menuliskan seluruh titik pojok",
-          explain:
-            "Kumpulkan semua titik yang lolos pemeriksaan. Urutkan searah tepi DHP agar rapi dan mudah dicek ulang.",
+          label: "Langkah 5: tuliskan semuanya",
+          explain: "Kumpulkan titik yang lolos. Urutkan mengikuti tepi DHP agar rapi.",
           steps: "> Titik pojok DHP:\n(0, 0)\n(6, 0)\n(4, 2)\n(0, 4)",
         },
       ],
@@ -755,52 +816,64 @@ export const SUBBABS: SubbabContent[] = [
     simulation: "corner",
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 8,
-    title: "Titik Pojok Metode Campuran",
-    levelRef: "Level 9.1 lanjut",
-    focus: "Eliminasi lalu substitusi",
+    title: "Menggambar DHP Secara Lengkap",
+    levelRef: "Level 8",
+    focus: "Titik potong antar garis, DHP terbatas, cek titik di DHP",
+    videoId: null,
+    videoNote:
+      "Untuk sub-bab ini tidak ada video khusus. Topiknya sudah tercakup dalam video Sub-Bab 7 di bawah ini.",
     materi: [
       {
-        title: "Mengapa perlu metode campuran?",
+        title: "Kapan metode campuran dibutuhkan",
         body:
-          "Titik pojok yang berada pada sumbu mudah dibaca langsung dari gambar. Namun titik pojok hasil perpotongan dua garis kendala sering kali tidak jatuh tepat di perpotongan grid, sehingga membaca dari gambar menjadi tidak akurat. Cara yang pasti adalah menghitungnya secara aljabar dengan metode campuran: ELIMINASI terlebih dahulu, kemudian SUBSTITUSI.",
+          "Titik pojok yang berada pada sumbu mudah dibaca dari gambar. Namun titik pojok yang lahir dari perpotongan DUA garis kendala sering jatuh di tengah dan tidak tepat pada grid. Membaca dari gambar jadi tidak akurat. Solusinya, hitung lewat persamaan dengan metode campuran: eliminasi dahulu, lalu substitusi.",
+      },
+      {
+        title: "Mencatat semua titik potong dalam tabel",
+        body:
+          "Sebelum menghitung perpotongan antar garis, rapihkan dulu semua titik potong dalam tabel seperti contoh berikut. Dengan cara ini tidak ada titik yang terlewat dan kamu tahu persis apa yang perlu dicari lebih lanjut.",
+        table: {
+          header: ["Garis / Sumbu", "Titik potong sumbu X", "Titik potong sumbu Y"],
+          rows: [
+            ["x + y = 6", "(6, 0)", "(0, 6)"],
+            ["x + 2y = 8", "(8, 0)", "(0, 4)"],
+            ["x = 0 (sumbu Y)", "tidak ada", "seluruh sumbu Y"],
+            ["y = 0 (sumbu X)", "seluruh sumbu X", "tidak ada"],
+          ],
+        },
       },
       {
         title: "Tahap eliminasi",
         body:
-          "Tujuan eliminasi adalah menghilangkan salah satu variabel agar tersisa persamaan dengan satu variabel saja. Ikuti urutan berikut:",
+          "Tujuan eliminasi adalah menghilangkan salah satu variabel sehingga tersisa persamaan satu variabel. Urutannya seperti ini:",
         list: [
-          "Pilih variabel yang akan dihilangkan (biasanya yang koefisiennya paling mudah disamakan)",
-          "Samakan koefisien variabel tersebut dengan mengalikan salah satu atau kedua persamaan",
-          "Jika koefisiennya bertanda sama, KURANGKAN kedua persamaan",
-          "Jika koefisiennya berlawanan tanda, JUMLAHKAN kedua persamaan",
+          "Pilih variabel yang paling mudah disamakan koefisiennya",
+          "Samakan koefisiennya dengan mengalikan persamaan bila perlu",
+          "Bila koefisiennya bertanda sama, kurangkan kedua persamaan",
+          "Bila berlawanan tanda, jumlahkan kedua persamaan",
           "Selesaikan persamaan satu variabel yang tersisa",
         ],
       },
       {
-        title: "Tahap substitusi",
+        title: "Tahap substitusi dan contoh lengkap",
         body:
-          "Nilai variabel yang sudah ditemukan pada tahap eliminasi kemudian dimasukkan kembali ke salah satu persamaan semula untuk memperoleh nilai variabel yang lain. Pilih persamaan yang angkanya paling sederhana agar perhitungan ringan.",
-      },
-      {
-        title: "Contoh lengkap metode campuran",
-        body:
-          "Perhatikan pengerjaan berikut. Setiap baris ditulis lengkap agar alurnya jelas dan mudah diperiksa ulang bila ada kekeliruan.",
+          "Nilai yang ditemukan dari eliminasi kemudian dimasukkan kembali ke salah satu persamaan semula untuk memperoleh variabel lainnya. Pilih persamaan yang angkanya paling sederhana agar perhitungan ringan. Perhatikan contoh utuhnya.",
         steps:
           "> Persamaan garis pembatas:\n" +
           "2x + y = 10   …(1)\n" +
           "x + 3y = 15   …(2)\n" +
-          "> LANGKAH 1 — ELIMINASI x:\n" +
-          "> Samakan koefisien x: kalikan (2) dengan 2.\n" +
+          "> LANGKAH 1, eliminasi x:\n" +
+          "> Kalikan persamaan (2) dengan 2.\n" +
           "2x + y = 10\n" +
           "2x + 6y = 30\n" +
-          "> Koefisien x bertanda sama, maka kurangkan (2) − (1):\n" +
+          "> Tanda keduanya sama, maka kurangkan (2) dikurangi (1):\n" +
           "5y = 20\n" +
           "y = frac(20,5)\n" +
           "y = 4\n" +
-          "> LANGKAH 2 — SUBSTITUSI y = 4 ke persamaan (1):\n" +
+          "> LANGKAH 2, substitusi y = 4 ke persamaan (1):\n" +
           "2x + 4 = 10\n" +
           "2x = 6\n" +
           "x = frac(6,2)\n" +
@@ -808,46 +881,55 @@ export const SUBBABS: SubbabContent[] = [
           "> Jadi titik potong kedua garis adalah (3, 4).",
       },
       {
-        title: "Memeriksa hasil perhitungan",
+        title: "Ciri DHP terbatas dan tidak terbatas",
         body:
-          "Setelah memperoleh titik potong, lakukan dua pemeriksaan. Pertama, substitusikan kembali ke KEDUA persamaan semula untuk memastikan hitunganmu benar. Kedua, periksa apakah titik tersebut memenuhi seluruh kendala sistem — bila melanggar salah satu, titik itu bukan titik pojok DHP.",
+          "Setelah semua garis digambar dengan lengkap, perhatikan bentuk daerah yang menjadi jawaban. Kenali perbedaan dua jenis DHP berikut karena berpengaruh pada tahap optimum nanti.",
+        list: [
+          "DHP terbatas berupa bangun tertutup (segitiga, segi empat, dst.) dan seluruhnya terkurung, biasanya dari kendala ≤ dan non negatif",
+          "DHP tidak terbatas memanjang tanpa ujung ke satu arah, biasanya ada kendala ≥ yang dominan",
+          "Nilai maksimum aman ada pada DHP terbatas; pada yang tidak terbatas maksimum bisa saja tidak ada",
+        ],
+      },
+      {
+        title: "Memastikan titik benar berada di DHP",
+        body:
+          "Terakhir selalu uji. Titik potong garis yang sudah dihitung akan dianggap titik pojok hanya bila memenuhi SELURUH kendala sistem. Substitusikan ke setiap pertidaksamaan, dan bila satu saja gagal, buang titik itu.",
         steps:
-          "> Periksa (3, 4) pada persamaan (1):\n2(3) + 4 = 10\n10 = 10   → cocok\n" +
-          "> Periksa (3, 4) pada persamaan (2):\n3 + 3(4) = 15\n15 = 15   → cocok",
+          "> Periksa (3, 4) pada sistem 2x + y ≤ 10 dan x + 3y ≤ 15:\n" +
+          "2(3) + 4 ≤ 10\n10 ≤ 10   → BENAR\n" +
+          "3 + 3(4) ≤ 15\n15 ≤ 15   → BENAR\n" +
+          "> Karena semua kendala terpenuhi, (3, 4) SAH menjadi titik pojok DHP.",
       },
     ],
-    videoQuery: "metode campuran eliminasi substitusi sistem persamaan linear",
     contoh: {
       soal: "Tentukan titik potong garis 3x + 2y = 16 dan x + 2y = 8 dengan metode campuran.",
       stages: [
         {
-          label: "Langkah 1 — Mengamati koefisien",
+          label: "Langkah 1: amati koefisien",
           explain:
-            "Perhatikan koefisien y pada kedua persamaan, keduanya sama-sama 2. Karena sudah sama, kita dapat langsung mengeliminasi y tanpa perlu mengalikan persamaan apa pun.",
+            "Koefisien y pada kedua persamaan sama sama 2. Karena sudah sama, eliminasi y bisa langsung dikerjakan tanpa mengalikan apa pun.",
           steps: "3x + 2y = 16   …(1)\nx + 2y = 8   …(2)",
         },
         {
-          label: "Langkah 2 — Eliminasi y",
+          label: "Langkah 2: eliminasi y",
           explain:
-            "Koefisien y pada kedua persamaan bertanda sama (keduanya positif 2), sehingga kita KURANGKAN persamaan (1) dengan persamaan (2). Suku y akan saling menghapus.",
+            "Koefisien y bertanda sama, sehingga kita KURANGKAN persamaan (1) dengan persamaan (2). Suku y saling menghapus.",
           steps:
-            "> LANGKAH 1 — ELIMINASI y:\n" +
+            "> LANGKAH 1, eliminasi y:\n" +
             "3x + 2y = 16\nx + 2y = 8\n" +
-            "> Kurangkan (1) − (2):\n" +
+            "> Kurangkan (1) dikurangi (2):\n" +
             "2x = 8\nx = frac(8,2)\nx = 4",
         },
         {
-          label: "Langkah 3 — Substitusi",
-          explain:
-            "Masukkan nilai x = 4 ke salah satu persamaan semula. Pilih persamaan (2) karena angkanya lebih sederhana.",
+          label: "Langkah 3: substitusi",
+          explain: "Substitusikan x = 4 ke persamaan (2) karena angkanya paling sederhana.",
           steps:
-            "> LANGKAH 2 — SUBSTITUSI x = 4 ke persamaan (2):\n" +
+            "> LANGKAH 2, substitusi x = 4 ke persamaan (2):\n" +
             "4 + 2y = 8\n2y = 4\ny = frac(4,2)\ny = 2",
         },
         {
-          label: "Langkah 4 — Memeriksa hasil",
-          explain:
-            "Substitusikan kembali titik (4, 2) ke persamaan (1) untuk memastikan perhitungan kita benar.",
+          label: "Langkah 4: periksa kembali",
+          explain: "Substitusikan titik (4, 2) ke persamaan (1) untuk memastikan perhitungan benar.",
           steps: "3(4) + 2(2) = 16\n12 + 4 = 16\n16 = 16   → cocok",
         },
       ],
@@ -856,95 +938,99 @@ export const SUBBABS: SubbabContent[] = [
     simulation: null,
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 9,
-    title: "Fungsi Tujuan & Nilai Optimum",
-    levelRef: "Level 9.2",
-    focus: "Nilai maksimum dan minimum",
+    title: "Fungsi Tujuan dan Nilai Optimum",
+    levelRef: "Level 9",
+    focus: "Evaluasi di titik pojok, kapan optimum ada",
+    videoId: "b07sImM1z0A",
     materi: [
       {
-        title: "Apa itu fungsi tujuan?",
+        title: "Apa itu fungsi tujuan",
         body:
-          "Fungsi tujuan (fungsi objektif) adalah bentuk aljabar yang hendak dioptimalkan, biasanya ditulis f(x, y) = ax + by. Dalam konteks nyata, fungsi tujuan menyatakan hal yang ingin kita capai sebesar-besarnya (misalnya keuntungan) atau sekecil-kecilnya (misalnya biaya produksi).",
+          "Fungsi tujuan adalah bentuk aljabar yang ingin kita besarkan atau kecilkan, biasanya ditulis f(x, y) = ax + by. Dalam konteks nyata, fungsi tujuan adalah hal yang ingin dicapai paling besar (misalnya keuntungan) atau paling kecil (misalnya biaya produksi).",
         list: [
-          "Kata \"keuntungan\", \"pendapatan\", \"hasil penjualan\" → dicari nilai MAKSIMUM",
-          "Kata \"biaya\", \"pengeluaran\", \"ongkos\" → dicari nilai MINIMUM",
+          "Kata keuntungan, pendapatan, hasil penjualan artinya cari nilai MAKSIMUM",
+          "Kata biaya, pengeluaran, ongkos artinya cari nilai MINIMUM",
         ],
       },
       {
-        title: "Menghitung nilai fungsi tujuan di sebuah titik",
+        title: "Menghitung nilai fungsi di satu titik",
         body:
-          "Menghitung nilai fungsi tujuan berarti mensubstitusikan koordinat sebuah titik ke dalam rumusnya. Lakukan perkalian lebih dahulu, baru penjumlahan.",
+          "Menilai fungsi tujuan pada sebuah titik berarti mensubstitusikan koordinatnya. Kerjakan perkalian lebih dulu, baru penjumlahan.",
         steps:
-          "> Diketahui f(x, y) = 5x + 3y. Hitung nilainya di titik (4, 2).\n" +
+          "> Diketahui f(x, y) = 5x + 3y. Hitung nilai di titik (4, 2).\n" +
           "f(4, 2) = 5(4) + 3(2)\nf(4, 2) = 20 + 6\nf(4, 2) = 26",
       },
       {
-        title: "Metode uji titik pojok",
+        title: "Teorema titik pojok",
         body:
-          "Inilah metode baku untuk mencari nilai optimum. Kerjakan berurutan agar tidak ada titik yang terlewat:",
+          "Ada teorema penting: pada DHP yang terbatas, nilai maksimum sekaligus minimum fungsi linear pasti tercapai di salah satu titik pojok, tidak pernah di tengah daerah. Sebabnya garis linear berubah dengan laju tetap, sehingga nilai paling besar atau kecil selalu ditemukan persis di salah satu sudut.",
+      },
+      {
+        title: "Kapan nilai optimum ada dan kapan tidak",
+        body:
+          "Bentuk DHP menentukan apakah nilai optimum dijamin ada. Pada DHP terbatas, nilai maksimum maupun minimum selalu ada. Namun bila DHP-nya tidak terbatas dan fungsi tujuan bertambah tanpa batas ke arah daerah terbuka, nilai maksimum bisa saja tidak ada. Inilah mengapa langkah sebelumnya penting untuk mengenali jenis DHP.",
+      },
+      {
+        title: "Format tabel evaluasi yang seragam",
+        body:
+          "Menyusun nilai dalam tabel yang sama setiap waktu membuat pekerjaan rapi dan bebas dari titik yang terlewat. Selalu pakai format yang sama di bawah ini, titik pojok di kolom pertama, bentuk substitusi di kolom kedua, hasilnya di kolom ketiga.",
+        table: {
+          header: ["Titik pojok", "f(x, y) = 5x + 3y", "Nilai"],
+          rows: [
+            ["(0, 0)", "5(0) + 3(0)", "0"],
+            ["(6, 0)", "5(6) + 3(0)", "30"],
+            ["(4, 2)", "5(4) + 3(2)", "26"],
+            ["(0, 4)", "5(0) + 3(4)", "12"],
+          ],
+        },
+      },
+      {
+        title: "Alur lengkap mencari nilai optimum",
+        body:
+          "Seluruh proses dari kendala sampai jawaban optimum diringkas dalam lima langkah berikut.",
         list: [
           "Gambar DHP dari seluruh kendala",
-          "Tentukan semua titik pojok DHP (pakai metode campuran bila perlu)",
-          "Hitung nilai fungsi tujuan pada setiap titik pojok",
-          "Susun hasilnya dalam sebuah tabel evaluasi",
-          "Nilai terbesar adalah maksimum, nilai terkecil adalah minimum",
+          "Tentukan semua titik pojoknya, pakai metode campuran bila perlu",
+          "Hitung nilai fungsi tujuan di setiap titik pojok",
+          "Susun dalam tabel evaluasi yang sama",
+          "Nilai terbesar adalah maksimum dan nilai terkecil adalah minimum",
         ],
       },
-      {
-        title: "Contoh tabel evaluasi",
-        body:
-          "Menyusun tabel membuat pekerjaan rapi dan mengurangi risiko salah hitung. Tuliskan setiap substitusi secara lengkap, jangan langsung menulis hasilnya.",
-        steps:
-          "> Fungsi tujuan f(x, y) = 5x + 3y dengan titik pojok (0,0), (6,0), (4,2), (0,4).\n" +
-          "f(0, 0) = 5(0) + 3(0)\nf(0, 0) = 0\n" +
-          "f(6, 0) = 5(6) + 3(0)\nf(6, 0) = 30\n" +
-          "f(4, 2) = 5(4) + 3(2)\nf(4, 2) = 26\n" +
-          "f(0, 4) = 5(0) + 3(4)\nf(0, 4) = 12\n" +
-          "> Nilai terbesar adalah 30 di titik (6, 0) → MAKSIMUM.\n" +
-          "> Nilai terkecil adalah 0 di titik (0, 0) → MINIMUM.",
-      },
-      {
-        title: "Mengapa cukup memeriksa titik pojok?",
-        body:
-          "Fungsi linear berubah dengan laju yang tetap ke satu arah tertentu. Bayangkan sebuah garis selidik ax + by = k yang digeser sejajar melintasi DHP: nilai k terus membesar seiring pergeseran. Garis tersebut akan meninggalkan DHP terakhir kali tepat di sebuah sudut. Itulah sebabnya nilai optimum selalu dicapai di titik pojok, bukan di bagian tengah daerah.",
-        tip:
-          "Bila dua titik pojok kebetulan menghasilkan nilai sama, berarti nilai optimum tercapai di sepanjang ruas garis yang menghubungkan keduanya.",
-      },
     ],
-    videoQuery: "nilai optimum fungsi tujuan metode uji titik pojok",
     contoh: {
       soal:
         "DHP suatu sistem memiliki titik pojok (0, 0), (6, 0), (4, 2), dan (0, 4). Tentukan nilai maksimum dan minimum dari f(x, y) = 5x + 3y.",
       stages: [
         {
-          label: "Langkah 1 — Menyiapkan rencana",
+          label: "Langkah 1: siapkan rencana",
           explain:
-            "Titik pojok sudah diketahui, sehingga kita tinggal menghitung nilai fungsi tujuan pada keempat titik tersebut, lalu membandingkannya.",
+            "Karena titik pojok sudah diketahui, kita cukup menghitung nilai fungsi di keempatnya lalu membandingkan.",
         },
         {
-          label: "Langkah 2 — Menghitung di dua titik pertama",
-          explain: "Substitusikan koordinat masing-masing titik ke dalam f(x, y) = 5x + 3y.",
+          label: "Langkah 2: dua titik pertama",
+          explain: "Substitusikan koordinat masing masing titik ke f(x, y) = 5x + 3y.",
           steps:
             "f(0, 0) = 5(0) + 3(0)\nf(0, 0) = 0\n" +
             "f(6, 0) = 5(6) + 3(0)\nf(6, 0) = 30 + 0\nf(6, 0) = 30",
         },
         {
-          label: "Langkah 3 — Menghitung di dua titik berikutnya",
+          label: "Langkah 3: dua titik berikutnya",
           explain: "Lanjutkan dengan dua titik pojok yang tersisa.",
           steps:
             "f(4, 2) = 5(4) + 3(2)\nf(4, 2) = 20 + 6\nf(4, 2) = 26\n" +
             "f(0, 4) = 5(0) + 3(4)\nf(0, 4) = 0 + 12\nf(0, 4) = 12",
         },
         {
-          label: "Langkah 4 — Membandingkan seluruh nilai",
+          label: "Langkah 4: susun tabel dan bandingkan",
           explain:
-            "Urutkan keempat hasil perhitungan, lalu pilih yang terbesar sebagai maksimum dan yang terkecil sebagai minimum. Jangan lupa menyebutkan di titik mana nilai itu tercapai.",
+            "Susun semua hasil dalam satu tabel seperti format baku, lalu pilih yang terbesar dan yang terkecil.",
           steps:
-            "> Nilai-nilai yang diperoleh: 0, 30, 26, dan 12.\n" +
-            "> Nilai terbesar adalah 30, tercapai di titik (6, 0).\n" +
-            "> Nilai terkecil adalah 0, tercapai di titik (0, 0).",
+            "> Tabel evaluasi (Titik pojok, f(x,y), Nilai):\n" +
+            "(0, 0):   0\n(6, 0):   30\n(4, 2):   26\n(0, 4):   12\n" +
+            "> Nilai terbesar 30 tercapai di (6, 0), terkecil 0 di (0, 0).",
         },
       ],
       jawaban: "Nilai maksimum 30 di titik (6, 0) dan nilai minimum 0 di titik (0, 0)",
@@ -952,107 +1038,119 @@ export const SUBBABS: SubbabContent[] = [
     simulation: null,
   },
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ════════════════════════════════════════════════════════════════════════
   {
     id: 10,
     title: "Pemodelan Soal Cerita",
     levelRef: "Integrasi",
-    focus: "Variabel, kendala, dan fungsi tujuan",
+    focus: "Variabel, tabel bantu, kendala, fungsi tujuan",
+    videoId: "nZqBMyDW1s0",
     materi: [
       {
-        title: "Alur lengkap menyelesaikan soal cerita",
+        title: "Cara membaca soal cerita",
         body:
-          "Sub-bab ini menggabungkan seluruh keterampilan yang sudah kamu pelajari. Urutan pengerjaannya selalu sama, mulai dari membaca soal sampai menafsirkan jawaban kembali ke konteks nyata:",
-        list: [
-          "Memisalkan variabel x dan y beserta satuannya",
-          "Menyusun seluruh kendala dari batasan yang ada di soal",
-          "Menambahkan kendala non-negatif x ≥ 0 dan y ≥ 0",
-          "Menyusun fungsi tujuan dari hal yang ingin dioptimalkan",
-          "Menggambar DHP dan menentukan titik-titik pojoknya",
-          "Menghitung nilai fungsi tujuan di setiap titik pojok",
-          "Menafsirkan jawaban kembali ke dalam kalimat konteks soal",
-        ],
+          "Baca soal dua kali. Pada bacaan pertama, cari dua objek yang banyaknya bisa diatur, itulah calon variabel. Pada bacaan kedua, cari semua batasan sumber daya (bahan, waktu, uang, tempat), cari juga hal yang ingin dibesarkan atau dikecilkan. Frasa kunci tertentu menentukan tandanya.",
+        table: {
+          header: ["Frasa kata kunci", "Hubungan"],
+          rows: [
+            ["tidak lebih dari, paling banyak, maksimal", "≤"],
+            ["tidak kurang dari, paling sedikit, minimal", "≥"],
+            ["kurang dari, di bawah", "<"],
+            ["lebih dari, melebihi, di atas", ">"],
+            ["keuntungan, pendapatan", "maksimum"],
+            ["biaya, pengeluaran", "minimum"],
+          ],
+        },
       },
       {
         title: "Memisalkan variabel dengan benar",
         body:
-          "Variabel harus menyatakan BANYAKNYA benda yang jumlahnya bisa kita atur, bukan harga, bukan keuntungan, dan bukan total. Tuliskan pemisalan secara eksplisit lengkap dengan satuan agar tidak keliru di langkah berikutnya.",
+          "Variabel harus menyatakan BANYAKNYA benda yang jumlahnya dapat kita atur, bukan harga, bukan keuntungan, dan bukan total. Tulis pemisalan secara eksplisit lengkap dengan satuannya agar setiap langkah berikutnya tidak keliru.",
         steps:
           "> Contoh pemisalan yang benar:\n" +
           "> x = banyak kursi yang diproduksi (buah)\n" +
           "> y = banyak meja yang diproduksi (buah)\n" +
-          "> Contoh pemisalan yang keliru: x = keuntungan kursi. Keuntungan bukan variabel, melainkan bagian dari fungsi tujuan.",
+          "> Contoh yang salah: x = keuntungan kursi. Keuntungan adalah bagian fungsi tujuan,\n" +
+          "> bukan sesuatu yang jumlahnya diatur.",
       },
       {
-        title: "Menyusun kendala dengan bantuan tabel",
+        title: "Menyusun kendala dengan tabel bantu",
         body:
-          "Cara paling aman menyusun kendala adalah dengan membuat tabel bantu: baris untuk setiap sumber daya, kolom untuk setiap objek. Isikan kebutuhan tiap objek, lalu tuliskan batas ketersediaan di kolom terakhir. Setiap baris tabel langsung menjadi satu pertidaksamaan.",
+          "Cara paling aman menyusun kendala adalah membuat tabel bantu terlebih dulu. Baris adalah sumber daya, kolom adalah kebutuhan tiap objek, dan kolom terakhir adalah batas ketersediaannya. Setiap baris tabel langsung menjadi satu pertidaksamaan.",
+        table: {
+          header: ["Sumber daya", "Per kursi (x)", "Per meja (y)", "Tersedia"],
+          rows: [
+            ["Jam kerja (jam)", "2", "3", "18"],
+            ["Tempat gudang (peti)", "1", "2", "12"],
+          ],
+        },
         steps:
-          "> Misalkan setiap kursi butuh 2 jam kerja dan setiap meja 4 jam kerja, dengan total waktu tersedia 32 jam.\n" +
-          "> Bentuk kebutuhan waktu:\n" +
-          "2x + 4y\n" +
-          "> Karena waktu yang tersedia terbatas 32 jam, maka:\n" +
-          "2x + 4y ≤ 32",
+          "> Baris jam kerja menjadi kendala waktu:\n2x + 3y ≤ 18\n" +
+          "> Baris gudang menjadi kendala tempat:\nx + 2y ≤ 12\n" +
+          "> Tambahkan kendala non negatif:\nx ≥ 0\ny ≥ 0",
         tip:
-          "Pastikan satuan ruas kiri dan ruas kanan sejenis. Jangan mencampur jam dengan rupiah dalam satu pertidaksamaan.",
+          "Pastikan satuan ruas kiri dan kanan sejenis. Jangan mencampur jam dengan rupiah dalam satu pertidaksamaan.",
       },
       {
-        title: "Menyusun fungsi tujuan",
+        title: "Menyusun fungsi tujuan dari konteks",
         body:
-          "Fungsi tujuan disusun dari nilai per satuan objek dikalikan banyaknya objek. Perhatikan satuan yang dipakai dan tuliskan dengan konsisten, misalnya dalam ribuan rupiah agar angkanya tidak terlalu besar.",
+          "Fungsi tujuan disusun dari nilai per unit objek dikali banyaknya objek. Perhatikan satuan yang dipakai, tulislah dalam ribuan rupiah agar angkanya ringkas, lalu tentukan apakah dimaksimumkan atau diminimumkan.",
         steps:
-          "> Keuntungan setiap kursi Rp40.000 dan setiap meja Rp60.000.\n" +
-          "> Maka fungsi tujuannya (dalam ribuan rupiah):\n" +
+          "> Keuntungan tiap kursi Rp40.000, tiap meja Rp60.000.\n" +
+          "> Susun fungsi tujuannya (dalam ribuan rupiah):\n" +
           "f(x, y) = 40x + 60y\n" +
-          "> Karena yang dicari keuntungan terbesar, fungsi ini akan dimaksimumkan.",
+          "> Karena yang dicari keuntungan sebesar besarnya, fungsi ini DIMAKSIMUMKAN.",
       },
       {
-        title: "Menafsirkan jawaban kembali ke konteks",
+        title: "Siklus lengkap sampai jadi kalimat jawaban",
         body:
-          "Jawaban akhir soal cerita tidak boleh berhenti pada angka. Kembalikan hasil perhitungan ke dalam kalimat yang menjawab pertanyaan soal, lengkap dengan satuan yang sesuai. Periksa juga kewajarannya: jika hasilnya berupa pecahan padahal yang dihitung adalah banyak benda, kemungkinan ada kekeliruan dalam pemodelan.",
-        steps:
-          "> Misalkan diperoleh nilai maksimum 520 di titik (4, 6).\n" +
-          "> Penafsirannya: keuntungan terbesar Rp520.000 dicapai dengan memproduksi 4 kursi dan 6 meja.",
+          "Rangkum semua tahapannya sekali lagi agar alurnya jelas dari mulai soal sampai jawaban konteks.",
+        list: [
+          "Memisalkan variabel x dan y beserta satuan",
+          "Membuat tabel bantu dan menyusun semua kendala",
+          "Menambahkan kendala non negatif x ≥ 0 dan y ≥ 0",
+          "Menyusun fungsi tujuan dari konteks",
+          "Menggambar DHP dan menentukan titik pojoknya",
+          "Menilai fungsi tujuan di setiap titik pojok",
+          "Mengembalikan jawaban ke kalimat konteks dengan satuan yang benar",
+        ],
       },
     ],
-    videoQuery: "model matematika program linear soal cerita kelas 10",
     contoh: {
       soal:
-        "Sebuah pabrik membuat kursi (x) dan meja (y). Setiap kursi memerlukan 2 jam kerja dan setiap meja memerlukan 4 jam kerja, dengan total waktu tersedia 32 jam. Ruang pamer hanya mampu menampung 10 furnitur. Keuntungan setiap kursi Rp40.000 dan setiap meja Rp60.000. Susunlah model matematikanya.",
+        "Sebuah pabrik membuat kursi (x) dan meja (y). Setiap kursi butuh 2 jam kerja dan meja 3 jam, total tersedia 18 jam. Gudang menampung 12 peti, setiap kursi memakan 1 peti dan meja memakan 2 peti. Keuntungan tiap kursi Rp40.000 dan tiap meja Rp60.000. Susunlah model matematikanya.",
       stages: [
         {
-          label: "Langkah 1 — Memisalkan variabel",
-          explain:
-            "Yang jumlahnya dapat diatur oleh pabrik adalah banyaknya kursi dan banyaknya meja, maka keduanya menjadi variabel.",
+          label: "Langkah 1: pemisalan",
+          explain: "Yang banyaknya dapat diatur pabrik adalah banyak kursi dan banyak meja, jadikan keduanya variabel.",
           steps: "> x = banyak kursi yang diproduksi (buah)\n> y = banyak meja yang diproduksi (buah)",
         },
         {
-          label: "Langkah 2 — Kendala waktu kerja",
+          label: "Langkah 2: susun tabel bantu dulu",
           explain:
-            "Setiap kursi butuh 2 jam sehingga x kursi butuh 2x jam. Setiap meja butuh 4 jam sehingga y meja butuh 4y jam. Totalnya tidak boleh melebihi waktu yang tersedia.",
-          steps: "2x + 4y ≤ 32",
+            "Sebelum menulis pertidaksamaan, rangkum data kebutuhan dalam tabel. Setiap barisnya akan menjadi satu kendala.",
+          steps:
+            "> Tabel bantu:\n" +
+            "Sumber daya     Kursi(x)  Meja(y)  Tersedia\n" +
+            "Jam kerja (jam)    2         3        18\n" +
+            "Gudang (peti)      1         2        12",
         },
         {
-          label: "Langkah 3 — Kendala kapasitas ruang",
-          explain:
-            "Ruang pamer menampung seluruh furnitur, baik kursi maupun meja, dengan total paling banyak 10 buah. Karena setiap furnitur memakan satu tempat, koefisien keduanya adalah 1 — cukup ditulis x dan y saja.",
-          steps: "x + y ≤ 10",
+          label: "Langkah 3: ubah baris menjadi kendala",
+          explain: "Setiap baris tabel dibaca seperti kalimat lalu ditulis menjadi pertidaksamaan.",
+          steps:
+            "> Baris jam kerja: 2x + 3y ≤ 18\n" +
+            "> Baris gudang: x + 2y ≤ 12\n" +
+            "> Tambahkan kendala non negatif: x ≥ 0 dan y ≥ 0.",
         },
         {
-          label: "Langkah 4 — Kendala non-negatif",
-          explain:
-            "Banyak kursi dan meja yang diproduksi tidak mungkin negatif. Kendala ini tidak tertulis di soal, tetapi wajib ditambahkan.",
-          steps: "x ≥ 0\ny ≥ 0",
-        },
-        {
-          label: "Langkah 5 — Fungsi tujuan",
-          explain:
-            "Yang ingin dioptimalkan adalah keuntungan, dan keuntungan selalu dicari sebesar-besarnya. Tuliskan dalam ribuan rupiah agar ringkas.",
-          steps: "f(x, y) = 40x + 60y\n> Fungsi ini dicari nilai MAKSIMUM-nya.",
+          label: "Langkah 4: susun fungsi tujuan",
+          explain: "Keuntungan per unit dikali banyaknya unit, ditulis dalam ribuan rupiah agar ringkas.",
+          steps: "f(x, y) = 40x + 60y\n> Karena yang dicari keuntungan terbesar, fungsi ini dimaksimumkan.",
         },
       ],
       jawaban:
-        "Maksimumkan f(x, y) = 40x + 60y dengan kendala 2x + 4y ≤ 32, x + y ≤ 10, x ≥ 0, dan y ≥ 0",
+        "Maksimumkan f(x, y) = 40x + 60y dengan kendala 2x + 3y ≤ 18, x + 2y ≤ 12, x ≥ 0, dan y ≥ 0",
     },
     simulation: null,
   },
