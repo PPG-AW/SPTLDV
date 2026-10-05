@@ -60,7 +60,7 @@ export default function MathSteps({ text, className = "", size = "md", tone = "d
             return (
               <p
                 key={i}
-                className={`col-span-2 ${i > 0 ? "mt-1.5" : ""} font-sans text-[12.5px] leading-relaxed ${
+                className={`col-span-2 min-w-0 break-words ${i > 0 ? "mt-1.5" : ""} font-sans text-[12.5px] leading-relaxed ${
                   strong ? "font-bold text-[#1A1A1A]" : "text-[#525252]"
                 }`}
               >
@@ -71,7 +71,10 @@ export default function MathSteps({ text, className = "", size = "md", tone = "d
           const idx = line.indexOf("=");
           if (idx === -1) {
             return (
-              <span key={i} className={`col-span-2 font-mono ${fontSize} text-[#1A1A1A]`}>
+              <span
+                key={i}
+                className={`col-span-2 min-w-0 whitespace-pre-wrap break-words font-mono ${fontSize} text-[#1A1A1A]`}
+              >
                 <MathInline text={line} />
               </span>
             );
@@ -83,7 +86,9 @@ export default function MathSteps({ text, className = "", size = "md", tone = "d
               <span className={`justify-self-end whitespace-nowrap font-mono ${fontSize} leading-relaxed text-[#1A1A1A]`}>
                 <MathInline text={lhs} />
               </span>
-              <span className={`whitespace-nowrap pl-2 font-mono ${fontSize} leading-relaxed text-[#1A1A1A]`}>
+              <span
+                className={`min-w-0 whitespace-pre-wrap break-words pl-2 font-mono ${fontSize} leading-relaxed text-[#1A1A1A]`}
+              >
                 = <MathInline text={rhs} />
               </span>
             </Fragment>
