@@ -26,9 +26,17 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { getSubbab, SUBBABS, TOTAL_SUBBAB } from "@/lib/curriculum";
+import {
+  getSubbab,
+  SUBBABS,
+  TOTAL_SUBBAB,
+  type FigureSpec,
+  type MateriTable,
+} from "@/lib/curriculum";
 import QuestionCard, { type AnswerMeta } from "./QuestionCard";
 import SimulationCanvas from "./SimulationCanvas";
+import CartesianCanvas from "./CartesianCanvas";
+import type { CanvasSpec } from "@/lib/templates";
 import SummativeView from "./SummativeView";
 import MathSteps, { MathInline } from "./MathText";
 
@@ -700,6 +708,8 @@ function MateriView({ subbabId }: { subbabId: number }) {
 
               {m.steps && <div className="mt-3"><MathSteps text={m.steps} /></div>}
 
+              {m.figure && <FigureBox fig={m.figure} />}
+
               {m.math && (
                 <div className="mt-3 space-y-1.5">
                   {m.math.map((line, j) => (
@@ -719,6 +729,47 @@ function MateriView({ subbabId }: { subbabId: number }) {
           </div>
         </article>
       ))}
+    </div>
+  );
+}
+
+// ─── Kotak gambar grafik untuk materi & contoh ──────────────────────────────
+function FigureBox({ fig }: { fig: FigureSpec }) {
+  return (
+    <figure className="mt-3 overflow-hidden rounded-xl border border-[#E5E5E5] bg-white">
+      <CartesianCanvas spec={fig as unknown as CanvasSpec} height={270} />
+      {fig.caption && (
+        <figcaption className="border-t border-[#F0F0F0] px-3 py-2 text-[11px] leading-relaxed text-[#737373]">
+          {fig.caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function SimpleTable({ t }: { t: MateriTable }) {
+  return (
+    <div className="mt-3 overflow-x-auto rounded-xl border border-[#E5E5E5]">
+      <table className="w-full border-collapse text-left">
+        <thead>
+          <tr className="bg-[#1A1A1A] text-white">
+            {t.header.map((h, j) => (
+              <th key={j} className="whitespace-nowrap px-3 py-2 text-[11px] font-bold">{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {t.rows.map((row, ri) => (
+            <tr key={ri} className={ri % 2 === 0 ? "bg-[#FAFAFA]" : "bg-white"}>
+              {row.map((cell, ci) => (
+                <td key={ci} className="px-3 py-2 text-[12.5px] leading-relaxed text-[#404040]">
+                  <MathInline text={cell} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -796,6 +847,8 @@ function ContohView({ subbabId }: { subbabId: number }) {
               </div>
               <p className="mt-2.5 text-sm leading-[1.75] text-[#404040]">{s.explain}</p>
               {s.steps && <div className="mt-3"><MathSteps text={s.steps} /></div>}
+              {s.table && <SimpleTable t={s.table} />}
+              {s.figure && <FigureBox fig={s.figure} />}
             </article>
           ))}
 

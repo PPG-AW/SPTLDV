@@ -182,6 +182,7 @@ scripts/seed.mjs                 → seed demo via CLI
 | Gejala | Penyebab | Solusi |
 |---|---|---|
 | **500 saat login/register** | Tabel belum ada di Neon | Langkah 3 di atas (POST `/api/setup`, atau `db/schema.sql`, atau `npx drizzle-kit push`) |
+| **500 saat register siswa setelah update kode baru** | Database masih skema LAMA (`students.class_id` wajib diisi, kode baru menjadikannya opsional) | POST `/api/setup` sekali lagi (otomatis migrasi), atau jalankan blok "MIGRASI" di `db/schema.sql` lewat Neon SQL Editor |
 | **`syntax error at or near "{"` di Neon SQL Editor** | Yang ditempel adalah file TypeScript (bukan SQL) | Tempel **hanya** isi `db/schema.sql` — lihat Catatan di Langkah 3 Cara B |
 | Integrasi Vercel↔Neon sudah jalan tapi tabel tetap kosong | Integrasi hanya membuat database + env var, **tidak** membuat tabel | Tetap jalankan Langkah 3 sekali saja per database |
 | Body `{ "ok": false }` di `/api/health` | `DATABASE_URL` salah/belum diset | Cek nama variabel persis `DATABASE_URL`, **Redeploy** setelah mengubah env |

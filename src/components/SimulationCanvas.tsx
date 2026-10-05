@@ -15,7 +15,7 @@ import {
 import type { CanvasSpec } from "@/lib/templates";
 import type { SimulationKind } from "@/lib/curriculum";
 import { ri, pick } from "@/lib/templates";
-import { eqStr, neg, stepsInterceptX, stepsInterceptY, stepsTestPoint } from "@/lib/mathfmt";
+import { eqStr, neg, simplifyLine, stepsInterceptX, stepsInterceptY, stepsTestPoint } from "@/lib/mathfmt";
 
 const SYM: Record<Sign, string> = { "<=": "≤", ">=": "≥", "<": "<", ">": ">" };
 const isDashed = (s: Sign) => s === "<" || s === ">";
@@ -53,7 +53,10 @@ function LineSim({ onNext }: { onNext: () => void }) {
   const [p] = useState(() => ri(2, 6));
   const [q] = useState(() => ri(2, 6));
   const [sign] = useState<Sign>(() => pick<Sign>(["<=", ">=", "<", ">"]));
-  const line = useMemo(() => lineFromIntercepts(p, q), [p, q]);
+  const line = useMemo(() => {
+    const l = lineFromIntercepts(p, q);
+    return simplifyLine(l.a, l.b, l.c); // tampilkan dalam bentuk paling sederhana
+  }, [p, q]);
   const dashedCorrect = isDashed(sign);
 
   const [taps, setTaps] = useState<Pt[]>([]);
@@ -161,10 +164,10 @@ function LineSim({ onNext }: { onNext: () => void }) {
 
 /* ══ Sub-Bab 4 — uji titik bebas ══════════════════════════════════════════ */
 function RegionSim() {
-  const [ineq] = useState<IneqSpec>(() => ({
-    ...lineFromIntercepts(ri(3, 6), ri(3, 6)),
-    sign: pick<Sign>(["<=", ">="]),
-  }));
+  const [ineq] = useState<IneqSpec>(() => {
+    const l = lineFromIntercepts(ri(3, 6), ri(3, 6));
+    return { ...simplifyLine(l.a, l.b, l.c), sign: pick<Sign>(["<=", ">="]) };
+  });
   const [testPt, setTestPt] = useState<Pt | null>(null);
   const [showShade, setShowShade] = useState(false);
   const verdict = testPt ? satisfies(testPt, ineq) : null;
@@ -199,7 +202,7 @@ function RegionSim() {
         <MathSteps size="sm" text={stepsTestPoint(ineq.a, ineq.b, ineq.c, SYM[ineq.sign], testPt.x, testPt.y).text} />
       )}
       <p className="rounded-lg bg-[#F5F5F5] px-3 py-2 text-xs leading-relaxed text-[#525252]">
-        Semua titik hijau berkumpul membentuk daerah penyelesaian — yaitu daerah yang BERSIH (tidak diarsir).
+        Semua titik hijau berkumpul membentuk daerah penyelesaian, yaitu daerah yang diarsir berwarna.
       </p>
     </div>
   );
@@ -231,7 +234,7 @@ function SystemSim() {
   return (
     <div className="space-y-3">
       <p className="text-sm leading-relaxed text-[#525252]">
-        Tampilkan DHP untuk melihat daerah bersih hasil irisan semua kendala, lalu ketuk titik mana pun untuk mengujinya.
+        Tampilkan DHP untuk melihat daerah hasil irisan semua kendala, lalu ketuk titik mana pun untuk mengujinya.
       </p>
       <div className="grid gap-1.5 sm:grid-cols-2">
         <div className="rounded-xl border border-[#E5E5E5] bg-[#FAFAFA] px-3 py-2 text-center font-mono text-xs">{ineqStr(l1)}</div>
@@ -241,7 +244,7 @@ function SystemSim() {
         onClick={() => setShowDhp((v) => !v)}
         className={`min-h-[44px] w-full rounded-xl border-2 text-sm font-bold transition active:scale-95 ${showDhp ? "border-[#1A1A1A] bg-[#1A1A1A] text-white" : "border-[#E5E5E5]"}`}
       >
-        {showDhp ? "Sembunyikan DHP" : "Tampilkan DHP (arsir yang bukan penyelesaian)"}
+        {showDhp ? "Sembunyikan DHP" : "Tampilkan DHP (daerah yang diarsir)"}
       </button>
       <CartesianCanvas spec={spec} height={300} interactive onTap={(_, s) => setTestPt(s)} />
       {testPt && (
@@ -296,7 +299,7 @@ function CornerSim() {
   return (
     <div className="space-y-3">
       <p className="text-sm leading-relaxed text-[#525252]">
-        Daerah bersih di tengah adalah DHP dengan <b>{sys.corners.length} titik pojok</b>. Ketuk setiap sudutnya untuk menemukannya.
+        Daerah berwarna di tengah adalah DHP dengan <b>{sys.corners.length} titik pojok</b>. Ketuk setiap sudutnya untuk menemukannya.
       </p>
       <CartesianCanvas
         spec={spec}

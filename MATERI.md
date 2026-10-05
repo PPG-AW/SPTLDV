@@ -29,22 +29,19 @@
 |----------|------------|-----------|
 | 1.1 | Pilihan Ganda | Manakah bentuk berikut yang merupakan pertidaksamaan linear dua variabel (PtLDV)?… |
 | 1.2 | Isian Singkat | Tentukan koefisien x, koefisien y, dan konstanta dari pertidaksamaan berikut.… |
-| 1.3 | Pilihan Ganda | Harga sebuah roti cokelat adalah Rp4.000 dan sebuah roti keju adalah Rp3.000. Misalkan x =… |
-| 2.0.1 | Isian Singkat | Sederhanakan pertidaksamaan berikut sampai bentuk paling sederhana, lalu isikan nilai koef… |
-| 2.0.2 | Pilihan Ganda | Manakah pertidaksamaan berikut yang SUDAH dalam bentuk paling sederhana (FPB koefisien dan… |
-| 2.0.3 | Isian Singkat | Sebelum menyederhanakan pertidaksamaan ini, tentukan dahulu FPB dari koefisien x, koefisie… |
+| 1.3 | Pilihan Ganda | Harga sebuah buku tulis adalah Rp5.000 dan sebuah pensil adalah Rp1.000. Misalkan x = bany… |
 | 2.1 | Isian Singkat | Tentukan koordinat titik potong garis berikut dengan sumbu X.… |
 | 2.2 | Isian Singkat | Tentukan koordinat titik potong garis berikut dengan sumbu Y.… |
 | 2.3 | Isian Singkat | Tentukan KEDUA titik potong garis berikut dengan sumbu koordinat.… |
 | 3.1 | Pilihan Ganda | Jenis garis pembatas yang tepat untuk pertidaksamaan berikut adalah…… |
 | 3.2 | Pilih Grafik yang Benar | Manakah grafik garis pembatas yang TEPAT untuk pertidaksamaan berikut? Perhatikan letak ti… |
 | 3.3 | Ketuk Titik pada Grafik | Ketuk TEPAT pada dua titik potong garis berikut dengan sumbu koordinat (urutan bebas).… |
-| 4.1 | Pilihan Ganda | Apakah titik (5, 6) memenuhi pertidaksamaan berikut?… |
+| 4.1 | Pilihan Ganda | Apakah titik (7, 7) memenuhi pertidaksamaan berikut?… |
 | 4.2 | Pilihan Ganda | Lakukan uji titik (0, 0) pada pertidaksamaan berikut. Manakah kesimpulan yang BENAR?… |
 | 4.3 | Pilih Grafik yang Benar | Manakah gambar yang TEPAT untuk pertidaksamaan berikut? (daerah berwarna = daerah penyeles… |
 | 5.1 | Pilihan Ganda | Manakah yang merupakan Sistem Pertidaksamaan Linear Dua Variabel (SPtLDV)?… |
 | 5.2 | Pilihan Ganda | Daerah Himpunan Penyelesaian (DHP) dari sebuah SPtLDV adalah…… |
-| 5.3 | Pilihan Ganda | Titik manakah yang merupakan penyelesaian dari sistem berikut?… |
+| 5.3 | Pilihan Ganda | Perhatikan sistem berikut. Ada berapa kendala di dalamnya, dan apa jenis dua kendala terak… |
 | 6.1 | Isian Singkat | Tentukan titik potong kedua garis pembatas berikut menggunakan METODE CAMPURAN (eliminasi … |
 | 6.2 | Pilih Grafik yang Benar | Manakah gambar DHP yang TEPAT untuk sistem berikut? (arsiran = bukan daerah penyelesaian)… |
 | 6.3 | Ketuk Titik di Dalam DHP | Ketuk satu titik berkoordinat bulat yang berada DI DALAM DHP sistem berikut (daerah ungu h… |
@@ -54,12 +51,12 @@
 | 8.1 | Isian Singkat | Tentukan titik potong kedua garis berikut dengan metode campuran (eliminasi lalu substitus… |
 | 8.2 | Isian Singkat | Tentukan titik potong kedua garis berikut. Samakan dahulu koefisiennya, lalu gunakan metod… |
 | 8.3 | Isian Singkat | Tentukan titik potong kedua garis berikut dengan metode campuran. Perhatikan adanya koefis… |
-| 9.1 | Isian Singkat | Tentukan nilai fungsi tujuan f(x, y) = 7x + 3y pada titik (1, 1).… |
-| 9.2 | Pilihan Ganda | Titik pojok DHP adalah (4, 2), (6, 0), (2, 0). Tentukan NILAI MAKSIMUM dari f(x, y) = 3x +… |
-| 9.3 | Isian Singkat | Dengan titik pojok (1, 4), (5, 0), (0, 3), (0, 0) dan f(x, y) = 6x + 6y, tentukan nilai ma… |
-| 10.1 | Pilihan Ganda | Sebuah usaha memproduksi kue bolu dan kue brownies. Pemisalan variabel yang tepat adalah…… |
+| 9.1 | Isian Singkat | Tentukan nilai fungsi tujuan f(x, y) = 3x + 7y pada titik (3, 4).… |
+| 9.2 | Pilihan Ganda | Titik pojok DHP adalah (2, 3), (5, 0), (0, 4), (0, 0). Tentukan NILAI MAKSIMUM dari f(x, y… |
+| 9.3 | Isian Singkat | Dengan titik pojok (4, 5), (9, 0), (0, 1), (0, 0) dan f(x, y) = 3x + 6y, tentukan nilai ma… |
+| 10.1 | Pilihan Ganda | Sebuah usaha memproduksi kaos dan kemeja. Pemisalan variabel yang tepat adalah…… |
 | 10.2 | Pilihan Ganda | Setiap kursi memerlukan 2 jam kerja dan setiap meja memerlukan 3 jam kerja. Total yang ter… |
-| 10.3 | Pilihan Ganda | Keuntungan setiap kaos adalah Rp30.000 dan setiap kemeja adalah Rp50.000, dengan kendala x… |
+| 10.3 | Pilihan Ganda | Keuntungan setiap kursi adalah Rp40.000 dan setiap meja adalah Rp60.000, dengan kendala 2x… |
 
 ---
 
@@ -105,22 +102,7 @@ Sebuah bentuk disebut PtLDV hanya jika memenuhi SEMUA syarat berikut: tepat dua 
 4. 2x + 3y = 12 bukan pertidaksamaan karena memakai tanda sama dengan
 5. 5x ≤ 20 bukan dua variabel karena hanya memuat x saja
 
-#### Bagian 5 — Memeriksa apakah sebuah titik memenuhi
-
-Menjawab pertanyaan apakah sebuah titik termasuk penyelesaian, caranya hanya substitusi. Masukkan nilai x dan y dari titik itu ke ruas kiri pertidaksamaan, lalu nilai benar atau salah pernyataannya. Bila pernyataan benar, titik itu memenuhi. Bila salah, titik itu tidak memenuhi.
-
-```
-> Periksa titik (1, 2) pada 3x + 2y ≤ 12:
-3(1) + 2(2) ≤ 12
-3 + 4 ≤ 12
-7 ≤ 12   → BENAR, maka titik (1, 2) memenuhi
-> Periksa titik (5, 3) pada pertidaksamaan yang sama:
-3(5) + 2(3) ≤ 12
-15 + 6 ≤ 12
-21 ≤ 12   → SALAH, maka titik (5, 3) tidak memenuhi
-```
-
-#### Bagian 6 — Unsur unsur di dalam PtLDV
+#### Bagian 5 — Unsur unsur di dalam PtLDV
 
 Setiap bagian kecil pada bentuk ax + by ≤ c punya nama resmi yang akan selalu dipakai di sub-bab berikutnya.
 
@@ -139,7 +121,7 @@ b = −4 karena tanda minus ikut koefisien
 c = 8
 ```
 
-#### Bagian 7 — Dari kalimat menjadi model matematika
+#### Bagian 6 — Dari kalimat menjadi model matematika
 
 Soal cerita diubah menjadi pertidaksamaan dengan tiga langkah: misalkan objek sebagai x dan y, susun bentuk yang mewakili keadaan (biasanya total harga, total bahan, atau total waktu), lalu pilih tanda yang sesuai kata kuncinya.
 
@@ -158,49 +140,59 @@ Soal cerita diubah menjadi pertidaksamaan dengan tiga langkah: misalkan objek se
 
 ### Contoh Soal & Pembahasan Bertahap
 
-**Soal:** Periksa apakah ketiga titik berikut memenuhi 3x + 2y ≤ 12:
-A. Titik (1, 2)
-B. Titik (4, 1)
-C. Titik (0, 6)
+**Soal:** Perhatikan pertidaksamaan 4x − 3y ≤ 24.
+A. Sebutkan variabel, koefisien x, koefisien y, dan konstantanya.
+B. Apakah bentuk tersebut termasuk PtLDV? Jelaskan alasannya.
 
-**Langkah 1 — Menetapkan cara kerja**
+**Langkah 1 — Menentukan variabelnya**
 
-Memeriksa titik itu mudah. Substitusikan x dan y dari titik ke ruas kiri, hitung hasilnya, lalu bandingkan dengan ruas kanan. Kita kerjakan titik per titik tanpa tergesa.
-
-**Langkah 2 — Titik A (1, 2)**
-
-Nilai x adalah 1 dan nilai y adalah 2. Substitusikan keduanya ke bentuk 3x + 2y.
+Variabel adalah huruf yang nilainya belum diketahui. Pada bentuk ini ada dua huruf, yaitu x dan y, sehingga variabelnya ada dua.
 
 ```
-3(1) + 2(2) = 3 + 4
-3(1) + 2(2) = 7
-7 ≤ 12   → BENAR
-> Titik A memenuhi.
+4x − 3y ≤ 24
+> Variabelnya adalah x dan y.
 ```
 
-**Langkah 3 — Titik B (4, 1)**
+**Langkah 2 — Menentukan koefisien x**
 
-Lakukan cara yang sama dengan nilai x yaitu 4 dan nilai y yaitu 1.
-
-```
-3(4) + 2(1) = 12 + 2
-3(4) + 2(1) = 14
-14 ≤ 12   → SALAH
-> Titik B tidak memenuhi.
-```
-
-**Langkah 4 — Titik C (0, 6)**
-
-Kali ini x nya nol sehingga perhitungannya lebih singkat. Perhatikan bahwa nilai ruas kiri tepat sama dengan ruas kanan. Karena tandanya ≤ (boleh sama), titik ini tetap memenuhi.
+Koefisien x adalah bilangan yang menempel pada x. Pada suku 4x, bilangan yang menempel adalah 4 dan tandanya positif.
 
 ```
-3(0) + 2(6) = 0 + 12
-3(0) + 2(6) = 12
-12 ≤ 12   → BENAR
-> Titik C memenuhi.
+> Suku yang memuat x adalah 4x, maka:
+a = 4
 ```
 
-> ✅ **Jawaban akhir:** Titik A dan titik C memenuhi; hanya titik B yang tidak memenuhi
+**Langkah 3 — Menentukan koefisien y**
+
+Koefisien y adalah bilangan yang menempel pada y. Perhatikan tanda di depannya. Karena sukunya −3y, maka koefisiennya negatif, bukan 3 melainkan −3.
+
+```
+> Suku yang memuat y adalah −3y, maka:
+b = −3
+```
+
+**Langkah 4 — Menentukan konstanta**
+
+Konstanta adalah suku yang tidak memuat variabel apa pun. Pada bentuk ini, suku tersebut berada di ruas kanan.
+
+```
+> Suku tanpa variabel adalah 24, maka:
+c = 24
+```
+
+**Langkah 5 — Memeriksa apakah termasuk PtLDV**
+
+Periksa syaratnya satu per satu. Ada dua variabel yaitu x dan y, keduanya berpangkat satu, tidak ada perkalian antar variabel seperti xy, tidak ada variabel di dalam akar atau penyebut, dan tandanya ≤ yang merupakan tanda ketidaksamaan. Semua syarat terpenuhi.
+
+```
+> Dua variabel: ada (x dan y)
+> Pangkat tiap variabel: satu
+> Perkalian antar variabel: tidak ada
+> Tanda: ≤ (tanda ketidaksamaan)
+> Kesimpulan: bentuk ini TERMASUK PtLDV.
+```
+
+> ✅ **Jawaban akhir:** Variabel x dan y, dengan a = 4, b = −3, c = 24. Bentuk tersebut termasuk PtLDV karena memenuhi semua syaratnya
 
 ### Simulasi Interaktif
 
@@ -222,10 +214,10 @@ ax + by ≤ c
 
 Pilihan jawaban:
 
-A. 4x + 2y = 18
-B. 4xy + 2y < 18
-C. 4x + 2y < 18 ✅ (kunci)
-D. 4x² + 2y < 18
+A. 3x + 3y = 11
+B. 3x² + 3y > 11
+C. 3xy + 3y > 11
+D. 3x + 3y > 11 ✅ (kunci)
 
 ---
 
@@ -243,9 +235,9 @@ D. 4x² + 2y < 18
 > 2. Setiap variabel berpangkat satu
 > 3. Tidak ada perkalian antarvariabel seperti xy
 > 4. Dihubungkan tanda <, >, ≤, atau ≥ (bukan =)
-> Bentuk yang memenuhi semuanya: 4x + 2y < 18
+> Bentuk yang memenuhi semuanya: 3x + 3y > 11
 ```
-**Kesimpulan:** Bentuk 4x + 2y < 18 memenuhi semua syarat PtLDV: dua variabel, keduanya berpangkat satu, tanpa perkalian antarvariabel, dan memakai tanda ketidaksamaan.
+**Kesimpulan:** Bentuk 3x + 3y > 11 memenuhi semua syarat PtLDV: dua variabel, keduanya berpangkat satu, tanpa perkalian antarvariabel, dan memakai tanda ketidaksamaan.
 
 #### Template 1.2 — Isian Singkat
 
@@ -254,12 +246,12 @@ D. 4x² + 2y < 18
 **Soal:** Tentukan koefisien x, koefisien y, dan konstanta dari pertidaksamaan berikut.
 
 ```
-3x + 5y ≤ 11
+6x + 3y ≤ 24
 ```
 
 Kolom isian: **a (koefisien x)**, **b (koefisien y)**, **c (konstanta)**
 
-**Kunci:** a = 3, b = 5, c = 11
+**Kunci:** a = 6, b = 3, c = 24
 
 ---
 
@@ -273,50 +265,50 @@ Kolom isian: **a (koefisien x)**, **b (koefisien y)**, **c (konstanta)**
 
 ```
 > Bandingkan dengan bentuk umum ax + by ≤ c:
-3x + 5y ≤ 11
+6x + 3y ≤ 24
 > Bilangan yang menempel pada x:
-a = 3
+a = 6
 > Bilangan yang menempel pada y (tanda ikut):
-b = 5
+b = 3
 > Suku tanpa variabel di ruas kanan:
-c = 11
+c = 24
 ```
-**Kesimpulan:** Koefisien x = 3, koefisien y = 5, konstanta = 11.
+**Kesimpulan:** Koefisien x = 6, koefisien y = 3, konstanta = 24.
 
 #### Template 1.3 — Pilihan Ganda
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Harga sebuah buku tulis adalah Rp3.000 dan sebuah pensil adalah Rp2.000. Misalkan x = banyak buku tulis dan y = banyak pensil. Jika total belanja tidak lebih dari Rp25.000, model matematikanya adalah…
+**Soal:** Harga sebuah buku tulis adalah Rp5.000 dan sebuah pensil adalah Rp1.000. Misalkan x = banyak buku tulis dan y = banyak pensil. Jika total belanja tidak lebih dari Rp25.000, model matematikanya adalah…
 
 Pilihan jawaban:
 
-A. 3000x + 2000y ≥ 25000
-B. 3000x + 2000y = 25000
-C. 2000x + 3000y ≤ 25000
-D. 3000x + 2000y ≤ 25000 ✅ (kunci)
+A. 5000x + 1000y ≤ 25000 ✅ (kunci)
+B. 1000x + 5000y ≤ 25000
+C. 5000x + 1000y = 25000
+D. 5000x + 1000y ≥ 25000
 
 ---
 
 **Petunjuk bertahap (H1 → H3) — tidak pernah membocorkan jawaban akhir:**
 
 **H1.** Susun dahulu bentuk total belanjanya: (harga satuan) dikali (banyaknya), untuk kedua barang.
-**H2.** Belanja buku tulis adalah 3000x dan belanja pensil adalah 2000y. Jumlahkan keduanya untuk memperoleh bentuk total belanja.
+**H2.** Belanja buku tulis adalah 5000x dan belanja pensil adalah 1000y. Jumlahkan keduanya untuk memperoleh bentuk total belanja.
 **H3.** Sekarang terjemahkan frasa "tidak lebih dari". Frasa ini menyatakan BATAS ATAS — nilainya boleh kurang, tetapi tidak boleh melebihi, dan tidak harus tepat sama. Pilih tanda ketidaksamaan yang sesuai serta pastikan koefisiennya tidak tertukar.
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
 > Belanja buku tulis: harga × banyaknya
-3000x
+5000x
 > Belanja pensil:
-2000y
+1000y
 > Total belanja:
-3000x + 2000y
+5000x + 1000y
 > Frasa "tidak lebih dari" berarti batas atas, yaitu tanda ≤:
-3000x + 2000y ≤ 25000
+5000x + 1000y ≤ 25000
 ```
-**Kesimpulan:** Total belanja adalah 3000x + 2000y, dan karena tidak boleh melebihi Rp25.000 maka tandanya ≤.
+**Kesimpulan:** Total belanja adalah 5000x + 1000y, dan karena tidak boleh melebihi Rp25.000 maka tandanya ≤.
 
 ---
 
@@ -330,42 +322,27 @@ D. 3000x + 2000y ≤ 25000 ✅ (kunci)
 
 Untuk menggambar sebuah garis kita hanya butuh dua titik. Dari semua titik yang dilalui garis, dua yang paling mudah dihitung adalah titik potong dengan sumbu X dan titik potong dengan sumbu Y. Alasannya sederhana: pada kedua titik itu, salah satu koordinatnya selalu nol, sehingga perhitungannya ringan.
 
-#### Bagian 2 — Menyederhanakan pertidaksamaan terlebih dahulu
+#### Bagian 2 — Sederhanakan dahulu bila memungkinkan
 
-Sebelum mencari titik potong, periksa dulu bentuk pertidaksamaannya. Bila koefisien x, koefisien y, dan konstantanya punya faktor persekutuan yang sama, bagi semuanya dengan faktor itu. Proses ini disebut menyederhanakan. Hasilnya jauh lebih mudah dihitung dan gambar garisnya tetap sama.
-
-1. Cari FPB dari ketiga angka: koefisien x, koefisien y, dan konstanta
-2. Jika FPB-nya lebih dari satu, bagi ketiga suku dengan FPB itu
-3. Jika FPB-nya satu, pertidaksamaan memang sudah paling sederhana
-4. Tanda pertidaksamaan tidak berubah selama kita membagi dengan bilangan positif
+Sebelum mencari titik potong, perhatikan dulu angka angkanya. Bila koefisien x, koefisien y, dan konstantanya sama sama habis dibagi satu bilangan, bagilah ketiganya dengan bilangan itu. Bentuk yang lebih sederhana membuat perhitungan jauh lebih ringan, sedangkan gambar garisnya tetap sama persis.
 
 ```
-> Periksa bentuk 6x + 4y ≤ 24:
-> FPB dari 6, 4, dan 24 adalah 2
-6x/2 + 4y/2 ≤ 24/2
+6x + 4y ≤ 24
+> Ketiga angka (6, 4, dan 24) sama sama habis dibagi 2, maka bagi semuanya dengan 2:
 3x + 2y ≤ 12
+> Sekarang bentuknya sudah sederhana dan siap dikerjakan.
 ```
 
-#### Bagian 3 — Tabel cek: sudah sederhana atau belum
+> **Tips:** Tanda pertidaksamaan tidak berubah selama kita membagi dengan bilangan positif. Bila angka angkanya sudah tidak bisa dibagi bersama lagi, berarti bentuknya memang sudah sederhana.
 
-Banyak soal langsung memberi bentuk sederhana, tetapi sebagian tidak. Biasakan selalu mengecek seperti tabel berikut sebelum lanjut menghitung.
-
-| Pertidaksamaan | FPB | Kesimpulan |
-|---|---|---|
-| 6x + 4y ≤ 24 | 2 | Belum, bagi dengan 2 menjadi 3x + 2y ≤ 12 |
-| 5x + 3y ≤ 15 | 1 | Sudah sederhana, langsung dikerjakan |
-| 9x + 6y ≥ 18 | 3 | Belum, bagi dengan 3 menjadi 3x + 2y ≥ 6 |
-| 4x + 2y = 8 | 2 | Belum, bagi dengan 2 menjadi 2x + y = 4 |
-| 3x + 2y = 12 | 1 | Sudah sederhana |
-
-#### Bagian 4 — Idenya: jadikan satu variabel nol
+#### Bagian 3 — Idenya: jadikan satu variabel nol
 
 Perhatikan ciri sumbu koordinat. Semua titik pada sumbu X berbentuk (p, 0). Semua titik pada sumbu Y berbentuk (0, q). Karena ada bagian yang selalu nol, kita dapat memanfaatkannya: nolkan variabel yang tepat, lalu hitung variabel satunya.
 
 1. Titik potong sumbu X dicari dengan mensubstitusi y = 0
 2. Titik potong sumbu Y dicari dengan mensubstitusi x = 0
 
-#### Bagian 5 — Langkah lengkap titik potong sumbu X
+#### Bagian 4 — Langkah lengkap titik potong sumbu X
 
 Ubah dulu pertidaksamaan menjadi persamaan karena yang kita gambar adalah garis pembatasnya. Kemudian kerjakan langkah berikut tanpa melompat.
 
@@ -380,7 +357,7 @@ x = 6
 > Jadi titik potong dengan sumbu X adalah (6, 0).
 ```
 
-#### Bagian 6 — Langkah lengkap titik potong sumbu Y
+#### Bagian 5 — Langkah lengkap titik potong sumbu Y
 
 Prosesnya sama persis, hanya variabel yang dijadikan nol berbeda. Sekarang giliran x yang kita nolkan.
 
@@ -397,7 +374,7 @@ y = 4
 
 > **Tips:** Jangan tertukar. Hasil hitungan sumbu X ditulis (6, 0) dengan angka di depan, sedangkan hasil sumbu Y ditulis (0, 4) dengan angka di belakang.
 
-#### Bagian 7 — Bila ada koefisien negatif
+#### Bagian 6 — Bila ada koefisien negatif
 
 Langkahnya tidak berubah. Yang perlu dijaga hanyalah pembagian dengan bilangan negatif: membagi bilangan positif dengan bilangan negatif menghasilkan bilangan negatif.
 
@@ -411,7 +388,7 @@ y = −3
 > Titik potong dengan sumbu Y adalah (0, −3), di bawah titik asal.
 ```
 
-#### Bagian 8 — Kasus khusus: garis lewat titik asal
+#### Bagian 7 — Kasus khusus: garis lewat titik asal
 
 Bila konstantanya nol (misalnya 2x − y = 0), mensubstitusi y = 0 memberi x = 0 juga. Kedua titik potong berimpit di (0, 0) sehingga kita hanya punya satu titik. Jalan keluarnya: pilih nilai x lain yang mudah, misalnya x = 2, hitung y nya, dan pakai itu sebagai titik kedua.
 
@@ -433,24 +410,27 @@ y = 4
 
 **Soal:** Sederhanakan pertidaksamaan 6x + 4y ≤ 24, kemudian tentukan titik potong garis pembatasnya dengan kedua sumbu.
 
-**Langkah 1 — Mengecek FPB dulu**
+**Langkah 1 — Menyederhanakan bentuknya**
 
-Sebelum mencari titik potong, selalu periksa apakah bentuknya sudah paling sederhana. Cari FPB dari 6, 4, dan 24. Ketiganya habis dibagi 2, sehingga FPB-nya adalah 2. Karena lebih dari satu, pertidaksamaan ini belum paling sederhana.
-
-**Langkah 2 — Menyederhanakan**
-
-Bagi seluruh suku dengan FPB yang tadi ditemukan. Tanda pertidaksamaan tidak berubah karena kita membagi dengan bilangan positif.
+Perhatikan ketiga angkanya: 6, 4, dan 24. Ketiganya sama sama habis dibagi 2, sehingga bentuknya masih bisa disederhanakan. Bagi seluruh suku dengan 2. Tanda pertidaksamaan tidak berubah karena kita membagi dengan bilangan positif.
 
 ```
 6x + 4y ≤ 24
-> Bagi ketiga suku dengan 2:
-6x/2 + 4y/2 ≤ 24/2
+> Bagi setiap suku dengan 2:
 3x + 2y ≤ 12
+```
+
+**Langkah 2 — Mengubah menjadi persamaan**
+
+Yang kita gambar adalah garis pembatasnya, sehingga tanda ≤ untuk sementara diganti dengan tanda sama dengan.
+
+```
+3x + 2y = 12
 ```
 
 **Langkah 3 — Titik potong sumbu X**
 
-Ubah pertidaksamaan menjadi persamaan, lalu substitusikan y = 0 dan hitung nilai x.
+Substitusikan y = 0 lalu hitung nilai x.
 
 ```
 3x + 2y = 12
@@ -459,11 +439,12 @@ Ubah pertidaksamaan menjadi persamaan, lalu substitusikan y = 0 dan hitung nilai
 3x = 12
 x = 12/3
 x = 4
+> Titik potong sumbu X adalah (4, 0).
 ```
 
 **Langkah 4 — Titik potong sumbu Y**
 
-Sekarang substitusikan x = 0 dan hitung nilai y dengan cara yang sama.
+Sekarang substitusikan x = 0 lalu hitung nilai y.
 
 ```
 3x + 2y = 12
@@ -472,11 +453,8 @@ Sekarang substitusikan x = 0 dan hitung nilai y dengan cara yang sama.
 2y = 12
 y = 12/2
 y = 6
+> Titik potong sumbu Y adalah (0, 6).
 ```
-
-**Langkah 5 — Latihan singkat dua kasus lagi**
-
-Agar terbiasa mengecek: 5x + 3y ≤ 15 memiliki FPB satu sehingga sudah sederhana dan boleh langsung dikerjakan. Sedangkan 9x + 6y ≥ 18 memiliki FPB 3, sehingga harus dibagi 3 dulu menjadi 3x + 2y ≥ 6.
 
 > ✅ **Jawaban akhir:** Bentuk sederhananya 3x + 2y ≤ 12, dengan titik potong (4, 0) dan (0, 6)
 
@@ -488,98 +466,6 @@ Sub-bab ini tidak memiliki simulasi khusus.
 
 Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kali salah berturut-turut memunculkan tombol **Minta Bantuan Tutor Sebaya**; tiga kali salah berturut-turut mengubah status siswa menjadi **MACET**.
 
-#### Template 2.0.1 — Isian Singkat
-
-> Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
-
-**Soal:** Sederhanakan pertidaksamaan berikut sampai bentuk paling sederhana, lalu isikan nilai koefisien x, koefisien y, dan konstantanya.
-
-```
-6x + 9y ≥ 36
-```
-
-Kolom isian: **a (koefisien x)**, **b (koefisien y)**, **c (konstanta)**
-
-**Kunci:** a = 2, b = 3, c = 12
-
----
-
-**Petunjuk bertahap (H1 → H3) — tidak pernah membocorkan jawaban akhir:**
-
-**H1.** Menyederhanakan artinya membagi seluruh suku dengan faktor persekutuan yang sama.
-**H2.** Carilah FPB dari 6, 9, dan 36 — coba pembagi terbesar yang membagi habis ketiganya.
-**H3.** FPB ketiganya adalah 3. Bagilah ketiga suku (6x, 9y, dan 36) satu per satu dengan 3. Tanda pertidaksamaan tidak berubah.
-
-**Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
-
-```
-6x + 9y ≥ 36
-> Hitung FPB dari 6, 9, dan 36:
-> Pembagi persekutuan terbesar adalah 3.
-> Bagi ketiga suku dengan 3 (tanda tidak berubah karena dibagi bilangan positif):
-6x/3 + 9y/3 ≤ 36/3
-2x + 3y ≥ 12
-```
-**Kesimpulan:** Bentuk paling sederhananya adalah 2x + 3y ≥ 12.
-
-#### Template 2.0.2 — Pilihan Ganda
-
-> Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
-
-**Soal:** Manakah pertidaksamaan berikut yang SUDAH dalam bentuk paling sederhana (FPB koefisien dan konstantanya = 1)?
-
-Pilihan jawaban:
-
-A. 6x + 10y ≤ 30
-B. 9x + 12y ≤ 36
-C. x + y ≤ 6 ✅ (kunci)
-D. 10x + 12y ≤ 60
-
----
-
-**Petunjuk bertahap (H1 → H3) — tidak pernah membocorkan jawaban akhir:**
-
-**H1.** Menyederhanakan artinya seluruh suku tidak bisa lagi dibagi bilangan yang sama. Artinya FPB dari ketiga angkanya adalah 1.
-**H2.** Periksa setiap opsi satu per satu: hitung FPB dari koefisien x, koefisien y, dan konstantanya.
-**H3.** Cari pembagi persekutuan dari tiap angka di setiap pilihan. Opsi yang FPB-nya tepat 1 adalah jawabannya; sisanya masih bisa disederhanakan lagi.
-
-**Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
-
-**Kesimpulan:** Hanya x + y ≤ 6 yang FPB-nya tepat 1, sehingga bentuk itulah yang sudah paling sederhana.
-
-#### Template 2.0.3 — Isian Singkat
-
-> Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
-
-**Soal:** Sebelum menyederhanakan pertidaksamaan ini, tentukan dahulu FPB dari koefisien x, koefisien y, dan konstantanya.
-
-```
-4x + 4y ≤ 16
-```
-
-Kolom isian: **FPB ketiga angka**
-
-**Kunci:** g = 4
-
----
-
-**Petunjuk bertahap (H1 → H3) — tidak pernah membocorkan jawaban akhir:**
-
-**H1.** FPB adalah faktor persekutuan terbesar: angka terbesar yang membagi habis semua angka sekaligus.
-**H2.** Daftar pembagi dari 4, dari 4, dan dari 16, lalu cari yang muncul di ketiganya.
-**H3.** Cari pembagi paling besar yang sama di ketiga daftar pembagi. Mulai dari angka yang paling besar agar cepat ketemu.
-
-**Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
-
-```
-4x + 4y ≤ 16
-> Daftar pembagi ketiga angka, lalu sama-sama dicari:
-> Pembagi persekutuan terbesarnya adalah 4.
-> Maka bentuk paling sederhana (dibagi 4):
-x + y ≤ 4
-```
-**Kesimpulan:** FPB dari 4, 4, dan 16 adalah 4, sehingga bentuk sederhannya x + y ≤ 4.
-
 #### Template 2.1 — Isian Singkat
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
@@ -587,7 +473,7 @@ x + y ≤ 4
 **Soal:** Tentukan koordinat titik potong garis berikut dengan sumbu X.
 
 ```
-7x + 3y = 21
+4x + 3y = 12
 ```
 
 Kolom isian: **nilai x pada titik (x, 0)**
@@ -603,20 +489,20 @@ Kolom isian: **nilai x pada titik (x, 0)**
 **H3.**
 
 ```
-7x + 3y = 21
+4x + 3y = 12
 > Titik potong sumbu X dicari saat y = 0, maka:
-7x + 3(0) = 21
-7x = 21
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 7 untuk memperoleh nilai x.
+4x + 3(0) = 12
+4x = 12
+> Tinggal satu langkah lagi: bagi kedua ruas dengan 4 untuk memperoleh nilai x.
 ```
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-7x + 3y = 21
+4x + 3y = 12
 > Titik potong sumbu X dicari saat y = 0, maka:
-7x + 3(0) = 21
-7x = 21
+4x + 3(0) = 12
+4x = 12
 x = 3
 > Jadi titik potong sumbu X adalah (3, 0).
 ```
@@ -629,12 +515,12 @@ x = 3
 **Soal:** Tentukan koordinat titik potong garis berikut dengan sumbu Y.
 
 ```
-x + y = 2
+x − y = 6
 ```
 
 Kolom isian: **nilai y pada titik (0, y)**
 
-**Kunci:** y = 2
+**Kunci:** y = −6
 
 ---
 
@@ -645,23 +531,24 @@ Kolom isian: **nilai y pada titik (0, y)**
 **H3.**
 
 ```
-x + y = 2
+x − y = 6
 > Titik potong sumbu Y dicari saat x = 0, maka:
-0 + y = 2
-> Koefisien y-nya 1, jadi setelah menyederhanakan ruas kanan, nilai y langsung terlihat tanpa perlu membagi apa pun.
+0 − y = 6
+−y = 6
+> Tinggal bagi kedua ruas dengan −1. Hati-hati: membagi dengan bilangan negatif mengubah tanda hasilnya.
 ```
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-x + y = 2
+x − y = 6
 > Titik potong sumbu Y dicari saat x = 0, maka:
-0 + y = 2
-y = 2
-y = 2
-> Jadi titik potong sumbu Y adalah (0, 2).
+0 − y = 6
+−y = 6
+y = −6
+> Jadi titik potong sumbu Y adalah (0, −6).
 ```
-**Kesimpulan:** Dengan mensubstitusikan x = 0 diperoleh y = 2, sehingga titik potong sumbu Y adalah (0, 2).
+**Kesimpulan:** Dengan mensubstitusikan x = 0 diperoleh y = −6, sehingga titik potong sumbu Y adalah (0, −6).
 
 #### Template 2.3 — Isian Singkat
 
@@ -670,12 +557,12 @@ y = 2
 **Soal:** Tentukan KEDUA titik potong garis berikut dengan sumbu koordinat.
 
 ```
-x + 3y = 6
+3x − y = 6
 ```
 
 Kolom isian: **x, untuk titik (x, 0)**, **y, untuk titik (0, y)**
 
-**Kunci:** x = 6, y = 2
+**Kunci:** x = 2, y = −6
 
 ---
 
@@ -685,38 +572,39 @@ Kolom isian: **x, untuk titik (x, 0)**, **y, untuk titik (0, y)**
 **H2.**
 
 ```
-x + 3y = 6
+3x − y = 6
 > Titik potong sumbu X dicari saat y = 0, maka:
-x + 3(0) = 6
-> Koefisien x-nya 1, jadi setelah menyederhanakan ruas kanan, nilai x langsung terlihat tanpa perlu membagi apa pun.
+3x − 0 = 6
+3x = 6
+> Tinggal satu langkah lagi: bagi kedua ruas dengan 3 untuk memperoleh nilai x.
 ```
 **H3.**
 
 ```
-x + 3y = 6
+3x − y = 6
 > Titik potong sumbu Y dicari saat x = 0, maka:
-0 + 3y = 6
-3y = 6
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 3 untuk memperoleh nilai y.
+3(0) − y = 6
+−y = 6
+> Tinggal bagi kedua ruas dengan −1. Hati-hati: membagi dengan bilangan negatif mengubah tanda hasilnya.
 ```
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-x + 3y = 6
+3x − y = 6
 > Titik potong sumbu X dicari saat y = 0, maka:
-x + 3(0) = 6
-x = 6
-x = 6
-> Jadi titik potong sumbu X adalah (6, 0).
-x + 3y = 6
+3x − 0 = 6
+3x = 6
+x = 2
+> Jadi titik potong sumbu X adalah (2, 0).
+3x − y = 6
 > Titik potong sumbu Y dicari saat x = 0, maka:
-0 + 3y = 6
-3y = 6
-y = 2
-> Jadi titik potong sumbu Y adalah (0, 2).
+3(0) − y = 6
+−y = 6
+y = −6
+> Jadi titik potong sumbu Y adalah (0, −6).
 ```
-**Kesimpulan:** Titik potong sumbu X adalah (6, 0) dan titik potong sumbu Y adalah (0, 2).
+**Kesimpulan:** Titik potong sumbu X adalah (2, 0) dan titik potong sumbu Y adalah (0, −6).
 
 ---
 
@@ -769,15 +657,12 @@ Ada dua bentuk istimewa. Bila tidak ada suku y (misalnya x = 4), garisnya VERTIK
 
 Garis yang salah seringnya bukan karena hitungan keliru, melainkan karena titiknya salah taruh. Ingat aturan membaca koordinat: angka pertama bergerak mendatar, angka kedua bergerak tegak.
 
-1. Titik (6, 0) bergerak 6 satuan ke kanan dari titik asal, tetap pada sumbu X
-2. Titik (0, 4) bergerak 4 satuan ke atas dari titik asal, tetap pada sumbu Y
-3. Titik (0, −3) bergerak 3 satuan ke bawah dari titik asal, di bagian negatif sumbu Y
+1. Titik A(6, 0) bergerak 6 satuan ke kanan dari titik asal, tetap pada sumbu X
+2. Titik B(0, 4) bergerak 4 satuan ke atas dari titik asal, tetap pada sumbu Y
+3. Titik C(0, −3) bergerak 3 satuan ke bawah dari titik asal, di bagian negatif sumbu Y
+4. Titik D(3, 2) bergerak 3 satuan ke kanan lalu 2 satuan ke atas
 
-#### Bagian 5 — Cek arah miringnya untuk mengontrol diri
-
-Pemeriksaan cepat sebelum menggambar: bila koefisien x dan y sama sama positif (misalnya 2x + 3y = 12), garis akan miring TURUN dari kiri atas ke kanan bawah. Bila salah satu koefisien negatif (misalnya 2x − 3y = 6), garis miring NAIK dari kiri bawah ke kanan atas. Cocokkan dugaan arah ini dengan gambarmu.
-
-#### Bagian 6 — Membaca kembali persamaan dari grafik
+#### Bagian 5 — Membaca kembali persamaan dari grafik
 
 Diberi gambar garis, kita juga bisa menemukan persamaannya. Baca kedua titik potongnya, lalu pakai rumus cepat: garis yang memotong sumbu X di (p, 0) dan sumbu Y di (0, q) punya persamaan qx + py = pq.
 
@@ -847,7 +732,7 @@ Kembali ke tanda aslinya, yaitu ≥. Tanda ini memuat unsur sama dengan, artinya
 
 **Langkah 5 — Langkah 5: gambarkan**
 
-Taruh titik (4, 0) pada sumbu X dan (0, 3) pada sumbu Y, hubungkan dengan garis penuh, lalu perpanjang sedikit keluar kedua ujungnya. Karena kedua koefisien positif, garisnya harus miring turun ke kanan.
+Taruh titik A(4, 0) pada sumbu X dan titik B(0, 3) pada sumbu Y, hubungkan keduanya dengan garis penuh, lalu perpanjang sedikit keluar kedua ujungnya. Hasil gambarnya tampak seperti berikut.
 
 > ✅ **Jawaban akhir:** Garis penuh yang melalui titik (4, 0) dan (0, 3)
 
@@ -866,15 +751,15 @@ Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kal
 **Soal:** Jenis garis pembatas yang tepat untuk pertidaksamaan berikut adalah…
 
 ```
-2x + y < 4
+2x − 5y > 10
 ```
 
 Pilihan jawaban:
 
-A. Garis penuh
+A. Garis bergelombang
 B. Tidak perlu menggambar garis
-C. Garis putus-putus ✅ (kunci)
-D. Garis bergelombang
+C. Garis penuh
+D. Garis putus-putus ✅ (kunci)
 
 ---
 
@@ -887,12 +772,12 @@ D. Garis bergelombang
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-2x + y < 4
-> Tanda relasinya adalah <.
+2x − 5y > 10
+> Tanda relasinya adalah >.
 > Tanda ini TIDAK memuat "sama dengan", artinya titik-titik tepat pada garis tidak ikut menjadi penyelesaian.
 > Kesimpulan: GARIS PUTUS-PUTUS.
 ```
-**Kesimpulan:** Tanda < tidak memuat unsur "sama dengan", sehingga garis pembatas digambar putus-putus.
+**Kesimpulan:** Tanda > tidak memuat unsur "sama dengan", sehingga garis pembatas digambar putus-putus.
 
 #### Template 3.2 — Pilih Grafik yang Benar
 
@@ -901,18 +786,18 @@ D. Garis bergelombang
 **Soal:** Manakah grafik garis pembatas yang TEPAT untuk pertidaksamaan berikut? Perhatikan letak titik potong dan jenis garisnya.
 
 ```
-5x + 2y < 10
+x + y ≥ 6
 ```
 
 Empat grafik (A–D) ditampilkan sebagai pilihan. Deskripsi tiap grafik:
 
-**A** — Bidang koordinat x ∈ [−1, 6], y ∈ [−1, 6]. Garis yang digambar: 2x + 5y ≤ 10 (garis penuh). Titik penanda: (5, 0), (0, 2).
+**A** — Bidang koordinat x ∈ [−1, 9], y ∈ [−1, 7]. Garis yang digambar: 6x + 8y ≤ 48 (garis penuh). Titik penanda: (8, 0), (0, 6).
 
-**B** — Bidang koordinat x ∈ [−1, 6], y ∈ [−1, 6]. Garis yang digambar: 2x + 5y ≤ 10 (garis putus-putus). Titik penanda: (5, 0), (0, 2).
+**B** — Bidang koordinat x ∈ [−1, 9], y ∈ [−1, 7]. Garis yang digambar: x + y ≤ 6 (garis putus-putus). Titik penanda: (6, 0), (0, 6).
 
-**C** — Bidang koordinat x ∈ [−1, 6], y ∈ [−1, 6]. Garis yang digambar: 5x + 2y ≤ 10 (garis penuh). Titik penanda: (2, 0), (0, 5).
+**C** — Bidang koordinat x ∈ [−1, 9], y ∈ [−1, 7]. Garis yang digambar: 6x + 8y ≤ 48 (garis putus-putus). Titik penanda: (8, 0), (0, 6).
 
-**D** ✅ (kunci) — Bidang koordinat x ∈ [−1, 6], y ∈ [−1, 6]. Garis yang digambar: 5x + 2y ≤ 10 (garis putus-putus). Titik penanda: (2, 0), (0, 5).
+**D** ✅ (kunci) — Bidang koordinat x ∈ [−1, 9], y ∈ [−1, 7]. Garis yang digambar: x + y ≤ 6 (garis penuh). Titik penanda: (6, 0), (0, 6).
 
 ---
 
@@ -922,44 +807,42 @@ Empat grafik (A–D) ditampilkan sebagai pilihan. Deskripsi tiap grafik:
 **H2.**
 
 ```
-5x + 2y = 10
+x + y = 6
 > Titik potong sumbu X dicari saat y = 0, maka:
-5x + 2(0) = 10
-5x = 10
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 5 untuk memperoleh nilai x.
+x + 0 = 6
+> Koefisien x-nya 1, jadi setelah menyederhanakan ruas kanan, nilai x langsung terlihat tanpa perlu membagi apa pun.
 ```
 **H3.**
 
 ```
-5x + 2y = 10
+x + y = 6
 > Titik potong sumbu Y dicari saat x = 0, maka:
-5(0) + 2y = 10
-2y = 10
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 2 untuk memperoleh nilai y.
+0 + y = 6
+> Koefisien y-nya 1, jadi setelah menyederhanakan ruas kanan, nilai y langsung terlihat tanpa perlu membagi apa pun.
 > Setelah kedua titik potong diperoleh, tentukan jenis garisnya dari tanda relasi pada soal.
 ```
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-5x + 2y < 10
+x + y ≥ 6
 > Ubah menjadi persamaan garis pembatas:
-5x + 2y = 10
-5x + 2y = 10
+x + y = 6
+x + y = 6
 > Titik potong sumbu X dicari saat y = 0, maka:
-5x + 2(0) = 10
-5x = 10
-x = 2
-> Jadi titik potong sumbu X adalah (2, 0).
-5x + 2y = 10
+x + 0 = 6
+x = 6
+x = 6
+> Jadi titik potong sumbu X adalah (6, 0).
+x + y = 6
 > Titik potong sumbu Y dicari saat x = 0, maka:
-5(0) + 2y = 10
-2y = 10
-y = 5
-> Jadi titik potong sumbu Y adalah (0, 5).
-> Tanda < tidak memuat "sama dengan" → garis PUTUS-PUTUS.
+0 + y = 6
+y = 6
+y = 6
+> Jadi titik potong sumbu Y adalah (0, 6).
+> Tanda ≥ memuat "sama dengan" → garis PENUH.
 ```
-**Kesimpulan:** Garis melalui (2, 0) dan (0, 5), digambar putus-putus karena tandanya <.
+**Kesimpulan:** Garis melalui (6, 0) dan (0, 6), digambar penuh karena tandanya ≥.
 
 #### Template 3.3 — Ketuk Titik pada Grafik
 
@@ -968,12 +851,12 @@ y = 5
 **Soal:** Ketuk TEPAT pada dua titik potong garis berikut dengan sumbu koordinat (urutan bebas).
 
 ```
-3x + 2y ≥ 12
+4x + 5y ≤ 20
 ```
 
-Siswa mengetuk 2 titik pada grafik (toleransi ±0,55 satuan). Bidang koordinat x ∈ [−1, 7], y ∈ [−1, 7].
+Siswa mengetuk 2 titik pada grafik (toleransi ±0,55 satuan). Bidang koordinat x ∈ [−1, 6], y ∈ [−1, 6].
 
-**Kunci (titik yang harus diketuk):** (4, 0), (0, 6)
+**Kunci (titik yang harus diketuk):** (5, 0), (0, 4)
 
 ---
 
@@ -983,40 +866,40 @@ Siswa mengetuk 2 titik pada grafik (toleransi ±0,55 satuan). Bidang koordinat x
 **H2.**
 
 ```
-3x + 2y = 12
+4x + 5y = 20
 > Titik potong sumbu X dicari saat y = 0, maka:
-3x + 2(0) = 12
-3x = 12
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 3 untuk memperoleh nilai x.
+4x + 5(0) = 20
+4x = 20
+> Tinggal satu langkah lagi: bagi kedua ruas dengan 4 untuk memperoleh nilai x.
 ```
 **H3.**
 
 ```
-3x + 2y = 12
+4x + 5y = 20
 > Titik potong sumbu Y dicari saat x = 0, maka:
-3(0) + 2y = 12
-2y = 12
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 2 untuk memperoleh nilai y.
+4(0) + 5y = 20
+5y = 20
+> Tinggal satu langkah lagi: bagi kedua ruas dengan 5 untuk memperoleh nilai y.
 ```
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-3x + 2y = 12
+4x + 5y = 20
 > Titik potong sumbu X dicari saat y = 0, maka:
-3x + 2(0) = 12
-3x = 12
-x = 4
-> Jadi titik potong sumbu X adalah (4, 0).
-3x + 2y = 12
+4x + 5(0) = 20
+4x = 20
+x = 5
+> Jadi titik potong sumbu X adalah (5, 0).
+4x + 5y = 20
 > Titik potong sumbu Y dicari saat x = 0, maka:
-3(0) + 2y = 12
-2y = 12
-y = 6
-> Jadi titik potong sumbu Y adalah (0, 6).
+4(0) + 5y = 20
+5y = 20
+y = 4
+> Jadi titik potong sumbu Y adalah (0, 4).
 > Ketuk kedua titik tersebut, lalu hubungkan menjadi garis pembatas.
 ```
-**Kesimpulan:** Kedua titik potongnya adalah (4, 0) dan (0, 6).
+**Kesimpulan:** Kedua titik potongnya adalah (5, 0) dan (0, 4).
 
 ---
 
@@ -1032,7 +915,7 @@ Saat garis pembatas sudah tergambar, bidang koordinat otomatis terbelah menjadi 
 
 #### Bagian 2 — Konvensi arsiran yang dipakai
 
-Sesuai standar pada buku dan video pembelajaran, yang kita ARSIR adalah daerah penyelesaian itu sendiri. Jadi nanti saat membaca gambar, daerah yang berwarnalah jawabannya. Daerah putih yang tidak diarsir berarti bukan penyelesaian.
+Sesuai standar pada buku dan video pembelajaran, yang kita ARSIR adalah daerah penyelesaiannya. Jadi saat membaca gambar, daerah yang diberi warna itulah jawabannya, sedangkan daerah putih di luarnya tidak termasuk penyelesaian.
 
 > **Tips:** Ingat kalimatnya: arsir daerah penyelesaian. Kebiasaan ini akan sangat membantu saat banyak kendala bertumpuk di sub-bab berikutnya.
 
@@ -1052,8 +935,8 @@ Perhatikan cara menuliskan substitusi secara utuh, tanpa melompat langsung ke ke
 > Ambil titik uji (0, 0), lalu substitusikan:
 2(0) + 3(0) ≤ 12
 0 ≤ 12   → BENAR
-> Titik (0, 0) memenuhi, maka daerah berisi (0, 0)
-> yang kita arsir, yaitu sisi bawah kiri garis.
+> Titik (0, 0) memenuhi pertidaksamaan.
+> Maka daerah yang memuat titik (0, 0) itulah yang kita arsir.
 ```
 
 #### Bagian 5 — Contoh lengkap dengan tanda ≥
@@ -1065,17 +948,17 @@ Sekarang coba tanda lain. Karena hasil ujinya salah, daerah penyelesaian justru 
 > Ambil titik uji (0, 0), lalu substitusikan:
 4(0) + 5(0) ≥ 20
 0 ≥ 20   → SALAH
-> Titik (0, 0) tidak memenuhi, maka daerah penyelesaian
-> ada di sisi lain, yaitu di atas kanan garis. Itulah yang kita arsir.
+> Titik (0, 0) tidak memenuhi pertidaksamaan.
+> Maka yang kita arsir adalah daerah di sisi seberangnya.
 ```
 
-#### Bagian 6 — Peran x ≥ 0 dan y ≥ 0 di Kuadran I
+#### Bagian 6 — Peran kendala x ≥ 0 dan y ≥ 0
 
-Dalam soal kontekstual, x dan y biasanya menghitung banyaknya barang sehingga tidak mungkin negatif. Dua kendala ekstra ini menutup daerah hanya pada Kuadran I. Karena daerah penyelesaian yang diarsir, maka arsiran x ≥ 0 berada di kanan sumbu Y dan arsiran y ≥ 0 berada di atas sumbu X.
+Dalam soal kontekstual, x dan y biasanya menghitung banyaknya barang sehingga tidak mungkin negatif. Dua kendala tambahan ini membatasi daerah penyelesaian hanya pada bagian kanan atas bidang koordinat, yaitu daerah dengan nilai x dan y yang sama sama tidak negatif.
 
 1. Kendala x ≥ 0: daerah yang diarsir berada di kanan sumbu Y
 2. Kendala y ≥ 0: daerah yang diarsir berada di atas sumbu X
-3. Akibat keduanya: daerah penyelesaian akhir selalu di Kuadran I
+3. Akibat keduanya: daerah penyelesaian berada di bagian kanan atas bidang
 
 #### Bagian 7 — Alur lengkap satu pertidaksamaan
 
@@ -1126,7 +1009,7 @@ Ambil titik (0, 0) karena garis tidak melewatinya dan perhitungannya paling muda
 
 **Langkah 3 — Langkah 3: tentukan daerah yang diarsir**
 
-Hasil uji benar, sehingga titik (0, 0) berada di dalam daerah penyelesaian. Karena konvensi kita mengarsir daerah penyelesaian, maka daerah sisi garis yang memuat (0, 0), yaitu sisi bawah kiri garis, yang diarsir berwarna.
+Hasil uji bernilai benar, sehingga titik (0, 0) berada di dalam daerah penyelesaian. Karena yang kita arsir adalah daerah penyelesaian, maka sisi garis yang memuat titik (0, 0) itulah yang diberi warna. Hasil akhirnya tampak seperti gambar berikut.
 
 > ✅ **Jawaban akhir:** Arsir daerah sisi garis yang memuat (0, 0), yaitu bawah kiri garis penuh 2x + 3y = 12
 
@@ -1142,16 +1025,16 @@ Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kal
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Apakah titik (7, 7) memenuhi pertidaksamaan berikut?
+**Soal:** Apakah titik (0, 0) memenuhi pertidaksamaan berikut?
 
 ```
-2x + 3y ≥ 12
+4x + 3y ≤ 12
 ```
 
 Pilihan jawaban:
 
-A. Ya, titik tersebut memenuhi ✅ (kunci)
-B. Tidak memenuhi
+A. Tidak memenuhi
+B. Ya, titik tersebut memenuhi ✅ (kunci)
 
 ---
 
@@ -1161,9 +1044,9 @@ B. Tidak memenuhi
 **H2.**
 
 ```
-2x + 3y ≥ 12
-> Substitusikan x = 7 dan y = 7:
-2(7) + 3(7) ≥ 12
+4x + 3y ≤ 12
+> Substitusikan x = 0 dan y = 0:
+4(0) + 3(0) ≤ 12
 > Hitung nilai ruas kiri, lalu bandingkan dengan ruas kanan. Apakah pernyataannya bernilai benar?
 ```
 **H3.** Hitung hasil ruas kiri dengan teliti, lalu bandingkan dengan ruas kanan sesuai tandanya. Jika pernyataan yang terbentuk bernilai benar, berarti titik itu memenuhi pertidaksamaan.
@@ -1171,13 +1054,13 @@ B. Tidak memenuhi
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-2x + 3y ≥ 12
-> Substitusikan titik (7, 7):
-2(7) + 3(7) ≥ 12
-14 + 21 ≥ 12
-35 ≥ 12   → BENAR
+4x + 3y ≤ 12
+> Substitusikan titik (0, 0):
+4(0) + 3(0) ≤ 12
+0 + 0 ≤ 12
+0 ≤ 12   → BENAR
 ```
-**Kesimpulan:** Hasil substitusi memberi 35 ≥ 12 yang bernilai BENAR, sehingga titik (7, 7) memenuhi pertidaksamaan.
+**Kesimpulan:** Hasil substitusi memberi 0 ≤ 12 yang bernilai BENAR, sehingga titik (0, 0) memenuhi pertidaksamaan.
 
 #### Template 4.2 — Pilihan Ganda
 
@@ -1186,15 +1069,15 @@ B. Tidak memenuhi
 **Soal:** Lakukan uji titik (0, 0) pada pertidaksamaan berikut. Manakah kesimpulan yang BENAR?
 
 ```
-6x + 5y ≤ 30
+5x + 4y ≥ 20
 ```
 
 Pilihan jawaban:
 
-A. Hasil ujinya BENAR, sehingga daerah penyelesaian adalah sisi garis yang MEMUAT titik (0, 0) ✅ (kunci)
-B. Hasil ujinya SALAH, sehingga daerah penyelesaian adalah sisi garis yang TIDAK memuat titik (0, 0)
-C. Seluruh bidang koordinat merupakan daerah penyelesaian
-D. Daerah penyelesaiannya hanya titik-titik yang tepat berada pada garis
+A. Daerah penyelesaiannya hanya titik-titik yang tepat berada pada garis
+B. Seluruh bidang koordinat merupakan daerah penyelesaian
+C. Hasil ujinya BENAR, sehingga daerah penyelesaian adalah sisi garis yang MEMUAT titik (0, 0)
+D. Hasil ujinya SALAH, sehingga daerah penyelesaian adalah sisi garis yang TIDAK memuat titik (0, 0) ✅ (kunci)
 
 ---
 
@@ -1204,9 +1087,9 @@ D. Daerah penyelesaiannya hanya titik-titik yang tepat berada pada garis
 **H2.**
 
 ```
-6x + 5y ≤ 30
+5x + 4y ≥ 20
 > Substitusikan x = 0 dan y = 0:
-6(0) + 5(0) ≤ 30
+5(0) + 4(0) ≥ 20
 > Hitung nilai ruas kiri, lalu bandingkan dengan ruas kanan. Apakah pernyataannya bernilai benar?
 ```
 **H3.** Aturannya: bila hasil uji BENAR, titik (0, 0) termasuk penyelesaian sehingga daerah penyelesaian berada di sisi yang memuatnya. Bila hasil uji SALAH, daerah penyelesaian berada di sisi seberangnya. Sekarang hitung hasil ujimu dan tentukan pilihannya.
@@ -1214,17 +1097,17 @@ D. Daerah penyelesaiannya hanya titik-titik yang tepat berada pada garis
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-6x + 5y ≤ 30
+5x + 4y ≥ 20
 > Substitusikan titik (0, 0):
-6(0) + 5(0) ≤ 30
-0 + 0 ≤ 30
-0 ≤ 30   → BENAR
+5(0) + 4(0) ≥ 20
+0 + 0 ≥ 20
+0 ≥ 20   → SALAH
 > Aturan penarikan kesimpulan:
 > Jika hasil uji BENAR → titik uji termasuk penyelesaian → daerah penyelesaian ada di sisi yang memuat titik itu.
-> Jika hasil uji SALAH → titik uji bukan penyelesaian → daerah penyelesaian ada di sisi seberangnya.
-> Pada soal ini hasilnya BENAR, jadi daerah penyelesaian memuat titik (0, 0).
+> Jika hasil uji SALAH → titik uji tidak termasuk penyelesaian → daerah penyelesaian ada di sisi seberangnya.
+> Pada soal ini hasilnya SALAH, jadi daerah penyelesaian tidak memuat titik (0, 0).
 ```
-**Kesimpulan:** Uji titik (0, 0) menghasilkan pernyataan BENAR, sehingga daerah penyelesaiannya adalah sisi garis yang MEMUAT titik (0, 0).
+**Kesimpulan:** Uji titik (0, 0) menghasilkan pernyataan SALAH, sehingga daerah penyelesaiannya adalah sisi garis yang TIDAK memuat titik (0, 0).
 
 #### Template 4.3 — Pilih Grafik yang Benar
 
@@ -1233,18 +1116,18 @@ D. Daerah penyelesaiannya hanya titik-titik yang tepat berada pada garis
 **Soal:** Manakah gambar yang TEPAT untuk pertidaksamaan berikut? (daerah berwarna = daerah penyelesaian)
 
 ```
-5x + 4y ≤ 20
+4x + 3y ≥ 12
 ```
 
 Empat grafik (A–D) ditampilkan sebagai pilihan. Deskripsi tiap grafik:
 
-**A** — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 6]. Garis yang digambar: 5x + 4y ≥ 20 (garis penuh).
+**A** — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 5]. Garis yang digambar: 4x + 3y ≤ 12 (garis penuh). Daerah penyelesaian ditandai dengan arsiran berwarna.
 
-**B** — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 6]. Garis yang digambar: 4x + 5y ≤ 20 (garis penuh).
+**B** — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 5]. Garis yang digambar: 4x + 3y ≥ 12 (garis putus-putus). Daerah penyelesaian ditandai dengan arsiran berwarna.
 
-**C** — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 6]. Garis yang digambar: 5x + 4y ≤ 20 (garis putus-putus).
+**C** — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 5]. Garis yang digambar: 3x + 4y ≥ 12 (garis penuh). Daerah penyelesaian ditandai dengan arsiran berwarna.
 
-**D** ✅ (kunci) — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 6]. Garis yang digambar: 5x + 4y ≤ 20 (garis penuh).
+**D** ✅ (kunci) — Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 5]. Garis yang digambar: 4x + 3y ≥ 12 (garis penuh). Daerah penyelesaian ditandai dengan arsiran berwarna.
 
 ---
 
@@ -1254,23 +1137,23 @@ Empat grafik (A–D) ditampilkan sebagai pilihan. Deskripsi tiap grafik:
 **H2.**
 
 ```
-5x + 4y = 20
+4x + 3y = 12
 > Titik potong sumbu X dicari saat y = 0, maka:
-5x + 4(0) = 20
-5x = 20
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 5 untuk memperoleh nilai x.
-5x + 4y = 20
+4x + 3(0) = 12
+4x = 12
+> Tinggal satu langkah lagi: bagi kedua ruas dengan 4 untuk memperoleh nilai x.
+4x + 3y = 12
 > Titik potong sumbu Y dicari saat x = 0, maka:
-5(0) + 4y = 20
-4y = 20
-> Tinggal satu langkah lagi: bagi kedua ruas dengan 4 untuk memperoleh nilai y.
+4(0) + 3y = 12
+3y = 12
+> Tinggal satu langkah lagi: bagi kedua ruas dengan 3 untuk memperoleh nilai y.
 ```
 **H3.**
 
 ```
-5x + 4y ≤ 20
+4x + 3y ≥ 12
 > Substitusikan x = 0 dan y = 0:
-5(0) + 4(0) ≤ 20
+4(0) + 3(0) ≥ 12
 > Hitung nilai ruas kiri, lalu bandingkan dengan ruas kanan. Apakah pernyataannya bernilai benar?
 > Ingat konvensinya: yang DIARSIR adalah daerah penyelesaian. Sisi mana yang diarsir ditentukan oleh hasil uji titik (0, 0).
 ```
@@ -1278,27 +1161,27 @@ Empat grafik (A–D) ditampilkan sebagai pilihan. Deskripsi tiap grafik:
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-5x + 4y = 20
+4x + 3y = 12
 > Titik potong sumbu X dicari saat y = 0, maka:
-5x + 4(0) = 20
-5x = 20
-x = 4
-> Jadi titik potong sumbu X adalah (4, 0).
-5x + 4y = 20
+4x + 3(0) = 12
+4x = 12
+x = 3
+> Jadi titik potong sumbu X adalah (3, 0).
+4x + 3y = 12
 > Titik potong sumbu Y dicari saat x = 0, maka:
-5(0) + 4y = 20
-4y = 20
-y = 5
-> Jadi titik potong sumbu Y adalah (0, 5).
-5x + 4y ≤ 20
+4(0) + 3y = 12
+3y = 12
+y = 4
+> Jadi titik potong sumbu Y adalah (0, 4).
+4x + 3y ≥ 12
 > Substitusikan titik (0, 0):
-5(0) + 4(0) ≤ 20
-0 + 0 ≤ 20
-0 ≤ 20   → BENAR
-> Karena hasil uji BENAR, daerah penyelesaian memuat titik (0, 0).
+4(0) + 3(0) ≥ 12
+0 + 0 ≥ 12
+0 ≥ 12   → SALAH
+> Karena hasil uji SALAH, daerah penyelesaian tidak memuat titik (0, 0).
 > Arsiran diletakkan tepat pada daerah penyelesaian yang dipilih oleh uji titik.
 ```
-**Kesimpulan:** Garis penuh melalui (4, 0) dan (0, 5), dengan daerah penyelesaian (yang diarsir) di sisi yang memuat titik (0, 0).
+**Kesimpulan:** Garis penuh melalui (3, 0) dan (0, 4), dengan daerah penyelesaian (yang diarsir) di sisi yang tidak memuat titik (0, 0).
 
 ---
 
@@ -1327,35 +1210,7 @@ Agar tidak tertukar antara satu pertidaksamaan dan sebuah sistem, bandingkan cir
 
 Dalam soal cerita, x dan y biasanya menghitung banyaknya benda: kursi, roti, kemasan, dan sebagainya. Banyak benda tidak mungkin negatif, sehingga otomatis berlaku x ≥ 0 dan y ≥ 0. Dua kendala ini sering tidak tertulis di soal, tetapi harus kamu tambahkan sendiri saat memodelkan.
 
-#### Bagian 4 — Cara memeriksa titik pada sistem
-
-Memeriksa titik pada sistem sama mudahnya, hanya lebih rajin. Substitusikan titik ke SETIAP kendala satu per satu. Semua harus benar. Satu saja gagal, titik itu langsung gugur dan tidak perlu diperiksa lagi.
-
-```
-> Sistem: x + y ≤ 10,  2x + y ≤ 14,  x ≥ 0,  y ≥ 0
-> Uji titik (2, 3):
-2 + 3 ≤ 10
-5 ≤ 10   → BENAR
-2(2) + 3 ≤ 14
-7 ≤ 14   → BENAR
-x = 2 ≥ 0 BENAR, y = 3 ≥ 0 BENAR
-> Karena semuanya benar, (2, 3) adalah penyelesaian sistem.
-```
-
-#### Bagian 5 — Contoh titik yang gugur
-
-Berikut titik yang tampak dekat tetapi gagal di satu kendala. Satu kegagalan saja cukup membuatnya tidak menjadi penyelesaian.
-
-```
-> Uji titik (6, 3) pada sistem yang sama:
-6 + 3 ≤ 10
-9 ≤ 10   → BENAR
-2(6) + 3 ≤ 14
-15 ≤ 14   → SALAH
-> Ada kendala yang gagal, maka (6, 3) BUKAN penyelesaian sistem.
-```
-
-#### Bagian 6 — Penyelesaian sistem adalah irisan
+#### Bagian 4 — Penyelesaian sistem adalah irisan
 
 Setiap kendala menghasilkan daerah penyelesaian tersendiri. Karena seluruh kendala harus dipenuhi bersamaan, jawaban sistem adalah bagian yang menjadi anggota SEMUA daerah itu sekaligus, dalam bahasa himpunan disebut IRISAN. Daerah hasil irisan inilah yang disebut Daerah Himpunan Penyelesaian atau DHP.
 
@@ -1368,48 +1223,50 @@ Setiap kendala menghasilkan daerah penyelesaian tersendiri. Karena seluruh kenda
 
 ### Contoh Soal & Pembahasan Bertahap
 
-**Soal:** Periksalah apakah titik (1, 4) merupakan penyelesaian sistem x + y ≤ 6, 3x + y ≥ 6, x ≥ 0, y ≥ 0.
+**Soal:** Perhatikan kumpulan pertidaksamaan berikut.
+x + y ≤ 10
+2x + y ≤ 14
+x ≥ 0
+y ≥ 0
+A. Apakah kumpulan ini termasuk SPtLDV?
+B. Ada berapa kendala di dalamnya dan apa makna dua kendala terakhir?
 
-**Langkah 1 — Langkah 1: rencana pemeriksaan**
+**Langkah 1 — Memeriksa syarat SPtLDV**
 
-Ada empat kendala yang harus diuji satu per satu. Begitu menemukan satu yang gagal, pemeriksaan bisa langsung berhenti.
-
-**Langkah 2 — Langkah 2: kendala pertama**
-
-Substitusikan x = 1 dan y = 4 ke kendala x + y ≤ 6.
-
-```
-x + y ≤ 6
-> Substitusikan (1, 4):
-1 + 4 ≤ 6
-5 ≤ 6   → BENAR
-```
-
-**Langkah 3 — Langkah 3: kendala kedua**
-
-Lanjutkan ke kendala 3x + y ≥ 6. Kali ini tandanya ≥, jadi yang diharapkan adalah hasil yang lebih besar atau sama dengan 6.
+SPtLDV adalah dua PtLDV atau lebih yang berlaku bersamaan. Periksa dahulu apakah setiap barisnya merupakan PtLDV, yaitu linear, memuat variabel yang sama, dan memakai tanda ketidaksamaan.
 
 ```
-3x + y ≥ 6
-> Substitusikan (1, 4):
-3(1) + 4 ≥ 6
-7 ≥ 6   → BENAR
+> Baris 1: x + y ≤ 10 → linear, dua variabel, bertanda ≤
+> Baris 2: 2x + y ≤ 14 → linear, dua variabel, bertanda ≤
+> Baris 3 dan 4: x ≥ 0 dan y ≥ 0 → kendala non negatif
+> Semuanya pertidaksamaan linear yang berlaku bersamaan.
 ```
 
-**Langkah 4 — Langkah 4: kendala non negatif**
+**Langkah 2 — Menyimpulkan jawaban A**
 
-Karena x = 1 dan y = 4 keduanya positif, dua kendala terakhir otomatis terpenuhi.
+Karena memuat lebih dari satu pertidaksamaan linear yang harus dipenuhi secara bersamaan, kumpulan ini memang sebuah SPtLDV.
 
 ```
-x = 1   → 1 ≥ 0 BENAR
-y = 4   → 4 ≥ 0 BENAR
+> Kesimpulan: ya, kumpulan tersebut adalah SPtLDV.
 ```
 
-**Langkah 5 — Langkah 5: simpulkan**
+**Langkah 3 — Menghitung banyak kendala**
 
-Semua kendala menghasilkan pernyataan benar, artinya titik (1, 4) memenuhi semuanya bersamaan dan berada di dalam DHP sistem ini.
+Hitung seluruh barisnya, termasuk kendala non negatif. Jangan lupa x ≥ 0 dan y ≥ 0 juga dihitung sebagai kendala.
 
-> ✅ **Jawaban akhir:** Ya, titik (1, 4) memenuhi semua kendala sehingga merupakan penyelesaian sistem
+```
+> Banyak kendala seluruhnya: 4
+```
+
+**Langkah 4 — Memahami makna dua kendala terakhir**
+
+Kendala x ≥ 0 dan y ≥ 0 disebut kendala non negatif. Maknanya nilai x dan y tidak boleh negatif. Dalam soal nyata, kendala ini muncul karena x dan y biasanya menghitung banyaknya benda, dan banyak benda tidak mungkin kurang dari nol.
+
+**Langkah 5 — Memahami arti penyelesaian sistem**
+
+Penyelesaian sistem bukan hanya memenuhi satu baris saja, melainkan harus memenuhi keempat kendala sekaligus. Daerah yang memenuhi semuanya disebut DHP, yaitu irisan dari seluruh daerah penyelesaian.
+
+> ✅ **Jawaban akhir:** Ya, kumpulan itu adalah SPtLDV dengan 4 kendala. Dua kendala terakhir adalah kendala non negatif yang menyatakan nilai x dan y tidak boleh negatif
 
 ### Simulasi Interaktif
 
@@ -1427,10 +1284,10 @@ Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kal
 
 Pilihan jawaban:
 
-A. 2x + 4y ≤ 9 ; 3x² + y ≤ 8
-B. 2x + 4y = 9 ; 3x + y = 8
-C. 2x + 4y ≤ 9 ; 3x + y ≥ 8 ; x ≥ 0 ; y ≥ 0 ✅ (kunci)
-D. 2x ≤ 9 ; 3y ≥ 8
+A. 4x + 3y ≤ 7 ; 3x + 3y ≥ 10 ; x ≥ 0 ; y ≥ 0 ✅ (kunci)
+B. 4x ≤ 7 ; 3y ≥ 10
+C. 4x + 3y ≤ 7 ; 3x² + y ≤ 10
+D. 4x + 3y = 7 ; 3x + 3y = 10
 
 ---
 
@@ -1452,10 +1309,10 @@ D. 2x ≤ 9 ; 3y ≥ 8
 
 Pilihan jawaban:
 
-A. Gabungan dari semua daerah penyelesaian tiap pertidaksamaan
-B. Daerah di luar semua garis pembatas
+A. Daerah di luar semua garis pembatas
+B. Hanya titik perpotongan garis-garis pembatasnya
 C. Irisan dari semua daerah penyelesaian tiap pertidaksamaan ✅ (kunci)
-D. Hanya titik perpotongan garis-garis pembatasnya
+D. Gabungan dari semua daerah penyelesaian tiap pertidaksamaan
 
 ---
 
@@ -1473,53 +1330,38 @@ D. Hanya titik perpotongan garis-garis pembatasnya
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Titik manakah yang merupakan penyelesaian dari sistem berikut?
+**Soal:** Perhatikan sistem berikut. Ada berapa kendala di dalamnya, dan apa jenis dua kendala terakhirnya?
 
 ```
-x + y ≤ 11 ;  3x + 2y ≥ 18 ;  x ≥ 0 ;  y ≥ 0
+x + 3y ≤ 8 ;  2x + 3y ≥ 10 ;  x ≥ 0 ;  y ≥ 0
 ```
 
 Pilihan jawaban:
 
-A. (4, 4) ✅ (kunci)
-B. (4, 9)
-C. (9, 4)
-D. (0, 0)
+A. 4 kendala, dengan 2 di antaranya merupakan kendala non negatif ✅ (kunci)
+B. 4 kendala, dan semuanya merupakan kendala non negatif
+C. 2 kendala, karena x ≥ 0 dan y ≥ 0 tidak dihitung sebagai kendala
+D. 1 kendala, karena semuanya digabung menjadi satu sistem
 
 ---
 
 **Petunjuk bertahap (H1 → H3) — tidak pernah membocorkan jawaban akhir:**
 
-**H1.** Sebuah titik penyelesaian harus memenuhi SEMUA kendala. Uji setiap opsi satu per satu dan hentikan begitu ada kendala yang gagal.
-**H2.**
-
-```
-Saring kandidatnya memakai kendala pertama lebih dahulu:
-x + y ≤ 11
-> Substitusikan koordinat tiap opsi, lalu buang yang tidak memenuhi.
-```
-**H3.**
-
-```
-Kandidat yang lolos kendala pertama masih harus diuji pada kendala kedua:
-3x + 2y ≥ 18
-> Jangan lupa memeriksa kendala x ≥ 0 dan y ≥ 0 juga.
-```
+**H1.** Hitung seluruh baris pertidaksamaan pada sistem, jangan ada yang terlewat.
+**H2.** Kendala x ≥ 0 dan y ≥ 0 juga dihitung, karena keduanya ikut membatasi daerah penyelesaian.
+**H3.** Dua kendala terakhir memiliki nama khusus. Keduanya menyatakan bahwa nilai variabel tidak boleh kurang dari nol.
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-> Uji titik (4, 4) pada setiap kendala:
-x + y ≤ 11
-4 + 4 = 8
-8 ≤ 11   → BENAR
-3x + 2y ≥ 18
-3(4) + 2(4) = 20
-20 ≥ 18   → BENAR
-> Kendala x ≥ 0 dan y ≥ 0 juga terpenuhi.
-> Karena semua kendala terpenuhi, titik (4, 4) berada di dalam DHP.
+> Hitung seluruh baris kendalanya:
+x + 3y ≤ 8   …kendala 1
+2x + 3y ≥ 10   …kendala 2
+x ≥ 0   …kendala 3 (non negatif)
+y ≥ 0   …kendala 4 (non negatif)
+> Jumlah seluruhnya 4 kendala, dua di antaranya kendala non negatif.
 ```
-**Kesimpulan:** Hanya titik (4, 4) yang memenuhi seluruh kendala sistem sehingga berada di dalam DHP.
+**Kesimpulan:** Sistem itu memuat 4 kendala. Dua yang pertama adalah kendala sumber daya, sedangkan x ≥ 0 dan y ≥ 0 disebut kendala non negatif.
 
 ---
 
@@ -1594,13 +1436,13 @@ x + 2y = 8
 
 **Langkah 3 — Langkah 3: tambahkan kendala non negatif**
 
-Kendala x ≥ 0 dan y ≥ 0 mengurung semuanya di Kuadran I, maka bagian arsiran di kiri sumbu Y dan di bawah sumbu X tidak ikut menjadi jawaban.
+Kendala x ≥ 0 dan y ≥ 0 mengurung semuanya di bagian kanan atas bidang, maka bagian arsiran di kiri sumbu Y dan di bawah sumbu X tidak ikut menjadi jawaban.
 
 **Langkah 4 — Langkah 4: temukan DHP**
 
-DHP adalah daerah yang ketumpuk semua arsiran, yaitu daerah di Kuadran I yang berada di bawah kedua garis. Bila diteliti, sudut sudutnya berada di (0, 0), (6, 0), (4, 2), dan (0, 4). Perjelas dengan warna ungu agar mudah dibaca.
+DHP adalah daerah yang terkena semua arsiran sekaligus, yaitu daerah di bagian kanan atas yang berada di bawah kedua garis. Bila diteliti, sudut sudutnya berada di (0, 0), (6, 0), (4, 2), dan (0, 4).
 
-> ✅ **Jawaban akhir:** DHP berupa segi empat di Kuadran I dengan sudut (0, 0), (6, 0), (4, 2), dan (0, 4)
+> ✅ **Jawaban akhir:** DHP berupa segi empat di bagian kanan atas bidang dengan sudut (0, 0), (6, 0), (4, 2), dan (0, 4)
 
 ### Simulasi Interaktif
 
@@ -1617,12 +1459,12 @@ Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kal
 **Soal:** Tentukan titik potong kedua garis pembatas berikut menggunakan METODE CAMPURAN (eliminasi lalu substitusi).
 
 ```
-x + y = 4   ;   −x + y = 2
+2x + y = 6   ;   x + 2y = 6
 ```
 
 Kolom isian: **x**, **y**
 
-**Kunci:** x = 1, y = 3
+**Kunci:** x = 2, y = 2
 
 ---
 
@@ -1633,36 +1475,36 @@ Kolom isian: **x**, **y**
 **H3.**
 
 ```
-x + y = 4   …(1)
-−x + y = 2   …(2)
-> LANGKAH 1 — ELIMINASI x:
-> Koefisien x pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-x + y = 4
-−x + y = 2
-> Koefisien x berlawanan tanda, jadi JUMLAHKAN kedua persamaan tersebut.
-> Setelah x hilang, selesaikan variabel yang tersisa. LANGKAH 2: substitusikan hasilnya kembali ke persamaan (1) untuk memperoleh x.
+2x + y = 6   …(1)
+x + 2y = 6   …(2)
+> LANGKAH 1 — ELIMINASI y:
+> Samakan koefisien y dengan mengalikan persamaan (1) dengan 2.
+4x + 2y = 12
+x + 2y = 6
+> Koefisien y bertanda sama, jadi KURANGKAN kedua persamaan tersebut.
+> Setelah y hilang, selesaikan variabel yang tersisa. LANGKAH 2: substitusikan hasilnya kembali ke persamaan (1) untuk memperoleh y.
 ```
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
 > Persamaan garis pembatas:
-x + y = 4   …(1)
-−x + y = 2   …(2)
-> LANGKAH 1 — ELIMINASI x:
-> Koefisien x pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-x + y = 4
-−x + y = 2
-> Koefisien x berlawanan tanda → JUMLAHKAN persamaan (1) + (2):
-2y = 6
-y = 3
-> LANGKAH 2 — SUBSTITUSI y = 3 ke persamaan (1):
-x + 3 = 4
-x = 4 − 3
-x = 1
-> Jadi titik potong kedua garis adalah (1, 3).
+2x + y = 6   …(1)
+x + 2y = 6   …(2)
+> LANGKAH 1 — ELIMINASI y:
+> Samakan koefisien y: kalikan persamaan (1) dengan 2.
+4x + 2y = 12
+x + 2y = 6
+> Koefisien y bertanda sama → KURANGKAN persamaan (1) − (2):
+3x = 6
+x = 2
+> LANGKAH 2 — SUBSTITUSI x = 2 ke persamaan (1):
+2(2) + y = 6
+y = 6 − 4
+y = 2
+> Jadi titik potong kedua garis adalah (2, 2).
 ```
-**Kesimpulan:** Melalui eliminasi kemudian substitusi diperoleh titik potong (1, 3).
+**Kesimpulan:** Melalui eliminasi kemudian substitusi diperoleh titik potong (2, 2).
 
 #### Template 6.2 — Pilih Grafik yang Benar
 
@@ -1671,18 +1513,18 @@ x = 1
 **Soal:** Manakah gambar DHP yang TEPAT untuk sistem berikut? (arsiran = bukan daerah penyelesaian)
 
 ```
-x + y ≤ 5 ;  x + 2y ≤ 6 ;  x ≥ 0 ;  y ≥ 0
+x + y ≤ 6 ;  −x + y ≤ −2 ;  x ≥ 0 ;  y ≥ 0
 ```
 
 Empat grafik (A–D) ditampilkan sebagai pilihan. Deskripsi tiap grafik:
 
-**A** — Bidang koordinat x ∈ [−1, 7], y ∈ [−1, 6]. Garis yang digambar: x + y ≤ 5 (garis penuh);  x + 2y ≤ 6 (garis penuh). DHP ditampilkan sebagai daerah bersih berbatas: x + y ≥ 5;  x + 2y ≤ 6;  x ≥ 0;  y ≥ 0 — di luar batas diberi arsiran tipis.
+**A** — Bidang koordinat x ∈ [−1, 7], y ∈ [−3, 7]. Garis yang digambar: x + y ≤ 6 (garis penuh);  −x + y ≤ −2 (garis penuh). DHP (daerah yang diarsir berwarna) dibatasi oleh: x + y ≤ 6;  −x + y ≤ −2.
 
-**B** ✅ (kunci) — Bidang koordinat x ∈ [−1, 7], y ∈ [−1, 6]. Garis yang digambar: x + y ≤ 5 (garis penuh);  x + 2y ≤ 6 (garis penuh). DHP ditampilkan sebagai daerah bersih berbatas: x + y ≤ 5;  x + 2y ≤ 6;  x ≥ 0;  y ≥ 0 — di luar batas diberi arsiran tipis.
+**B** — Bidang koordinat x ∈ [−1, 7], y ∈ [−3, 7]. Garis yang digambar: x + y ≤ 6 (garis penuh);  −x + y ≤ −2 (garis penuh). DHP (daerah yang diarsir berwarna) dibatasi oleh: x + y ≥ 6;  −x + y ≤ −2;  x ≥ 0;  y ≥ 0.
 
-**C** — Bidang koordinat x ∈ [−1, 7], y ∈ [−1, 6]. Garis yang digambar: x + y ≤ 5 (garis penuh);  x + 2y ≤ 6 (garis penuh). DHP ditampilkan sebagai daerah bersih berbatas: x + y ≤ 5;  x + 2y ≤ 6 — di luar batas diberi arsiran tipis.
+**C** — Bidang koordinat x ∈ [−1, 7], y ∈ [−3, 7]. Garis yang digambar: x + y ≤ 6 (garis putus-putus);  −x + y ≤ −2 (garis penuh). DHP (daerah yang diarsir berwarna) dibatasi oleh: x + y ≤ 6;  −x + y ≤ −2;  x ≥ 0;  y ≥ 0.
 
-**D** — Bidang koordinat x ∈ [−1, 7], y ∈ [−1, 6]. Garis yang digambar: x + y ≤ 5 (garis putus-putus);  x + 2y ≤ 6 (garis penuh). DHP ditampilkan sebagai daerah bersih berbatas: x + y ≤ 5;  x + 2y ≤ 6;  x ≥ 0;  y ≥ 0 — di luar batas diberi arsiran tipis.
+**D** ✅ (kunci) — Bidang koordinat x ∈ [−1, 7], y ∈ [−3, 7]. Garis yang digambar: x + y ≤ 6 (garis penuh);  −x + y ≤ −2 (garis penuh). DHP (daerah yang diarsir berwarna) dibatasi oleh: x + y ≤ 6;  −x + y ≤ −2;  x ≥ 0;  y ≥ 0.
 
 ---
 
@@ -1693,32 +1535,32 @@ Empat grafik (A–D) ditampilkan sebagai pilihan. Deskripsi tiap grafik:
 
 ```
 Lakukan uji titik (0, 0) pada kedua kendala:
-x + y ≤ 5
+x + y ≤ 6
 > Substitusikan x = 0 dan y = 0:
-0 + 0 ≤ 5
+0 + 0 ≤ 6
 > Hitung nilai ruas kiri, lalu bandingkan dengan ruas kanan. Apakah pernyataannya bernilai benar?
 ```
-**H3.** Sekarang bandingkan setiap pilihan: apakah daerah ungu (DHP) terkurung di Kuadran I? apakah sisi arsirannya sesuai hasil uji titikmu? apakah jenis garisnya sesuai tanda pada kendala? Hanya satu pilihan yang lolos ketiganya.
+**H3.** Sekarang bandingkan setiap pilihan: apakah daerah ungu (DHP) berada di bagian kanan atas bidang? apakah sisi arsirannya sesuai hasil uji titikmu? apakah jenis garisnya sesuai tanda pada kendala? Hanya satu pilihan yang lolos ketiganya.
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
 > Uji titik (0, 0) pada kendala pertama:
-x + y ≤ 5
+x + y ≤ 6
 > Substitusikan titik (0, 0):
-0 + 0 ≤ 5
-0 + 0 ≤ 5
-0 ≤ 5   → BENAR
-> Uji titik (0, 0) pada kendala kedua:
-x + 2y ≤ 6
-> Substitusikan titik (0, 0):
-0 + 2(0) ≤ 6
+0 + 0 ≤ 6
 0 + 0 ≤ 6
 0 ≤ 6   → BENAR
-> Tambahkan kendala x ≥ 0 dan y ≥ 0 yang mengurung daerah di Kuadran I.
-> DHP adalah daerah ungu dengan titik pojok: (4, 1), (5, 0), (0, 3), (0, 0).
+> Uji titik (0, 0) pada kendala kedua:
+−x + y ≤ −2
+> Substitusikan titik (0, 0):
+−0 + 0 ≤ −2
+0 + 0 ≤ −2
+0 ≤ −2   → SALAH
+> Tambahkan kendala x ≥ 0 dan y ≥ 0 yang membatasi daerah pada bagian kanan atas bidang.
+> DHP adalah daerah ungu dengan titik pojok: (4, 2), (6, 0), (2, 0).
 ```
-**Kesimpulan:** DHP yang benar adalah daerah ungu di Kuadran I yang dibatasi oleh kedua garis penuh serta kedua sumbu.
+**Kesimpulan:** DHP yang benar adalah daerah ungu di bagian kanan atas yang dibatasi oleh kedua garis penuh serta kedua sumbu.
 
 #### Template 6.3 — Ketuk Titik di Dalam DHP
 
@@ -1727,10 +1569,10 @@ x + 2y ≤ 6
 **Soal:** Ketuk satu titik berkoordinat bulat yang berada DI DALAM DHP sistem berikut (daerah ungu hasil irisan).
 
 ```
-x + y ≤ 3 ;  x + 2y ≤ 4 ;  x ≥ 0 ;  y ≥ 0
+x + y ≤ 9 ;  −x + y ≤ 1 ;  x ≥ 0 ;  y ≥ 0
 ```
 
-Siswa mengetuk satu titik berkoordinat bulat yang harus berada di dalam DHP. Bidang koordinat x ∈ [−1, 5], y ∈ [−1, 5]. Garis yang digambar: x + y ≤ 3 (garis penuh);  x + 2y ≤ 4 (garis penuh). DHP ditampilkan sebagai daerah bersih berbatas: x + y ≤ 3;  x + 2y ≤ 4;  x ≥ 0;  y ≥ 0 — di luar batas diberi arsiran tipis.
+Siswa mengetuk satu titik berkoordinat bulat yang harus berada di dalam DHP. Bidang koordinat x ∈ [−2, 10], y ∈ [−1, 10]. Garis yang digambar: x + y ≤ 9 (garis penuh);  −x + y ≤ 1 (garis penuh). DHP (daerah yang diarsir berwarna) dibatasi oleh: x + y ≤ 9;  −x + y ≤ 1;  x ≥ 0;  y ≥ 0.
 
 **Contoh titik yang benar:** (0, 0) — semua titik di dalam DHP diterima.
 
@@ -1742,9 +1584,9 @@ Siswa mengetuk satu titik berkoordinat bulat yang harus berada di dalam DHP. Bid
 **H2.**
 
 ```
-Pilih sebuah titik percobaan di Kuadran I, lalu substitusikan ke setiap kendala:
-x + y ≤ 3
-x + 2y ≤ 4
+Pilih sebuah titik percobaan di bagian kanan atas bidang, lalu substitusikan ke setiap kendala:
+x + y ≤ 9
+−x + y ≤ 1
 ```
 **H3.** Perhatikan bahwa kedua kendala bertanda ≤. Artinya semakin kecil nilai x dan y, semakin besar peluang titik itu memenuhi keduanya. Uji dahulu titik pilihanmu dengan substitusi sebelum mengetuk grafik.
 
@@ -1752,11 +1594,11 @@ x + 2y ≤ 4
 
 ```
 > Sebuah titik berada di dalam DHP bila memenuhi seluruh kendala:
-x + y ≤ 3
-x + 2y ≤ 4
+x + y ≤ 9
+−x + y ≤ 1
 x ≥ 0
 y ≥ 0
-> Titik pojok DHP ini: (2, 1), (3, 0), (0, 2), (0, 0). Titik mana pun di dalam daerah ungu tersebut adalah jawaban yang benar.
+> Titik pojok DHP ini: (4, 5), (9, 0), (0, 1), (0, 0). Titik mana pun di dalam daerah ungu tersebut adalah jawaban yang benar.
 ```
 **Kesimpulan:** Setiap titik yang memenuhi seluruh kendala berada di dalam DHP, yaitu daerah ungu hasil irisan.
 
@@ -1869,7 +1711,7 @@ x = 4
 
 **Langkah 5 — Langkah 5: tuliskan semuanya**
 
-Kumpulkan titik yang lolos. Urutkan mengikuti tepi DHP agar rapi.
+Kumpulkan titik yang lolos pemeriksaan. Urutkan mengikuti tepi DHP agar rapi dan mudah dicek ulang.
 
 ```
 > Titik pojok DHP:
@@ -1914,12 +1756,12 @@ D. 5 titik
 
 ```
 > Telusuri tepi daerah ungu dan catat setiap sudutnya:
-> Sudut ke-1: (0, 8)
-> Sudut ke-2: (4, 0)
+> Sudut ke-1: (0, 4)
+> Sudut ke-2: (8, 0)
 > Sudut ke-3: (0, 0)
 > Banyaknya titik pojok = 3.
 ```
-**Kesimpulan:** DHP ini memiliki 3 sudut, yaitu di (0, 8), (4, 0), (0, 0).
+**Kesimpulan:** DHP ini memiliki 3 sudut, yaitu di (0, 4), (8, 0), (0, 0).
 
 #### Template 7.2 — Ketuk Titik pada Grafik
 
@@ -1927,9 +1769,9 @@ D. 5 titik
 
 **Soal:** Ketuk SEMUA titik pojok DHP berikut (4 titik, urutan bebas).
 
-Siswa mengetuk 4 titik pada grafik (toleransi ±0,55 satuan). Bidang koordinat x ∈ [−1, 8], y ∈ [−1, 6]. Garis yang digambar: x + y ≤ 7 (garis penuh);  −x + y ≤ 3 (garis penuh). DHP ditampilkan sebagai daerah bersih berbatas: x + y ≤ 7;  −x + y ≤ 3;  x ≥ 0;  y ≥ 0 — di luar batas diberi arsiran tipis.
+Siswa mengetuk 4 titik pada grafik (toleransi ±0,55 satuan). Bidang koordinat x ∈ [−1, 7], y ∈ [−1, 6]. Garis yang digambar: x + y ≤ 5 (garis penuh);  x + 2y ≤ 6 (garis penuh). DHP (daerah yang diarsir berwarna) dibatasi oleh: x + y ≤ 5;  x + 2y ≤ 6;  x ≥ 0;  y ≥ 0.
 
-**Kunci (titik yang harus diketuk):** (2, 5), (7, 0), (0, 3), (0, 0)
+**Kunci (titik yang harus diketuk):** (4, 1), (5, 0), (0, 3), (0, 0)
 
 ---
 
@@ -1943,12 +1785,12 @@ Siswa mengetuk 4 titik pada grafik (toleransi ±0,55 satuan). Bidang koordinat x
 
 ```
 > Titik pojok berasal dari perpotongan dua garis pembatas yang masih di dalam DHP:
-> Titik pojok 1: (2, 5)
-> Titik pojok 2: (7, 0)
+> Titik pojok 1: (4, 1)
+> Titik pojok 2: (5, 0)
 > Titik pojok 3: (0, 3)
 > Titik pojok 4: (0, 0)
 ```
-**Kesimpulan:** Titik pojok DHP ini adalah (2, 5), (7, 0), (0, 3), (0, 0).
+**Kesimpulan:** Titik pojok DHP ini adalah (4, 1), (5, 0), (0, 3), (0, 0).
 
 #### Template 7.3 — Isian Singkat
 
@@ -1957,12 +1799,12 @@ Siswa mengetuk 4 titik pada grafik (toleransi ±0,55 satuan). Bidang koordinat x
 **Soal:** Tentukan titik pojok DHP yang merupakan perpotongan KEDUA garis kendala. Gunakan metode campuran (eliminasi lalu substitusi).
 
 ```
-x + y = 4   ;   −x + y = 2
+x + y = 6   ;   −x + y = 0
 ```
 
 Kolom isian: **x**, **y**
 
-**Kunci:** x = 1, y = 3
+**Kunci:** x = 3, y = 3
 
 ---
 
@@ -1973,12 +1815,12 @@ Kolom isian: **x**, **y**
 **H3.**
 
 ```
-x + y = 4   …(1)
-−x + y = 2   …(2)
+x + y = 6   …(1)
+−x + y = 0   …(2)
 > LANGKAH 1 — ELIMINASI x:
 > Koefisien x pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-x + y = 4
-−x + y = 2
+x + y = 6
+−x + y = 0
 > Koefisien x berlawanan tanda, jadi JUMLAHKAN kedua persamaan tersebut.
 > Setelah x hilang, selesaikan variabel yang tersisa. LANGKAH 2: substitusikan hasilnya kembali ke persamaan (1) untuk memperoleh x.
 ```
@@ -1987,24 +1829,24 @@ x + y = 4
 
 ```
 > Persamaan garis pembatas:
-x + y = 4   …(1)
-−x + y = 2   …(2)
+x + y = 6   …(1)
+−x + y = 0   …(2)
 > LANGKAH 1 — ELIMINASI x:
 > Koefisien x pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-x + y = 4
-−x + y = 2
+x + y = 6
+−x + y = 0
 > Koefisien x berlawanan tanda → JUMLAHKAN persamaan (1) + (2):
 2y = 6
 y = 3
 > LANGKAH 2 — SUBSTITUSI y = 3 ke persamaan (1):
-x + 3 = 4
-x = 4 − 3
-x = 1
-> Jadi titik potong kedua garis adalah (1, 3).
+x + 3 = 6
+x = 6 − 3
+x = 3
+> Jadi titik potong kedua garis adalah (3, 3).
 > Periksa apakah titik ini memenuhi seluruh kendala:
-> (1, 3) memenuhi semua kendala → benar merupakan titik pojok DHP.
+> (3, 3) memenuhi semua kendala → benar merupakan titik pojok DHP.
 ```
-**Kesimpulan:** Perpotongan kedua garis kendala berada di titik (1, 3), dan titik ini memenuhi seluruh kendala sehingga merupakan titik pojok DHP.
+**Kesimpulan:** Perpotongan kedua garis kendala berada di titik (3, 3), dan titik ini memenuhi seluruh kendala sehingga merupakan titik pojok DHP.
 
 ---
 
@@ -2026,8 +1868,6 @@ Sebelum menghitung perpotongan antar garis, rapihkan dulu semua titik potong dal
 |---|---|---|
 | x + y = 6 | (6, 0) | (0, 6) |
 | x + 2y = 8 | (8, 0) | (0, 4) |
-| x = 0 (sumbu Y) | tidak ada | seluruh sumbu Y |
-| y = 0 (sumbu X) | seluruh sumbu X | tidak ada |
 
 #### Bagian 3 — Tahap eliminasi
 
@@ -2132,7 +1972,7 @@ y = 2
 
 **Langkah 4 — Langkah 4: periksa kembali**
 
-Substitusikan titik (4, 2) ke persamaan (1) untuk memastikan perhitungan benar.
+Substitusikan titik (4, 2) ke persamaan (1) untuk memastikan perhitungan kita benar. Pada gambar, titik itu memang tepat berada di perpotongan kedua garis.
 
 ```
 3(4) + 2(2) = 16
@@ -2157,12 +1997,12 @@ Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kal
 **Soal:** Tentukan titik potong kedua garis berikut dengan metode campuran (eliminasi lalu substitusi).
 
 ```
-x + y = 6   ;   x − y = 0
+x + y = 8   ;   x − y = −2
 ```
 
 Kolom isian: **x**, **y**
 
-**Kunci:** x = 3, y = 3
+**Kunci:** x = 3, y = 5
 
 ---
 
@@ -2173,12 +2013,12 @@ Kolom isian: **x**, **y**
 **H3.**
 
 ```
-x + y = 6   …(1)
-x − y = 0   …(2)
+x + y = 8   …(1)
+x − y = −2   …(2)
 > LANGKAH 1 — ELIMINASI x:
 > Koefisien x pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-x + y = 6
-x − y = 0
+x + y = 8
+x − y = −2
 > Koefisien x bertanda sama, jadi KURANGKAN kedua persamaan tersebut.
 > Setelah x hilang, selesaikan variabel yang tersisa. LANGKAH 2: substitusikan hasilnya kembali ke persamaan (1) untuk memperoleh x.
 ```
@@ -2187,22 +2027,22 @@ x − y = 0
 
 ```
 > Persamaan garis pembatas:
-x + y = 6   …(1)
-x − y = 0   …(2)
+x + y = 8   …(1)
+x − y = −2   …(2)
 > LANGKAH 1 — ELIMINASI x:
 > Koefisien x pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-x + y = 6
-x − y = 0
+x + y = 8
+x − y = −2
 > Koefisien x bertanda sama → KURANGKAN persamaan (1) − (2):
-2y = 6
-y = 3
-> LANGKAH 2 — SUBSTITUSI y = 3 ke persamaan (1):
-x + 3 = 6
-x = 6 − 3
+2y = 10
+y = 5
+> LANGKAH 2 — SUBSTITUSI y = 5 ke persamaan (1):
+x + 5 = 8
+x = 8 − 5
 x = 3
-> Jadi titik potong kedua garis adalah (3, 3).
+> Jadi titik potong kedua garis adalah (3, 5).
 ```
-**Kesimpulan:** Eliminasi menghasilkan nilai salah satu variabel, lalu substitusi memberikan variabel lainnya, yaitu titik (3, 3).
+**Kesimpulan:** Eliminasi menghasilkan nilai salah satu variabel, lalu substitusi memberikan variabel lainnya, yaitu titik (3, 5).
 
 #### Template 8.2 — Isian Singkat
 
@@ -2211,12 +2051,12 @@ x = 3
 **Soal:** Tentukan titik potong kedua garis berikut. Samakan dahulu koefisiennya, lalu gunakan metode campuran.
 
 ```
-x + y = 10   ;   2x + 3y = 25
+x + y = 4   ;   2x + 3y = 10
 ```
 
 Kolom isian: **x**, **y**
 
-**Kunci:** x = 5, y = 5
+**Kunci:** x = 2, y = 2
 
 ---
 
@@ -2227,12 +2067,12 @@ Kolom isian: **x**, **y**
 **H3.**
 
 ```
-x + y = 10   …(1)
-2x + 3y = 25   …(2)
+x + y = 4   …(1)
+2x + 3y = 10   …(2)
 > LANGKAH 1 — ELIMINASI x:
 > Samakan koefisien x dengan mengalikan persamaan (1) dengan 2.
-2x + 2y = 20
-2x + 3y = 25
+2x + 2y = 8
+2x + 3y = 10
 > Koefisien x bertanda sama, jadi KURANGKAN kedua persamaan tersebut.
 > Setelah x hilang, selesaikan variabel yang tersisa. LANGKAH 2: substitusikan hasilnya kembali ke persamaan (1) untuk memperoleh x.
 ```
@@ -2241,22 +2081,22 @@ x + y = 10   …(1)
 
 ```
 > Persamaan garis pembatas:
-x + y = 10   …(1)
-2x + 3y = 25   …(2)
+x + y = 4   …(1)
+2x + 3y = 10   …(2)
 > LANGKAH 1 — ELIMINASI x:
 > Samakan koefisien x: kalikan persamaan (1) dengan 2.
-2x + 2y = 20
-2x + 3y = 25
+2x + 2y = 8
+2x + 3y = 10
 > Koefisien x bertanda sama → KURANGKAN persamaan (1) − (2):
-−y = −5
-y = 5
-> LANGKAH 2 — SUBSTITUSI y = 5 ke persamaan (1):
-x + 5 = 10
-x = 10 − 5
-x = 5
-> Jadi titik potong kedua garis adalah (5, 5).
+−y = −2
+y = 2
+> LANGKAH 2 — SUBSTITUSI y = 2 ke persamaan (1):
+x + 2 = 4
+x = 4 − 2
+x = 2
+> Jadi titik potong kedua garis adalah (2, 2).
 ```
-**Kesimpulan:** Setelah koefisien disamakan, eliminasi dan substitusi menghasilkan titik potong (5, 5).
+**Kesimpulan:** Setelah koefisien disamakan, eliminasi dan substitusi menghasilkan titik potong (2, 2).
 
 #### Template 8.3 — Isian Singkat
 
@@ -2265,12 +2105,12 @@ x = 5
 **Soal:** Tentukan titik potong kedua garis berikut dengan metode campuran. Perhatikan adanya koefisien negatif.
 
 ```
-−x + y = 1   ;   2x + y = 13
+−x + y = 4   ;   2x + y = 10
 ```
 
 Kolom isian: **x**, **y**
 
-**Kunci:** x = 4, y = 5
+**Kunci:** x = 2, y = 6
 
 ---
 
@@ -2281,12 +2121,12 @@ Kolom isian: **x**, **y**
 **H3.**
 
 ```
-−x + y = 1   …(1)
-2x + y = 13   …(2)
+−x + y = 4   …(1)
+2x + y = 10   …(2)
 > LANGKAH 1 — ELIMINASI y:
 > Koefisien y pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-−x + y = 1
-2x + y = 13
+−x + y = 4
+2x + y = 10
 > Koefisien y bertanda sama, jadi KURANGKAN kedua persamaan tersebut.
 > Setelah y hilang, selesaikan variabel yang tersisa. LANGKAH 2: substitusikan hasilnya kembali ke persamaan (1) untuk memperoleh y.
 ```
@@ -2295,22 +2135,22 @@ Kolom isian: **x**, **y**
 
 ```
 > Persamaan garis pembatas:
-−x + y = 1   …(1)
-2x + y = 13   …(2)
+−x + y = 4   …(1)
+2x + y = 10   …(2)
 > LANGKAH 1 — ELIMINASI y:
 > Koefisien y pada kedua persamaan sudah sama, jadi dapat langsung dieliminasi.
-−x + y = 1
-2x + y = 13
+−x + y = 4
+2x + y = 10
 > Koefisien y bertanda sama → KURANGKAN persamaan (1) − (2):
-−3x = −12
-x = 4
-> LANGKAH 2 — SUBSTITUSI x = 4 ke persamaan (1):
-−4 + y = 1
-y = 1 + 4
-y = 5
-> Jadi titik potong kedua garis adalah (4, 5).
+−3x = −6
+x = 2
+> LANGKAH 2 — SUBSTITUSI x = 2 ke persamaan (1):
+−2 + y = 4
+y = 4 + 2
+y = 6
+> Jadi titik potong kedua garis adalah (2, 6).
 ```
-**Kesimpulan:** Eliminasi y kemudian substitusi menghasilkan titik potong (4, 5).
+**Kesimpulan:** Eliminasi y kemudian substitusi menghasilkan titik potong (2, 6).
 
 ---
 
@@ -2338,9 +2178,9 @@ f(4, 2) = 20 + 6
 f(4, 2) = 26
 ```
 
-#### Bagian 3 — Teorema titik pojok
+#### Bagian 3 — Mengapa cukup memeriksa titik pojok saja
 
-Ada teorema penting: pada DHP yang terbatas, nilai maksimum sekaligus minimum fungsi linear pasti tercapai di salah satu titik pojok, tidak pernah di tengah daerah. Sebabnya garis linear berubah dengan laju tetap, sehingga nilai paling besar atau kecil selalu ditemukan persis di salah satu sudut.
+Di dalam DHP terdapat titik yang jumlahnya tak terhingga, sehingga mustahil dihitung satu per satu. Untungnya ada sifat penting yang berlaku pada DHP terbatas: nilai terbesar maupun terkecil fungsi tujuan selalu jatuh tepat di salah satu sudut DHP, tidak pernah di tengah daerah. Sebabnya nilai fungsi berubah dengan laju tetap ke satu arah, sehingga nilai paling ujung pasti ditemukan di titik paling pojok. Berkat sifat ini, kita cukup memeriksa beberapa titik sudut saja.
 
 #### Bagian 4 — Kapan nilai optimum ada dan kapan tidak
 
@@ -2376,9 +2216,9 @@ Seluruh proses dari kendala sampai jawaban optimum diringkas dalam lima langkah 
 
 **Soal:** DHP suatu sistem memiliki titik pojok (0, 0), (6, 0), (4, 2), dan (0, 4). Tentukan nilai maksimum dan minimum dari f(x, y) = 5x + 3y.
 
-**Langkah 1 — Langkah 1: siapkan rencana**
+**Langkah 1 — Langkah 1: baca titik pojok dari grafik**
 
-Karena titik pojok sudah diketahui, kita cukup menghitung nilai fungsi di keempatnya lalu membandingkan.
+Sebelum menghitung, pastikan dahulu titik pojoknya. Telusuri tepi daerah ungu pada gambar berikut satu putaran. Setiap kali tepinya berbelok, di situ ada titik pojok. Terbaca empat sudut, yaitu (0, 0), (6, 0), (4, 2), dan (0, 4).
 
 **Langkah 2 — Langkah 2: dua titik pertama**
 
@@ -2432,15 +2272,15 @@ Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kal
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Tentukan nilai fungsi tujuan f(x, y) = 3x + 7y pada titik (4, 5).
+**Soal:** Tentukan nilai fungsi tujuan f(x, y) = 4x + 4y pada titik (2, 2).
 
 ```
-f(x, y) = 3x + 7y
+f(x, y) = 4x + 4y
 ```
 
 Kolom isian: **nilai f**
 
-**Kunci:** v = 47
+**Kunci:** v = 16
 
 ---
 
@@ -2450,9 +2290,9 @@ Kolom isian: **nilai f**
 **H2.**
 
 ```
-f(x, y) = 3x + 7y
-> Substitusikan titik (4, 5):
-f(4, 5) = 3(4) + 7(5)
+f(x, y) = 4x + 4y
+> Substitusikan titik (2, 2):
+f(2, 2) = 4(2) + 4(2)
 > Kerjakan perkalian lebih dahulu, baru penjumlahannya.
 ```
 **H3.** Kerjakan kedua perkalian lebih dahulu, kemudian jumlahkan hasilnya. Perhatikan urutan operasi ini agar tidak keliru.
@@ -2460,30 +2300,30 @@ f(4, 5) = 3(4) + 7(5)
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-f(x, y) = 3x + 7y
-> Substitusikan titik (4, 5):
-f(4, 5) = 3(4) + 7(5)
-f(4, 5) = 12 + 35
-f(4, 5) = 47
+f(x, y) = 4x + 4y
+> Substitusikan titik (2, 2):
+f(2, 2) = 4(2) + 4(2)
+f(2, 2) = 8 + 8
+f(2, 2) = 16
 ```
-**Kesimpulan:** Substitusi memberikan f(4, 5) = 12 + 35 = 47.
+**Kesimpulan:** Substitusi memberikan f(2, 2) = 8 + 8 = 16.
 
 #### Template 9.2 — Pilihan Ganda
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Titik pojok DHP adalah (2, 2), (3, 0), (0, 3), (0, 0). Tentukan NILAI MAKSIMUM dari f(x, y) = 5x + 4y.
+**Soal:** Titik pojok DHP adalah (2, 3), (5, 0), (0, 4), (0, 0). Tentukan NILAI MAKSIMUM dari f(x, y) = 4x + 5y.
 
 ```
-f(x, y) = 5x + 4y
+f(x, y) = 4x + 5y
 ```
 
 Pilihan jawaban:
 
-A. 12
-B. 18 ✅ (kunci)
-C. 15
-D. 0
+A. 28
+B. 0
+C. 20
+D. 23 ✅ (kunci)
 
 ---
 
@@ -2493,9 +2333,9 @@ D. 0
 **H2.**
 
 ```
-f(x, y) = 5x + 4y
-> Substitusikan titik (2, 2):
-f(2, 2) = 5(2) + 4(2)
+f(x, y) = 4x + 5y
+> Substitusikan titik (2, 3):
+f(2, 3) = 4(2) + 5(3)
 > Kerjakan perkalian lebih dahulu, baru penjumlahannya.
 ```
 **H3.** Pastikan seluruh titik pojok dihitung tanpa ada yang terlewat, lalu susun hasilnya berjajar. Nilai maksimum adalah yang paling besar di antara semuanya — jangan tertukar dengan yang paling kecil.
@@ -2503,32 +2343,32 @@ f(2, 2) = 5(2) + 4(2)
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-f(2, 2) = 5(2) + 4(2)
-f(2, 2) = 18
-f(3, 0) = 5(3) + 4(0)
-f(3, 0) = 15
-f(0, 3) = 5(0) + 4(3)
-f(0, 3) = 12
-f(0, 0) = 5(0) + 4(0)
+f(2, 3) = 4(2) + 5(3)
+f(2, 3) = 23
+f(5, 0) = 4(5) + 5(0)
+f(5, 0) = 20
+f(0, 4) = 4(0) + 5(4)
+f(0, 4) = 20
+f(0, 0) = 4(0) + 5(0)
 f(0, 0) = 0
-> Bandingkan seluruh nilai: 18, 15, 12, 0.
-> Nilai TERBESAR adalah 18 di titik (2, 2).
+> Bandingkan seluruh nilai: 23, 20, 20, 0.
+> Nilai TERBESAR adalah 23 di titik (2, 3).
 ```
-**Kesimpulan:** Setelah seluruh titik pojok dievaluasi, nilai terbesarnya adalah 18 yang dicapai di titik (2, 2).
+**Kesimpulan:** Setelah seluruh titik pojok dievaluasi, nilai terbesarnya adalah 23 yang dicapai di titik (2, 3).
 
 #### Template 9.3 — Isian Singkat
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Dengan titik pojok (2, 3), (5, 0), (0, 1), (0, 0) dan f(x, y) = 2x + 6y, tentukan nilai maksimum dan minimumnya.
+**Soal:** Dengan titik pojok (4, 3), (7, 0), (0, 5), (0, 0) dan f(x, y) = 6x + 5y, tentukan nilai maksimum dan minimumnya.
 
 ```
-f(x, y) = 2x + 6y
+f(x, y) = 6x + 5y
 ```
 
 Kolom isian: **nilai maksimum**, **nilai minimum**
 
-**Kunci:** max = 22, min = 0
+**Kunci:** max = 42, min = 0
 
 ---
 
@@ -2538,9 +2378,9 @@ Kolom isian: **nilai maksimum**, **nilai minimum**
 **H2.**
 
 ```
-f(x, y) = 2x + 6y
-> Substitusikan titik (2, 3):
-f(2, 3) = 2(2) + 6(3)
+f(x, y) = 6x + 5y
+> Substitusikan titik (4, 3):
+f(4, 3) = 6(4) + 5(3)
 > Kerjakan perkalian lebih dahulu, baru penjumlahannya.
 ```
 **H3.** Setelah seluruh nilai diperoleh, urutkan dari yang terkecil hingga terbesar. Nilai terbesar menjadi maksimum dan nilai terkecil menjadi minimum — perhatikan jangan sampai tertukar saat menuliskannya.
@@ -2548,18 +2388,18 @@ f(2, 3) = 2(2) + 6(3)
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
-f(2, 3) = 2(2) + 6(3)
-f(2, 3) = 22
-f(5, 0) = 2(5) + 6(0)
-f(5, 0) = 10
-f(0, 1) = 2(0) + 6(1)
-f(0, 1) = 6
-f(0, 0) = 2(0) + 6(0)
+f(4, 3) = 6(4) + 5(3)
+f(4, 3) = 39
+f(7, 0) = 6(7) + 5(0)
+f(7, 0) = 42
+f(0, 5) = 6(0) + 5(5)
+f(0, 5) = 25
+f(0, 0) = 6(0) + 5(0)
 f(0, 0) = 0
-> Nilai terbesar (MAKSIMUM) adalah 22 di titik (2, 3).
+> Nilai terbesar (MAKSIMUM) adalah 42 di titik (7, 0).
 > Nilai terkecil (MINIMUM) adalah 0 di titik (0, 0).
 ```
-**Kesimpulan:** Nilai maksimum 22 dicapai di (2, 3), dan nilai minimum 0 dicapai di (0, 0).
+**Kesimpulan:** Nilai maksimum 42 dicapai di (7, 0), dan nilai minimum 0 dicapai di (0, 0).
 
 ---
 
@@ -2661,10 +2501,7 @@ Yang banyaknya dapat diatur pabrik adalah banyak kursi dan banyak meja, jadikan 
 Sebelum menulis pertidaksamaan, rangkum data kebutuhan dalam tabel. Setiap barisnya akan menjadi satu kendala.
 
 ```
-> Tabel bantu:
-Sumber daya     Kursi(x)  Meja(y)  Tersedia
-Jam kerja (jam)    2         3        18
-Gudang (peti)      1         2        12
+> Isikan setiap data dari soal ke dalam tabel bantu seperti berikut.
 ```
 
 **Langkah 3 — Langkah 3: ubah baris menjadi kendala**
@@ -2704,10 +2541,10 @@ Aturan: jawaban salah mengganti soal baru dan menghitung ulang dari nol; dua kal
 
 Pilihan jawaban:
 
-A. x = total produksi, y = sisa bahan baku
-B. x = banyak meja, y = banyak kursi
-C. x = keuntungan kursi, y = keuntungan meja
-D. x = banyak kursi, y = banyak meja ✅ (kunci)
+A. x = banyak kursi, y = banyak meja ✅ (kunci)
+B. x = keuntungan kursi, y = keuntungan meja
+C. x = total produksi, y = sisa bahan baku
+D. x = banyak meja, y = banyak kursi
 
 ---
 
@@ -2725,54 +2562,54 @@ D. x = banyak kursi, y = banyak meja ✅ (kunci)
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Setiap kaos memerlukan 1 meter kain dan setiap kemeja memerlukan 2 meter kain. Total yang tersedia adalah 20 meter kain. Kendala yang tepat adalah…
+**Soal:** Setiap kue bolu memerlukan 2 ons tepung dan setiap kue brownies memerlukan 3 ons tepung. Total yang tersedia adalah 24 ons tepung. Kendala yang tepat adalah…
 
 Pilihan jawaban:
 
-A. 2x + y ≤ 20
-B. x + 2y = 20
-C. x + 2y ≤ 20 ✅ (kunci)
-D. x + 2y ≥ 20
+A. 2x + 3y = 24
+B. 2x + 3y ≥ 24
+C. 3x + 2y ≤ 24
+D. 2x + 3y ≤ 24 ✅ (kunci)
 
 ---
 
 **Petunjuk bertahap (H1 → H3) — tidak pernah membocorkan jawaban akhir:**
 
 **H1.** Susun bentuk total kebutuhannya: (kebutuhan per unit) dikali (banyaknya), untuk kedua objek.
-**H2.** Kebutuhan untuk kaos adalah x dan kebutuhan untuk kemeja adalah 2y. Jumlahkan keduanya.
+**H2.** Kebutuhan untuk kue bolu adalah 2x dan kebutuhan untuk kue brownies adalah 3y. Jumlahkan keduanya.
 **H3.** Sekarang tentukan tandanya. Kata "tersedia" menunjukkan batas maksimum: pemakaian boleh kurang dari itu, tetapi tidak boleh melebihi, dan tidak harus habis persis. Pastikan pula koefisiennya tidak tertukar.
 
 **Pembahasan lengkap (ditampilkan setelah siswa menjawab):**
 
 ```
 > Susun tabel bantu dari data kebutuhan terlebih dahulu:
-Sumber daya  kaos(x)  kemeja(y)  Tersedia
-─────────────────────────────────────────
-meter kain   1        2          20
-kancing      1        3          21
-> Dari baris tabel, kebutuhan untuk kaos:
-x
-> Kebutuhan untuk kemeja:
-2y
+Sumber daya  kue bolu(x)  kue brownies(y)  Tersedia
+───────────────────────────────────────────────────
+ons tepung   2            3                24
+loyang oven  1            2                16
+> Dari baris tabel, kebutuhan untuk kue bolu:
+2x
+> Kebutuhan untuk kue brownies:
+3y
 > Total kebutuhan:
-x + 2y
-> Total tidak boleh melebihi 20 meter kain:
-x + 2y ≤ 20
+2x + 3y
+> Total tidak boleh melebihi 24 ons tepung:
+2x + 3y ≤ 24
 ```
-**Kesimpulan:** Total kebutuhan x + 2y tidak boleh melebihi 20, sehingga kendalanya adalah x + 2y ≤ 20.
+**Kesimpulan:** Total kebutuhan 2x + 3y tidak boleh melebihi 24, sehingga kendalanya adalah 2x + 3y ≤ 24.
 
 #### Template 10.3 — Pilihan Ganda
 
 > Contoh di bawah adalah **hasil acak**. Angka soal berubah setiap kali siswa mengerjakan, tetapi struktur, langkah petunjuk, dan jenis pembahasannya selalu sama.
 
-**Soal:** Keuntungan setiap kursi adalah Rp40.000 dan setiap meja adalah Rp60.000, dengan kendala 2x + 3y ≤ 18 dan x + 2y ≤ 12. Model matematika LENGKAP yang benar adalah…
+**Soal:** Keuntungan setiap kue bolu adalah Rp5.000 dan setiap kue brownies adalah Rp4.000, dengan kendala 2x + 3y ≤ 24 dan x + 2y ≤ 16. Model matematika LENGKAP yang benar adalah…
 
 Pilihan jawaban:
 
-A. Maksimumkan f(x, y) = 60x + 40y dengan kendala 2x + 3y ≤ 18 ; x + 2y ≤ 12 ; x ≥ 0 ; y ≥ 0
-B. Maksimumkan f(x, y) = 40x + 60y dengan kendala 2x + 3y ≤ 18 ; x + 2y ≤ 12
-C. Minimumkan f(x, y) = 40x + 60y dengan kendala 2x + 3y ≤ 18 ; x + 2y ≤ 12 ; x ≥ 0 ; y ≥ 0
-D. Maksimumkan f(x, y) = 40x + 60y dengan kendala 2x + 3y ≤ 18 ; x + 2y ≤ 12 ; x ≥ 0 ; y ≥ 0 ✅ (kunci)
+A. Maksimumkan f(x, y) = 4x + 5y dengan kendala 2x + 3y ≤ 24 ; x + 2y ≤ 16 ; x ≥ 0 ; y ≥ 0
+B. Maksimumkan f(x, y) = 5x + 4y dengan kendala 2x + 3y ≤ 24 ; x + 2y ≤ 16 ; x ≥ 0 ; y ≥ 0 ✅ (kunci)
+C. Maksimumkan f(x, y) = 5x + 4y dengan kendala 2x + 3y ≤ 24 ; x + 2y ≤ 16
+D. Minimumkan f(x, y) = 5x + 4y dengan kendala 2x + 3y ≤ 24 ; x + 2y ≤ 16 ; x ≥ 0 ; y ≥ 0
 
 ---
 
@@ -2786,20 +2623,20 @@ D. Maksimumkan f(x, y) = 40x + 60y dengan kendala 2x + 3y ≤ 18 ; x + 2y ≤ 12
 
 ```
 > Susun tabel bantu dari soal cerita:
-Sumber daya  kursi(x)  meja(y)  Tersedia
-────────────────────────────────────────
-jam kerja    2         3        18
-peti gudang  1         2        12
+Sumber daya  kue bolu(x)  kue brownies(y)  Tersedia
+───────────────────────────────────────────────────
+ons tepung   2            3                24
+loyang oven  1            2                16
 > Fungsi tujuan dari keuntungan per unit:
-f(x, y) = 40x + 60y
+f(x, y) = 5x + 4y
 > Kendala sumber daya:
-2x + 3y ≤ 18
-x + 2y ≤ 12
+2x + 3y ≤ 24
+x + 2y ≤ 16
 > Kendala non-negatif (wajib ditambahkan):
 x ≥ 0
 y ≥ 0
 > Karena yang dicari keuntungan terbesar, fungsi tujuan DIMAKSIMUMKAN.
 ```
-**Kesimpulan:** Model lengkap memuat fungsi tujuan f(x, y) = 40x + 60y yang dimaksimumkan, beserta kendala 2x + 3y ≤ 18, x + 2y ≤ 12, x ≥ 0, dan y ≥ 0.
+**Kesimpulan:** Model lengkap memuat fungsi tujuan f(x, y) = 5x + 4y yang dimaksimumkan, beserta kendala 2x + 3y ≤ 24, x + 2y ≤ 16, x ≥ 0, dan y ≥ 0.
 
 ---

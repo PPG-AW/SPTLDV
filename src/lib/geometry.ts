@@ -37,9 +37,14 @@ export function satisfies(p: Pt, ineq: IneqSpec, eps = 1e-7): boolean {
   return v >= -eps;
 }
 
-/** sisi mana yang "benar": nilai +1 jika sisi ≤, -1 jika sisi ≥ (untuk clipping) */
+/**
+ * Arah "sisi yang dipertahankan" saat clipping.
+ * lineValue = ax + by − c.
+ *   Untuk ≤ : penyelesaian ada di lineValue ≤ 0  →  pertahankan −lineValue ≥ 0  →  k = −1
+ *   Untuk ≥ : penyelesaian ada di lineValue ≥ 0  →  pertahankan +lineValue ≥ 0  →  k = +1
+ */
 function keepSign(sign: Sign): number {
-  return sign === "<=" || sign === "<" ? 1 : -1;
+  return sign === "<=" || sign === "<" ? -1 : 1;
 }
 
 /**

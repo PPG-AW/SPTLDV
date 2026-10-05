@@ -20,7 +20,7 @@ create unique index if not exists classes_code_uq on classes(class_code);
 create index if not exists classes_teacher_idx on classes(teacher_id);
 create table if not exists students (
   id serial primary key, name text not null, password_hash text not null,
-  class_id integer not null references classes(id) on delete cascade,
+  class_id integer references classes(id) on delete cascade,
   current_subbab integer not null default 1,
   completed_subbabs jsonb not null default '[]'::jsonb,
   streak_correct integer not null default 0,
@@ -29,7 +29,7 @@ create table if not exists students (
   last_active_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );
-create unique index if not exists students_class_name_uq on students(class_id, name);
+create unique index if not exists students_name_uq on students(name);
 create index if not exists students_class_idx on students(class_id);
 create table if not exists sessions (
   token text primary key,
@@ -91,6 +91,52 @@ async function schemaReady(): Promise<boolean> {
   return !!(row.t && row.s && row.sa);
 }
 
+/** Migrasi idempoten untuk database yang dibuat dengan skema versi LAMA
+ *  (students.class_id NOT NULL + unique (class_id, name)).
+ *  Semua pernyataan aman dijalankan berulang kali. */
+const MIGRATIONS: { name: string; statement: string }[] = [
+  {
+    name: "students.class_id boleh kosong (kode kelas diminta setelah login)",
+    statement: `alter table if exists students alter column class_id drop not null`,
+  },
+  {
+    name: "hapus indeks unik lama per rombel",
+    statement: `drop index if exists students_class_name_uq`,
+  },
+  {
+    name: "indeks unik nama siswa global (case-sensitive)",
+    statement: `create unique index if not exists students_name_uq on students(name)`,
+  },
+];
+
+async function runMigrations(): Promise<{ name: string; status: string; detail?: string }[]> {
+  const results: { name: string; status: string; detail?: string }[] = [];
+  for (const m of MIGRATIONS) {
+    try {
+      await db.execute(sql.raw(m.statement));
+      results.push({ name: m.name, status: "diterapkan" });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      // jika indeks unik gagal karena ada nama ganda, pakai indeks biasa
+      if (m.statement.includes("students_name_uq") && /duplicate|already exists/i.test(msg)) {
+        try {
+          await db.execute(sql.raw(`create index if not exists students_name_idx on students(name)`));
+          results.push({
+            name: m.name,
+            status: "dilewati",
+            detail: "Ada nama ganda di data lama. Indeks unik diganti indeks biasa; perbaiki nama duplikat jika ingin indeks unik.",
+          });
+          continue;
+        } catch (e2) {
+          msg + ` | fallback: ${e2 instanceof Error ? e2.message : e2}`;
+        }
+      }
+      results.push({ name: m.name, status: "gagal", detail: msg });
+    }
+  }
+  return results;
+}
+
 export async function GET() {
   try {
     const ready = await schemaReady();
@@ -131,6 +177,8 @@ export async function POST(req: NextRequest) {
     if (!wasReady) {
       await db.execute(sql.raw(DDL));
     }
+    // selalu jalankan migrasi versi lama → baru (idempoten)
+    const migrations = await runMigrations();
     const ready = await schemaReady();
     let seed: Awaited<ReturnType<typeof runDemoSeed>> | null = null;
     if (ready && body.seed) {
@@ -140,6 +188,8 @@ export async function POST(req: NextRequest) {
       ok: true,
       createdTables: !wasReady,
       schemaReady: ready,
+      migrations,
+      migrationsFailed: migrations.filter((m) => m.status === "gagal").length,
       seeded: seed?.seeded ?? false,
       demo: seed?.seeded
         ? {

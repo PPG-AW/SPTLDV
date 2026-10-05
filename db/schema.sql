@@ -26,7 +26,8 @@ create table if not exists students (
   id serial primary key,
   name text not null,
   password_hash text not null,
-  class_id integer not null references classes(id) on delete cascade,
+  -- class_id boleh NULL: kode kelas diminta SETELAH siswa masuk
+  class_id integer references classes(id) on delete cascade,
   current_subbab integer not null default 1,
   completed_subbabs jsonb not null default '[]'::jsonb,
   streak_correct integer not null default 0,
@@ -35,8 +36,19 @@ create table if not exists students (
   last_active_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );
-create unique index if not exists students_class_name_uq on students(class_id, name);
+create unique index if not exists students_name_uq on students(name);
 create index if not exists students_class_idx on students(class_id);
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- MIGRASI untuk database yang dibuat dengan skema LAMA (jalankan SEKALI saja).
+-- Aman dijalankan berulang kali (idempotent).
+-- ─────────────────────────────────────────────────────────────────────────────
+alter table if exists students alter column class_id drop not null;
+drop index if exists students_class_name_uq;
+create unique index if not exists students_name_uq on students(name);
+-- Catatan: jika pembuatan indeks unik gagal karena ada nama ganda di data lama,
+-- perbaiki nama duplikat tersebut, atau gunakan indeks biasa di bawah ini:
+-- create index if not exists students_name_idx on students(name);
 
 create table if not exists sessions (
   token text primary key,

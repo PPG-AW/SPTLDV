@@ -62,10 +62,13 @@ function canvasDesc(spec) {
   }
   if (spec.dhpIneqs?.length) {
     parts.push(
-      "DHP ditampilkan sebagai daerah bersih berbatas: " +
+      "DHP (daerah yang diarsir berwarna) dibatasi oleh: " +
         spec.dhpIneqs.map((l) => eqStr(l.a, l.b, l.c, SYM[l.sign])).join(";  ") +
-        " — di luar batas diberi arsiran tipis."
+        "."
     );
+  }
+  if (spec.shadeIndices?.length) {
+    parts.push("Daerah penyelesaian ditandai dengan arsiran berwarna.");
   }
   if (spec.points?.length) {
     parts.push(

@@ -1,8 +1,23 @@
 // ─── Kurikulum SPtLDV Fase E (Kelas X) — 10 Sub-Bab ─────────────────────────
 // Bahasa sederhana untuk siswa Kelas X. Tanpa tanda pisah em-dash.
 // Sintaks langkah: baris ">" = kalimat penjelas, frac(a,b) = pecahan atas bawah.
+// KONVENSI GRAFIK: daerah yang DIARSIR adalah daerah penyelesaian / DHP.
+
+import type { IneqSpec, Pt } from "./geometry";
 
 export type SimulationKind = "line" | "region" | "system" | "corner";
+
+/** Gambar grafik yang menyertai materi atau contoh soal. */
+export interface FigureSpec {
+  xRange: [number, number];
+  yRange: [number, number];
+  lines?: IneqSpec[];
+  shadeIndices?: number[];
+  dhpIneqs?: IneqSpec[];
+  points?: { p: Pt; label?: string; color?: string; hollow?: boolean }[];
+  crosshair?: Pt;
+  caption?: string;
+}
 
 export interface MateriTable {
   header: string[];
@@ -17,12 +32,15 @@ export interface MateriBlock {
   math?: string[];
   tip?: string;
   table?: MateriTable;
+  figure?: FigureSpec;
 }
 
 export interface ContohStage {
   label: string;
   explain: string;
   steps?: string;
+  figure?: FigureSpec;
+  table?: MateriTable;
 }
 
 export interface SubbabContent {
@@ -92,20 +110,6 @@ export const SUBBABS: SubbabContent[] = [
         ],
       },
       {
-        title: "Memeriksa apakah sebuah titik memenuhi",
-        body:
-          "Menjawab pertanyaan apakah sebuah titik termasuk penyelesaian, caranya hanya substitusi. Masukkan nilai x dan y dari titik itu ke ruas kiri pertidaksamaan, lalu nilai benar atau salah pernyataannya. Bila pernyataan benar, titik itu memenuhi. Bila salah, titik itu tidak memenuhi.",
-        steps:
-          "> Periksa titik (1, 2) pada 3x + 2y ≤ 12:\n" +
-          "3(1) + 2(2) ≤ 12\n" +
-          "3 + 4 ≤ 12\n" +
-          "7 ≤ 12   → BENAR, maka titik (1, 2) memenuhi\n" +
-          "> Periksa titik (5, 3) pada pertidaksamaan yang sama:\n" +
-          "3(5) + 2(3) ≤ 12\n" +
-          "15 + 6 ≤ 12\n" +
-          "21 ≤ 12   → SALAH, maka titik (5, 3) tidak memenuhi",
-      },
-      {
         title: "Unsur unsur di dalam PtLDV",
         body:
           "Setiap bagian kecil pada bentuk ax + by ≤ c punya nama resmi yang akan selalu dipakai di sub-bab berikutnya.",
@@ -138,33 +142,42 @@ export const SUBBABS: SubbabContent[] = [
     ],
     contoh: {
       soal:
-        "Periksa apakah ketiga titik berikut memenuhi 3x + 2y ≤ 12:\nA. Titik (1, 2)\nB. Titik (4, 1)\nC. Titik (0, 6)",
+        "Perhatikan pertidaksamaan 4x − 3y ≤ 24.\nA. Sebutkan variabel, koefisien x, koefisien y, dan konstantanya.\nB. Apakah bentuk tersebut termasuk PtLDV? Jelaskan alasannya.",
       stages: [
         {
-          label: "Menetapkan cara kerja",
+          label: "Menentukan variabelnya",
           explain:
-            "Memeriksa titik itu mudah. Substitusikan x dan y dari titik ke ruas kiri, hitung hasilnya, lalu bandingkan dengan ruas kanan. Kita kerjakan titik per titik tanpa tergesa.",
+            "Variabel adalah huruf yang nilainya belum diketahui. Pada bentuk ini ada dua huruf, yaitu x dan y, sehingga variabelnya ada dua.",
+          steps: "4x − 3y ≤ 24\n> Variabelnya adalah x dan y.",
         },
         {
-          label: "Titik A (1, 2)",
+          label: "Menentukan koefisien x",
           explain:
-            "Nilai x adalah 1 dan nilai y adalah 2. Substitusikan keduanya ke bentuk 3x + 2y.",
-          steps: "3(1) + 2(2) = 3 + 4\n3(1) + 2(2) = 7\n7 ≤ 12   → BENAR\n> Titik A memenuhi.",
+            "Koefisien x adalah bilangan yang menempel pada x. Pada suku 4x, bilangan yang menempel adalah 4 dan tandanya positif.",
+          steps: "> Suku yang memuat x adalah 4x, maka:\na = 4",
         },
         {
-          label: "Titik B (4, 1)",
+          label: "Menentukan koefisien y",
           explain:
-            "Lakukan cara yang sama dengan nilai x yaitu 4 dan nilai y yaitu 1.",
-          steps: "3(4) + 2(1) = 12 + 2\n3(4) + 2(1) = 14\n14 ≤ 12   → SALAH\n> Titik B tidak memenuhi.",
+            "Koefisien y adalah bilangan yang menempel pada y. Perhatikan tanda di depannya. Karena sukunya −3y, maka koefisiennya negatif, bukan 3 melainkan −3.",
+          steps: "> Suku yang memuat y adalah −3y, maka:\nb = −3",
         },
         {
-          label: "Titik C (0, 6)",
+          label: "Menentukan konstanta",
           explain:
-            "Kali ini x nya nol sehingga perhitungannya lebih singkat. Perhatikan bahwa nilai ruas kiri tepat sama dengan ruas kanan. Karena tandanya ≤ (boleh sama), titik ini tetap memenuhi.",
-          steps: "3(0) + 2(6) = 0 + 12\n3(0) + 2(6) = 12\n12 ≤ 12   → BENAR\n> Titik C memenuhi.",
+            "Konstanta adalah suku yang tidak memuat variabel apa pun. Pada bentuk ini, suku tersebut berada di ruas kanan.",
+          steps: "> Suku tanpa variabel adalah 24, maka:\nc = 24",
+        },
+        {
+          label: "Memeriksa apakah termasuk PtLDV",
+          explain:
+            "Periksa syaratnya satu per satu. Ada dua variabel yaitu x dan y, keduanya berpangkat satu, tidak ada perkalian antar variabel seperti xy, tidak ada variabel di dalam akar atau penyebut, dan tandanya ≤ yang merupakan tanda ketidaksamaan. Semua syarat terpenuhi.",
+          steps:
+            "> Dua variabel: ada (x dan y)\n> Pangkat tiap variabel: satu\n> Perkalian antar variabel: tidak ada\n> Tanda: ≤ (tanda ketidaksamaan)\n> Kesimpulan: bentuk ini TERMASUK PtLDV.",
         },
       ],
-      jawaban: "Titik A dan titik C memenuhi; hanya titik B yang tidak memenuhi",
+      jawaban:
+        "Variabel x dan y, dengan a = 4, b = −3, c = 24. Bentuk tersebut termasuk PtLDV karena memenuhi semua syaratnya",
     },
     simulation: null,
   },
@@ -183,35 +196,16 @@ export const SUBBABS: SubbabContent[] = [
           "Untuk menggambar sebuah garis kita hanya butuh dua titik. Dari semua titik yang dilalui garis, dua yang paling mudah dihitung adalah titik potong dengan sumbu X dan titik potong dengan sumbu Y. Alasannya sederhana: pada kedua titik itu, salah satu koordinatnya selalu nol, sehingga perhitungannya ringan.",
       },
       {
-        title: "Menyederhanakan pertidaksamaan terlebih dahulu",
+        title: "Sederhanakan dahulu bila memungkinkan",
         body:
-          "Sebelum mencari titik potong, periksa dulu bentuk pertidaksamaannya. Bila koefisien x, koefisien y, dan konstantanya punya faktor persekutuan yang sama, bagi semuanya dengan faktor itu. Proses ini disebut menyederhanakan. Hasilnya jauh lebih mudah dihitung dan gambar garisnya tetap sama.",
-        list: [
-          "Cari FPB dari ketiga angka: koefisien x, koefisien y, dan konstanta",
-          "Jika FPB-nya lebih dari satu, bagi ketiga suku dengan FPB itu",
-          "Jika FPB-nya satu, pertidaksamaan memang sudah paling sederhana",
-          "Tanda pertidaksamaan tidak berubah selama kita membagi dengan bilangan positif",
-        ],
+          "Sebelum mencari titik potong, perhatikan dulu angka angkanya. Bila koefisien x, koefisien y, dan konstantanya sama sama habis dibagi satu bilangan, bagilah ketiganya dengan bilangan itu. Bentuk yang lebih sederhana membuat perhitungan jauh lebih ringan, sedangkan gambar garisnya tetap sama persis.",
         steps:
-          "> Periksa bentuk 6x + 4y ≤ 24:\n" +
-          "> FPB dari 6, 4, dan 24 adalah 2\n" +
-          "6x/2 + 4y/2 ≤ 24/2\n" +
-          "3x + 2y ≤ 12",
-      },
-      {
-        title: "Tabel cek: sudah sederhana atau belum",
-        body:
-          "Banyak soal langsung memberi bentuk sederhana, tetapi sebagian tidak. Biasakan selalu mengecek seperti tabel berikut sebelum lanjut menghitung.",
-        table: {
-          header: ["Pertidaksamaan", "FPB", "Kesimpulan"],
-          rows: [
-            ["6x + 4y ≤ 24", "2", "Belum, bagi dengan 2 menjadi 3x + 2y ≤ 12"],
-            ["5x + 3y ≤ 15", "1", "Sudah sederhana, langsung dikerjakan"],
-            ["9x + 6y ≥ 18", "3", "Belum, bagi dengan 3 menjadi 3x + 2y ≥ 6"],
-            ["4x + 2y = 8", "2", "Belum, bagi dengan 2 menjadi 2x + y = 4"],
-            ["3x + 2y = 12", "1", "Sudah sederhana"],
-          ],
-        },
+          "6x + 4y ≤ 24\n" +
+          "> Ketiga angka (6, 4, dan 24) sama sama habis dibagi 2, maka bagi semuanya dengan 2:\n" +
+          "3x + 2y ≤ 12\n" +
+          "> Sekarang bentuknya sudah sederhana dan siap dikerjakan.",
+        tip:
+          "Tanda pertidaksamaan tidak berubah selama kita membagi dengan bilangan positif. Bila angka angkanya sudah tidak bisa dibagi bersama lagi, berarti bentuknya memang sudah sederhana.",
       },
       {
         title: "Idenya: jadikan satu variabel nol",
@@ -283,35 +277,33 @@ export const SUBBABS: SubbabContent[] = [
         "Sederhanakan pertidaksamaan 6x + 4y ≤ 24, kemudian tentukan titik potong garis pembatasnya dengan kedua sumbu.",
       stages: [
         {
-          label: "Mengecek FPB dulu",
+          label: "Menyederhanakan bentuknya",
           explain:
-            "Sebelum mencari titik potong, selalu periksa apakah bentuknya sudah paling sederhana. Cari FPB dari 6, 4, dan 24. Ketiganya habis dibagi 2, sehingga FPB-nya adalah 2. Karena lebih dari satu, pertidaksamaan ini belum paling sederhana.",
+            "Perhatikan ketiga angkanya: 6, 4, dan 24. Ketiganya sama sama habis dibagi 2, sehingga bentuknya masih bisa disederhanakan. Bagi seluruh suku dengan 2. Tanda pertidaksamaan tidak berubah karena kita membagi dengan bilangan positif.",
+          steps:
+            "6x + 4y ≤ 24\n> Bagi setiap suku dengan 2:\n3x + 2y ≤ 12",
         },
         {
-          label: "Menyederhanakan",
+          label: "Mengubah menjadi persamaan",
           explain:
-            "Bagi seluruh suku dengan FPB yang tadi ditemukan. Tanda pertidaksamaan tidak berubah karena kita membagi dengan bilangan positif.",
-          steps: "6x + 4y ≤ 24\n> Bagi ketiga suku dengan 2:\n6x/2 + 4y/2 ≤ 24/2\n3x + 2y ≤ 12",
+            "Yang kita gambar adalah garis pembatasnya, sehingga tanda ≤ untuk sementara diganti dengan tanda sama dengan.",
+          steps: "3x + 2y = 12",
         },
         {
           label: "Titik potong sumbu X",
-          explain:
-            "Ubah pertidaksamaan menjadi persamaan, lalu substitusikan y = 0 dan hitung nilai x.",
+          explain: "Substitusikan y = 0 lalu hitung nilai x.",
           steps:
             "3x + 2y = 12\n" +
-            "> Kita ubah y = 0, maka:\n3x + 2(0) = 12\n3x = 12\nx = frac(12,3)\nx = 4",
+            "> Kita ubah y = 0, maka:\n3x + 2(0) = 12\n3x = 12\nx = frac(12,3)\nx = 4\n" +
+            "> Titik potong sumbu X adalah (4, 0).",
         },
         {
           label: "Titik potong sumbu Y",
-          explain: "Sekarang substitusikan x = 0 dan hitung nilai y dengan cara yang sama.",
+          explain: "Sekarang substitusikan x = 0 lalu hitung nilai y.",
           steps:
             "3x + 2y = 12\n" +
-            "> Kita ubah x = 0, maka:\n3(0) + 2y = 12\n2y = 12\ny = frac(12,2)\ny = 6",
-        },
-        {
-          label: "Latihan singkat dua kasus lagi",
-          explain:
-            "Agar terbiasa mengecek: 5x + 3y ≤ 15 memiliki FPB satu sehingga sudah sederhana dan boleh langsung dikerjakan. Sedangkan 9x + 6y ≥ 18 memiliki FPB 3, sehingga harus dibagi 3 dulu menjadi 3x + 2y ≥ 6.",
+            "> Kita ubah x = 0, maka:\n3(0) + 2y = 12\n2y = 12\ny = frac(12,2)\ny = 6\n" +
+            "> Titik potong sumbu Y adalah (0, 6).",
         },
       ],
       jawaban: "Bentuk sederhananya 3x + 2y ≤ 12, dengan titik potong (4, 0) dan (0, 6)",
@@ -367,21 +359,39 @@ export const SUBBABS: SubbabContent[] = [
           "> Garis x = 4 adalah garis tegak melalui titik (4, 0).\n" +
           "> Garis y = 3 adalah garis datar melalui titik (0, 3).\n" +
           "> Garis x = 0 adalah sumbu Y, dan garis y = 0 adalah sumbu X.",
+        figure: {
+          xRange: [-1, 7], yRange: [-1, 7],
+          lines: [
+            { a: 1, b: 0, c: 4, sign: "<=" },
+            { a: 0, b: 1, c: 3, sign: "<=", color: "#DC2626" },
+          ],
+          points: [
+            { p: { x: 4, y: 0 }, label: "(4, 0)", hollow: true },
+            { p: { x: 0, y: 3 }, label: "(0, 3)", hollow: true, color: "#DC2626" },
+          ],
+          caption: "Garis biru x = 4 (tegak) dan garis merah y = 3 (datar)",
+        },
       },
       {
         title: "Ketelitian saat menaruh titik",
         body:
           "Garis yang salah seringnya bukan karena hitungan keliru, melainkan karena titiknya salah taruh. Ingat aturan membaca koordinat: angka pertama bergerak mendatar, angka kedua bergerak tegak.",
         list: [
-          "Titik (6, 0) bergerak 6 satuan ke kanan dari titik asal, tetap pada sumbu X",
-          "Titik (0, 4) bergerak 4 satuan ke atas dari titik asal, tetap pada sumbu Y",
-          "Titik (0, −3) bergerak 3 satuan ke bawah dari titik asal, di bagian negatif sumbu Y",
+          "Titik A(6, 0) bergerak 6 satuan ke kanan dari titik asal, tetap pada sumbu X",
+          "Titik B(0, 4) bergerak 4 satuan ke atas dari titik asal, tetap pada sumbu Y",
+          "Titik C(0, −3) bergerak 3 satuan ke bawah dari titik asal, di bagian negatif sumbu Y",
+          "Titik D(3, 2) bergerak 3 satuan ke kanan lalu 2 satuan ke atas",
         ],
-      },
-      {
-        title: "Cek arah miringnya untuk mengontrol diri",
-        body:
-          "Pemeriksaan cepat sebelum menggambar: bila koefisien x dan y sama sama positif (misalnya 2x + 3y = 12), garis akan miring TURUN dari kiri atas ke kanan bawah. Bila salah satu koefisien negatif (misalnya 2x − 3y = 6), garis miring NAIK dari kiri bawah ke kanan atas. Cocokkan dugaan arah ini dengan gambarmu.",
+        figure: {
+          xRange: [-2, 8], yRange: [-4, 6],
+          points: [
+            { p: { x: 6, y: 0 }, label: "A(6, 0)" },
+            { p: { x: 0, y: 4 }, label: "B(0, 4)" },
+            { p: { x: 0, y: -3 }, label: "C(0, −3)" },
+            { p: { x: 3, y: 2 }, label: "D(3, 2)" },
+          ],
+          caption: "Penulisan nama titik yang benar: huruf kapital diikuti koordinatnya",
+        },
       },
       {
         title: "Membaca kembali persamaan dari grafik",
@@ -423,7 +433,16 @@ export const SUBBABS: SubbabContent[] = [
         {
           label: "Langkah 5: gambarkan",
           explain:
-            "Taruh titik (4, 0) pada sumbu X dan (0, 3) pada sumbu Y, hubungkan dengan garis penuh, lalu perpanjang sedikit keluar kedua ujungnya. Karena kedua koefisien positif, garisnya harus miring turun ke kanan.",
+            "Taruh titik A(4, 0) pada sumbu X dan titik B(0, 3) pada sumbu Y, hubungkan keduanya dengan garis penuh, lalu perpanjang sedikit keluar kedua ujungnya. Hasil gambarnya tampak seperti berikut.",
+          figure: {
+            xRange: [-1, 6], yRange: [-1, 5],
+            lines: [{ a: 3, b: 4, c: 12, sign: ">=" }],
+            points: [
+              { p: { x: 4, y: 0 }, label: "A(4, 0)", hollow: true },
+              { p: { x: 0, y: 3 }, label: "B(0, 3)", hollow: true },
+            ],
+            caption: "Garis penuh 3x + 4y = 12 melalui A(4, 0) dan B(0, 3)",
+          },
         },
       ],
       jawaban: "Garis penuh yang melalui titik (4, 0) dan (0, 3)",
@@ -447,7 +466,7 @@ export const SUBBABS: SubbabContent[] = [
       {
         title: "Konvensi arsiran yang dipakai",
         body:
-          "Sesuai standar pada buku dan video pembelajaran, yang kita ARSIR adalah daerah penyelesaian itu sendiri. Jadi nanti saat membaca gambar, daerah yang berwarnalah jawabannya. Daerah putih yang tidak diarsir berarti bukan penyelesaian.",
+          "Sesuai standar pada buku dan video pembelajaran, yang kita ARSIR adalah daerah penyelesaiannya. Jadi saat membaca gambar, daerah yang diberi warna itulah jawabannya, sedangkan daerah putih di luarnya tidak termasuk penyelesaian.",
         tip:
           "Ingat kalimatnya: arsir daerah penyelesaian. Kebiasaan ini akan sangat membantu saat banyak kendala bertumpuk di sub-bab berikutnya.",
       },
@@ -469,8 +488,15 @@ export const SUBBABS: SubbabContent[] = [
           "> Ambil titik uji (0, 0), lalu substitusikan:\n" +
           "2(0) + 3(0) ≤ 12\n" +
           "0 ≤ 12   → BENAR\n" +
-          "> Titik (0, 0) memenuhi, maka daerah berisi (0, 0)\n" +
-          "> yang kita arsir, yaitu sisi bawah kiri garis.",
+          "> Titik (0, 0) memenuhi pertidaksamaan.\n" +
+          "> Maka daerah yang memuat titik (0, 0) itulah yang kita arsir.",
+        figure: {
+          xRange: [-1, 8], yRange: [-1, 6],
+          lines: [{ a: 2, b: 3, c: 12, sign: "<=" }],
+          shadeIndices: [0],
+          crosshair: { x: 0, y: 0 },
+          caption: "Daerah berwarna adalah daerah penyelesaian 2x + 3y ≤ 12",
+        },
       },
       {
         title: "Contoh lengkap dengan tanda ≥",
@@ -481,18 +507,34 @@ export const SUBBABS: SubbabContent[] = [
           "> Ambil titik uji (0, 0), lalu substitusikan:\n" +
           "4(0) + 5(0) ≥ 20\n" +
           "0 ≥ 20   → SALAH\n" +
-          "> Titik (0, 0) tidak memenuhi, maka daerah penyelesaian\n" +
-          "> ada di sisi lain, yaitu di atas kanan garis. Itulah yang kita arsir.",
+          "> Titik (0, 0) tidak memenuhi pertidaksamaan.\n" +
+          "> Maka yang kita arsir adalah daerah di sisi seberangnya.",
+        figure: {
+          xRange: [-1, 8], yRange: [-1, 7],
+          lines: [{ a: 4, b: 5, c: 20, sign: ">=" }],
+          shadeIndices: [0],
+          crosshair: { x: 0, y: 0 },
+          caption: "Daerah berwarna adalah daerah penyelesaian 4x + 5y ≥ 20",
+        },
       },
       {
-        title: "Peran x ≥ 0 dan y ≥ 0 di Kuadran I",
+        title: "Peran kendala x ≥ 0 dan y ≥ 0",
         body:
-          "Dalam soal kontekstual, x dan y biasanya menghitung banyaknya barang sehingga tidak mungkin negatif. Dua kendala ekstra ini menutup daerah hanya pada Kuadran I. Karena daerah penyelesaian yang diarsir, maka arsiran x ≥ 0 berada di kanan sumbu Y dan arsiran y ≥ 0 berada di atas sumbu X.",
+          "Dalam soal kontekstual, x dan y biasanya menghitung banyaknya barang sehingga tidak mungkin negatif. Dua kendala tambahan ini membatasi daerah penyelesaian hanya pada bagian kanan atas bidang koordinat, yaitu daerah dengan nilai x dan y yang sama sama tidak negatif.",
         list: [
           "Kendala x ≥ 0: daerah yang diarsir berada di kanan sumbu Y",
           "Kendala y ≥ 0: daerah yang diarsir berada di atas sumbu X",
-          "Akibat keduanya: daerah penyelesaian akhir selalu di Kuadran I",
+          "Akibat keduanya: daerah penyelesaian berada di bagian kanan atas bidang",
         ],
+        figure: {
+          xRange: [-4, 7], yRange: [-4, 7],
+          lines: [],
+          dhpIneqs: [
+            { a: 1, b: 0, c: 0, sign: ">=" },
+            { a: 0, b: 1, c: 0, sign: ">=" },
+          ],
+          caption: "Daerah berwarna memenuhi x ≥ 0 dan y ≥ 0 sekaligus",
+        },
       },
       {
         title: "Alur lengkap satu pertidaksamaan",
@@ -529,7 +571,17 @@ export const SUBBABS: SubbabContent[] = [
         {
           label: "Langkah 3: tentukan daerah yang diarsir",
           explain:
-            "Hasil uji benar, sehingga titik (0, 0) berada di dalam daerah penyelesaian. Karena konvensi kita mengarsir daerah penyelesaian, maka daerah sisi garis yang memuat (0, 0), yaitu sisi bawah kiri garis, yang diarsir berwarna.",
+            "Hasil uji bernilai benar, sehingga titik (0, 0) berada di dalam daerah penyelesaian. Karena yang kita arsir adalah daerah penyelesaian, maka sisi garis yang memuat titik (0, 0) itulah yang diberi warna. Hasil akhirnya tampak seperti gambar berikut.",
+          figure: {
+            xRange: [-1, 8], yRange: [-1, 6],
+            lines: [{ a: 2, b: 3, c: 12, sign: "<=" }],
+            shadeIndices: [0],
+            points: [
+              { p: { x: 6, y: 0 }, label: "(6, 0)", hollow: true },
+              { p: { x: 0, y: 4 }, label: "(0, 4)", hollow: true },
+            ],
+            caption: "Daerah penyelesaian 2x + 3y ≤ 12 ditandai dengan warna",
+          },
         },
       ],
       jawaban:
@@ -571,28 +623,6 @@ export const SUBBABS: SubbabContent[] = [
           "Dalam soal cerita, x dan y biasanya menghitung banyaknya benda: kursi, roti, kemasan, dan sebagainya. Banyak benda tidak mungkin negatif, sehingga otomatis berlaku x ≥ 0 dan y ≥ 0. Dua kendala ini sering tidak tertulis di soal, tetapi harus kamu tambahkan sendiri saat memodelkan.",
       },
       {
-        title: "Cara memeriksa titik pada sistem",
-        body:
-          "Memeriksa titik pada sistem sama mudahnya, hanya lebih rajin. Substitusikan titik ke SETIAP kendala satu per satu. Semua harus benar. Satu saja gagal, titik itu langsung gugur dan tidak perlu diperiksa lagi.",
-        steps:
-          "> Sistem: x + y ≤ 10,  2x + y ≤ 14,  x ≥ 0,  y ≥ 0\n" +
-          "> Uji titik (2, 3):\n" +
-          "2 + 3 ≤ 10\n5 ≤ 10   → BENAR\n" +
-          "2(2) + 3 ≤ 14\n7 ≤ 14   → BENAR\n" +
-          "x = 2 ≥ 0 BENAR, y = 3 ≥ 0 BENAR\n" +
-          "> Karena semuanya benar, (2, 3) adalah penyelesaian sistem.",
-      },
-      {
-        title: "Contoh titik yang gugur",
-        body:
-          "Berikut titik yang tampak dekat tetapi gagal di satu kendala. Satu kegagalan saja cukup membuatnya tidak menjadi penyelesaian.",
-        steps:
-          "> Uji titik (6, 3) pada sistem yang sama:\n" +
-          "6 + 3 ≤ 10\n9 ≤ 10   → BENAR\n" +
-          "2(6) + 3 ≤ 14\n15 ≤ 14   → SALAH\n" +
-          "> Ada kendala yang gagal, maka (6, 3) BUKAN penyelesaian sistem.",
-      },
-      {
         title: "Penyelesaian sistem adalah irisan",
         body:
           "Setiap kendala menghasilkan daerah penyelesaian tersendiri. Karena seluruh kendala harus dipenuhi bersamaan, jawaban sistem adalah bagian yang menjadi anggota SEMUA daerah itu sekaligus, dalam bahasa himpunan disebut IRISAN. Daerah hasil irisan inilah yang disebut Daerah Himpunan Penyelesaian atau DHP.",
@@ -601,36 +631,44 @@ export const SUBBABS: SubbabContent[] = [
       },
     ],
     contoh: {
-      soal: "Periksalah apakah titik (1, 4) merupakan penyelesaian sistem x + y ≤ 6, 3x + y ≥ 6, x ≥ 0, y ≥ 0.",
+      soal:
+        "Perhatikan kumpulan pertidaksamaan berikut.\nx + y ≤ 10\n2x + y ≤ 14\nx ≥ 0\ny ≥ 0\nA. Apakah kumpulan ini termasuk SPtLDV?\nB. Ada berapa kendala di dalamnya dan apa makna dua kendala terakhir?",
       stages: [
         {
-          label: "Langkah 1: rencana pemeriksaan",
+          label: "Memeriksa syarat SPtLDV",
           explain:
-            "Ada empat kendala yang harus diuji satu per satu. Begitu menemukan satu yang gagal, pemeriksaan bisa langsung berhenti.",
+            "SPtLDV adalah dua PtLDV atau lebih yang berlaku bersamaan. Periksa dahulu apakah setiap barisnya merupakan PtLDV, yaitu linear, memuat variabel yang sama, dan memakai tanda ketidaksamaan.",
+          steps:
+            "> Baris 1: x + y ≤ 10 → linear, dua variabel, bertanda ≤\n" +
+            "> Baris 2: 2x + y ≤ 14 → linear, dua variabel, bertanda ≤\n" +
+            "> Baris 3 dan 4: x ≥ 0 dan y ≥ 0 → kendala non negatif\n" +
+            "> Semuanya pertidaksamaan linear yang berlaku bersamaan.",
         },
         {
-          label: "Langkah 2: kendala pertama",
-          explain: "Substitusikan x = 1 dan y = 4 ke kendala x + y ≤ 6.",
-          steps: "x + y ≤ 6\n> Substitusikan (1, 4):\n1 + 4 ≤ 6\n5 ≤ 6   → BENAR",
-        },
-        {
-          label: "Langkah 3: kendala kedua",
+          label: "Menyimpulkan jawaban A",
           explain:
-            "Lanjutkan ke kendala 3x + y ≥ 6. Kali ini tandanya ≥, jadi yang diharapkan adalah hasil yang lebih besar atau sama dengan 6.",
-          steps: "3x + y ≥ 6\n> Substitusikan (1, 4):\n3(1) + 4 ≥ 6\n7 ≥ 6   → BENAR",
+            "Karena memuat lebih dari satu pertidaksamaan linear yang harus dipenuhi secara bersamaan, kumpulan ini memang sebuah SPtLDV.",
+          steps: "> Kesimpulan: ya, kumpulan tersebut adalah SPtLDV.",
         },
         {
-          label: "Langkah 4: kendala non negatif",
-          explain: "Karena x = 1 dan y = 4 keduanya positif, dua kendala terakhir otomatis terpenuhi.",
-          steps: "x = 1   → 1 ≥ 0 BENAR\ny = 4   → 4 ≥ 0 BENAR",
-        },
-        {
-          label: "Langkah 5: simpulkan",
+          label: "Menghitung banyak kendala",
           explain:
-            "Semua kendala menghasilkan pernyataan benar, artinya titik (1, 4) memenuhi semuanya bersamaan dan berada di dalam DHP sistem ini.",
+            "Hitung seluruh barisnya, termasuk kendala non negatif. Jangan lupa x ≥ 0 dan y ≥ 0 juga dihitung sebagai kendala.",
+          steps: "> Banyak kendala seluruhnya: 4",
+        },
+        {
+          label: "Memahami makna dua kendala terakhir",
+          explain:
+            "Kendala x ≥ 0 dan y ≥ 0 disebut kendala non negatif. Maknanya nilai x dan y tidak boleh negatif. Dalam soal nyata, kendala ini muncul karena x dan y biasanya menghitung banyaknya benda, dan banyak benda tidak mungkin kurang dari nol.",
+        },
+        {
+          label: "Memahami arti penyelesaian sistem",
+          explain:
+            "Penyelesaian sistem bukan hanya memenuhi satu baris saja, melainkan harus memenuhi keempat kendala sekaligus. Daerah yang memenuhi semuanya disebut DHP, yaitu irisan dari seluruh daerah penyelesaian.",
         },
       ],
-      jawaban: "Ya, titik (1, 4) memenuhi semua kendala sehingga merupakan penyelesaian sistem",
+      jawaban:
+        "Ya, kumpulan itu adalah SPtLDV dengan 4 kendala. Dua kendala terakhir adalah kendala non negatif yang menyatakan nilai x dan y tidak boleh negatif",
     },
     simulation: null,
   },
@@ -664,6 +702,20 @@ export const SUBBABS: SubbabContent[] = [
           "Bagian yang ketumpuk kedua arsiran, juga dibatasi kedua sumbu, adalah DHP",
           "Perjelas DHP dengan warna ungu yang lebih pekat",
         ],
+        figure: {
+          xRange: [-1, 10], yRange: [-1, 8],
+          lines: [
+            { a: 1, b: 1, c: 6, sign: "<=" },
+            { a: 1, b: 2, c: 8, sign: "<=" },
+          ],
+          dhpIneqs: [
+            { a: 1, b: 1, c: 6, sign: "<=" },
+            { a: 1, b: 2, c: 8, sign: "<=" },
+            { a: 1, b: 0, c: 0, sign: ">=" },
+            { a: 0, b: 1, c: 0, sign: ">=" },
+          ],
+          caption: "Daerah ungu adalah DHP, yaitu irisan dari semua daerah penyelesaian",
+        },
       },
       {
         title: "Kendala non negatif juga punya garis pembatas",
@@ -707,15 +759,35 @@ export const SUBBABS: SubbabContent[] = [
         {
           label: "Langkah 3: tambahkan kendala non negatif",
           explain:
-            "Kendala x ≥ 0 dan y ≥ 0 mengurung semuanya di Kuadran I, maka bagian arsiran di kiri sumbu Y dan di bawah sumbu X tidak ikut menjadi jawaban.",
+            "Kendala x ≥ 0 dan y ≥ 0 mengurung semuanya di bagian kanan atas bidang, maka bagian arsiran di kiri sumbu Y dan di bawah sumbu X tidak ikut menjadi jawaban.",
         },
         {
           label: "Langkah 4: temukan DHP",
           explain:
-            "DHP adalah daerah yang ketumpuk semua arsiran, yaitu daerah di Kuadran I yang berada di bawah kedua garis. Bila diteliti, sudut sudutnya berada di (0, 0), (6, 0), (4, 2), dan (0, 4). Perjelas dengan warna ungu agar mudah dibaca.",
+            "DHP adalah daerah yang terkena semua arsiran sekaligus, yaitu daerah di bagian kanan atas yang berada di bawah kedua garis. Bila diteliti, sudut sudutnya berada di (0, 0), (6, 0), (4, 2), dan (0, 4).",
+          figure: {
+            xRange: [-1, 10], yRange: [-1, 8],
+            lines: [
+              { a: 1, b: 1, c: 6, sign: "<=" },
+              { a: 1, b: 2, c: 8, sign: "<=" },
+            ],
+            dhpIneqs: [
+              { a: 1, b: 1, c: 6, sign: "<=" },
+              { a: 1, b: 2, c: 8, sign: "<=" },
+              { a: 1, b: 0, c: 0, sign: ">=" },
+              { a: 0, b: 1, c: 0, sign: ">=" },
+            ],
+            points: [
+              { p: { x: 0, y: 0 }, label: "(0, 0)", color: "#7C3AED" },
+              { p: { x: 6, y: 0 }, label: "(6, 0)", color: "#7C3AED" },
+              { p: { x: 4, y: 2 }, label: "(4, 2)", color: "#7C3AED" },
+              { p: { x: 0, y: 4 }, label: "(0, 4)", color: "#7C3AED" },
+            ],
+            caption: "DHP berwarna ungu dengan keempat titik pojoknya",
+          },
         },
       ],
-      jawaban: "DHP berupa segi empat di Kuadran I dengan sudut (0, 0), (6, 0), (4, 2), dan (0, 4)",
+      jawaban: "DHP berupa segi empat di bagian kanan atas bidang dengan sudut (0, 0), (6, 0), (4, 2), dan (0, 4)",
     },
     simulation: "system",
   },
@@ -742,6 +814,26 @@ export const SUBBABS: SubbabContent[] = [
           "Perpotongan satu garis kendala dengan salah satu sumbu",
           "Perpotongan dua garis kendala satu dengan yang lain",
         ],
+        figure: {
+          xRange: [-1, 10], yRange: [-1, 8],
+          lines: [
+            { a: 1, b: 1, c: 6, sign: "<=" },
+            { a: 1, b: 2, c: 8, sign: "<=" },
+          ],
+          dhpIneqs: [
+            { a: 1, b: 1, c: 6, sign: "<=" },
+            { a: 1, b: 2, c: 8, sign: "<=" },
+            { a: 1, b: 0, c: 0, sign: ">=" },
+            { a: 0, b: 1, c: 0, sign: ">=" },
+          ],
+          points: [
+            { p: { x: 0, y: 0 }, label: "(0, 0) dua sumbu", color: "#7C3AED" },
+            { p: { x: 6, y: 0 }, label: "(6, 0) garis & sumbu", color: "#7C3AED" },
+            { p: { x: 4, y: 2 }, label: "(4, 2) dua garis", color: "#7C3AED" },
+            { p: { x: 0, y: 4 }, label: "(0, 4) garis & sumbu", color: "#7C3AED" },
+          ],
+          caption: "Setiap sudut DHP berasal dari salah satu dari tiga jenis perpotongan",
+        },
       },
       {
         title: "Cara memeriksa titik benar benar ada di DHP",
@@ -807,8 +899,28 @@ export const SUBBABS: SubbabContent[] = [
         },
         {
           label: "Langkah 5: tuliskan semuanya",
-          explain: "Kumpulkan titik yang lolos. Urutkan mengikuti tepi DHP agar rapi.",
+          explain: "Kumpulkan titik yang lolos pemeriksaan. Urutkan mengikuti tepi DHP agar rapi dan mudah dicek ulang.",
           steps: "> Titik pojok DHP:\n(0, 0)\n(6, 0)\n(4, 2)\n(0, 4)",
+          figure: {
+            xRange: [-1, 10], yRange: [-1, 8],
+            lines: [
+              { a: 1, b: 1, c: 6, sign: "<=" },
+              { a: 1, b: 2, c: 8, sign: "<=" },
+            ],
+          dhpIneqs: [
+            { a: 1, b: 1, c: 6, sign: "<=" },
+            { a: 1, b: 2, c: 8, sign: "<=" },
+            { a: 1, b: 0, c: 0, sign: ">=" },
+            { a: 0, b: 1, c: 0, sign: ">=" },
+          ],
+            points: [
+              { p: { x: 0, y: 0 }, label: "(0, 0)", color: "#7C3AED" },
+              { p: { x: 6, y: 0 }, label: "(6, 0)", color: "#7C3AED" },
+              { p: { x: 4, y: 2 }, label: "(4, 2)", color: "#7C3AED" },
+              { p: { x: 0, y: 4 }, label: "(0, 4)", color: "#7C3AED" },
+            ],
+            caption: "Keempat titik pojok DHP",
+          },
         },
       ],
       jawaban: "Titik pojoknya adalah (0, 0), (6, 0), (4, 2), dan (0, 4)",
@@ -840,8 +952,6 @@ export const SUBBABS: SubbabContent[] = [
           rows: [
             ["x + y = 6", "(6, 0)", "(0, 6)"],
             ["x + 2y = 8", "(8, 0)", "(0, 4)"],
-            ["x = 0 (sumbu Y)", "tidak ada", "seluruh sumbu Y"],
-            ["y = 0 (sumbu X)", "seluruh sumbu X", "tidak ada"],
           ],
         },
       },
@@ -899,6 +1009,21 @@ export const SUBBABS: SubbabContent[] = [
           "2(3) + 4 ≤ 10\n10 ≤ 10   → BENAR\n" +
           "3 + 3(4) ≤ 15\n15 ≤ 15   → BENAR\n" +
           "> Karena semua kendala terpenuhi, (3, 4) SAH menjadi titik pojok DHP.",
+        figure: {
+          xRange: [-1, 16], yRange: [-1, 11],
+          lines: [
+            { a: 2, b: 1, c: 10, sign: "<=" },
+            { a: 1, b: 3, c: 15, sign: "<=" },
+          ],
+          dhpIneqs: [
+            { a: 2, b: 1, c: 10, sign: "<=" },
+            { a: 1, b: 3, c: 15, sign: "<=" },
+            { a: 1, b: 0, c: 0, sign: ">=" },
+            { a: 0, b: 1, c: 0, sign: ">=" },
+          ],
+          points: [{ p: { x: 3, y: 4 }, label: "(3, 4)", color: "#7C3AED" }],
+          caption: "Titik (3, 4) tepat berada di sudut DHP, jadi sah sebagai titik pojok",
+        },
       },
     ],
     contoh: {
@@ -929,8 +1054,17 @@ export const SUBBABS: SubbabContent[] = [
         },
         {
           label: "Langkah 4: periksa kembali",
-          explain: "Substitusikan titik (4, 2) ke persamaan (1) untuk memastikan perhitungan benar.",
+          explain: "Substitusikan titik (4, 2) ke persamaan (1) untuk memastikan perhitungan kita benar. Pada gambar, titik itu memang tepat berada di perpotongan kedua garis.",
           steps: "3(4) + 2(2) = 16\n12 + 4 = 16\n16 = 16   → cocok",
+          figure: {
+            xRange: [-1, 10], yRange: [-1, 9],
+            lines: [
+              { a: 3, b: 2, c: 16, sign: "<=" },
+              { a: 1, b: 2, c: 8, sign: "<=" },
+            ],
+            points: [{ p: { x: 4, y: 2 }, label: "(4, 2)", color: "#7C3AED" }],
+            caption: "Perpotongan garis 3x + 2y = 16 dan x + 2y = 8",
+          },
         },
       ],
       jawaban: "Titik potong kedua garis adalah (4, 2)",
@@ -964,9 +1098,9 @@ export const SUBBABS: SubbabContent[] = [
           "f(4, 2) = 5(4) + 3(2)\nf(4, 2) = 20 + 6\nf(4, 2) = 26",
       },
       {
-        title: "Teorema titik pojok",
+        title: "Mengapa cukup memeriksa titik pojok saja",
         body:
-          "Ada teorema penting: pada DHP yang terbatas, nilai maksimum sekaligus minimum fungsi linear pasti tercapai di salah satu titik pojok, tidak pernah di tengah daerah. Sebabnya garis linear berubah dengan laju tetap, sehingga nilai paling besar atau kecil selalu ditemukan persis di salah satu sudut.",
+          "Di dalam DHP terdapat titik yang jumlahnya tak terhingga, sehingga mustahil dihitung satu per satu. Untungnya ada sifat penting yang berlaku pada DHP terbatas: nilai terbesar maupun terkecil fungsi tujuan selalu jatuh tepat di salah satu sudut DHP, tidak pernah di tengah daerah. Sebabnya nilai fungsi berubah dengan laju tetap ke satu arah, sehingga nilai paling ujung pasti ditemukan di titik paling pojok. Berkat sifat ini, kita cukup memeriksa beberapa titik sudut saja.",
       },
       {
         title: "Kapan nilai optimum ada dan kapan tidak",
@@ -1005,9 +1139,29 @@ export const SUBBABS: SubbabContent[] = [
         "DHP suatu sistem memiliki titik pojok (0, 0), (6, 0), (4, 2), dan (0, 4). Tentukan nilai maksimum dan minimum dari f(x, y) = 5x + 3y.",
       stages: [
         {
-          label: "Langkah 1: siapkan rencana",
+          label: "Langkah 1: baca titik pojok dari grafik",
           explain:
-            "Karena titik pojok sudah diketahui, kita cukup menghitung nilai fungsi di keempatnya lalu membandingkan.",
+            "Sebelum menghitung, pastikan dahulu titik pojoknya. Telusuri tepi daerah ungu pada gambar berikut satu putaran. Setiap kali tepinya berbelok, di situ ada titik pojok. Terbaca empat sudut, yaitu (0, 0), (6, 0), (4, 2), dan (0, 4).",
+          figure: {
+            xRange: [-1, 10], yRange: [-1, 8],
+            lines: [
+              { a: 1, b: 1, c: 6, sign: "<=" },
+              { a: 1, b: 2, c: 8, sign: "<=" },
+            ],
+            dhpIneqs: [
+              { a: 1, b: 1, c: 6, sign: "<=" },
+              { a: 1, b: 2, c: 8, sign: "<=" },
+              { a: 1, b: 0, c: 0, sign: ">=" },
+              { a: 0, b: 1, c: 0, sign: ">=" },
+            ],
+            points: [
+              { p: { x: 0, y: 0 }, label: "(0, 0)", color: "#7C3AED" },
+              { p: { x: 6, y: 0 }, label: "(6, 0)", color: "#7C3AED" },
+              { p: { x: 4, y: 2 }, label: "(4, 2)", color: "#7C3AED" },
+              { p: { x: 0, y: 4 }, label: "(0, 4)", color: "#7C3AED" },
+            ],
+            caption: "Membaca keempat titik pojok langsung dari gambar DHP",
+          },
         },
         {
           label: "Langkah 2: dua titik pertama",
@@ -1129,11 +1283,14 @@ export const SUBBABS: SubbabContent[] = [
           label: "Langkah 2: susun tabel bantu dulu",
           explain:
             "Sebelum menulis pertidaksamaan, rangkum data kebutuhan dalam tabel. Setiap barisnya akan menjadi satu kendala.",
-          steps:
-            "> Tabel bantu:\n" +
-            "Sumber daya     Kursi(x)  Meja(y)  Tersedia\n" +
-            "Jam kerja (jam)    2         3        18\n" +
-            "Gudang (peti)      1         2        12",
+          steps: "> Isikan setiap data dari soal ke dalam tabel bantu seperti berikut.",
+          table: {
+            header: ["Sumber daya", "Kursi (x)", "Meja (y)", "Tersedia"],
+            rows: [
+              ["Jam kerja (jam)", "2", "3", "18"],
+              ["Gudang (peti)", "1", "2", "12"],
+            ],
+          },
         },
         {
           label: "Langkah 3: ubah baris menjadi kendala",
