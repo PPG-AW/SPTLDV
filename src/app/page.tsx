@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
   Brain,
   GraduationCap,
+  Heart,
   Lock,
   MonitorPlay,
   MoveRight,
@@ -19,6 +20,16 @@ const TICKER = [
   "ax + by ≤ c", "Daerah Penyelesaian", "Titik Pojok", "Fungsi Tujuan",
   "Mastery × 3", "Tutor Sebaya", "Focus Lock", "f(x,y) = 5x + 3y",
   "Eliminasi", "Uji Titik (0,0)", "SPtLDV Fase E",
+];
+
+const PENGEMBANG = [
+  "Fika Widya Pratama, S.Si., M.Pd.",
+  "Afifah Rahma Amini, S.Pd.",
+  "Amalia Kartika, S.Pd.",
+  "Awang Haris Prasetyo Adhi, S.Pd.",
+  "Juniyati, S.Pd.",
+  "Noviani Nur Aisyah, S.Pd.",
+  "Pramesthi Al Kautsari, S.Pd.",
 ];
 
 export default async function Landing() {
@@ -129,6 +140,26 @@ export default async function Landing() {
                 <p className="mt-0.5 text-[9.5px] font-semibold uppercase tracking-wider text-[#A3A3A3]">{s.l}</p>
               </div>
             ))}
+          </div>
+
+          {/* ── Tim Pengembang ── */}
+          <div className="mt-8 overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white">
+            <div className="flex items-center gap-2 border-b border-[#F0F0F0] px-4 py-3">
+              <Heart size={13} className="text-[#EF4444]" fill="currentColor" />
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#A3A3A3]">
+                Tim Pengembang
+              </p>
+            </div>
+            <ul className="divide-y divide-[#F7F7F7]">
+              {PENGEMBANG.map((nama) => (
+                <li key={nama} className="flex items-center gap-2.5 px-4 py-2.5">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A] text-[10px] font-bold text-white">
+                    {nama.slice(0, 1)}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium text-[#404040]">{nama}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>

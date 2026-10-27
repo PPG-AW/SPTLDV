@@ -822,7 +822,7 @@ function t62(): Question {
     { spec: mk(sys.ineqs, [{ ...l1, dashed: true }, l2]), why: "Jenis garis keliru — tanda ≤ digambar dengan garis penuh, bukan putus-putus.", ok: false },
   ]);
   const q = baseQ(6, "6.2", "graph",
-    "Manakah gambar DHP yang TEPAT untuk sistem berikut? (arsiran = bukan daerah penyelesaian)",
+    "Manakah gambar DHP yang TEPAT untuk sistem berikut? (daerah berwarna = daerah penyelesaian)",
     [
       "Periksa tiga hal pada setiap pilihan: sisi penyelesaian tiap kendala, penerapan kendala x ≥ 0 dan y ≥ 0, serta jenis garisnya.",
       `Lakukan uji titik (0, 0) pada kedua kendala:\n${hintTestPoint(l1.a, l1.b, l1.c, SYM[l1.sign], 0, 0)}`,
