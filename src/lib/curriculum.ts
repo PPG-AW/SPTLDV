@@ -68,7 +68,7 @@ export const SUBBABS: SubbabContent[] = [
       {
         title: "Dari persamaan ke pertidaksamaan",
         body:
-          "Selama ini kamu akrab dengan persamaan seperti x + y = 10. Artinya jumlah kedua nilai TEPAT sepuluh, tidak boleh kurang dan tidak boleh lebih. Kenyataan di sekitar kita tidak selalu seketat itu. Uang saku yang dibawa paling banyak Rp20.000, waktu belajar minimal 2 jam, muatan truk tidak melebihi 5 ton. Semua batasan itu menyatakan rentang, bukan satu nilai pasti. Batasan rentang seperti ini dimodelkan oleh pertidaksamaan.",
+          "Selama ini kamu akrab dengan persamaan seperti x + y = 10. Artinya jumlah kedua nilai TEPAT sepuluh, tidak boleh kurang dan tidak boleh lebih. Kenyataan di sekitar kita tidak selalu seketat itu. Uang saku yang dibawa paling banyak Rp20.000,00, waktu belajar minimal 2 jam, muatan truk tidak melebihi 5 ton. Semua batasan itu menyatakan rentang, bukan satu nilai pasti. Batasan rentang seperti ini dimodelkan oleh pertidaksamaan.",
       },
       {
         title: "Mengenal tanda pertidaksamaan",
@@ -128,21 +128,10 @@ export const SUBBABS: SubbabContent[] = [
           "b = −4 karena tanda minus ikut koefisien\n" +
           "c = 8",
       },
-      {
-        title: "Dari kalimat menjadi model matematika",
-        body:
-          "Soal cerita diubah menjadi pertidaksamaan dengan tiga langkah: misalkan objek sebagai x dan y, susun bentuk yang mewakili keadaan (biasanya total harga, total bahan, atau total waktu), lalu pilih tanda yang sesuai kata kuncinya.",
-        steps:
-          "> \"Dina membeli 3 buku dan 2 pensil dengan total tidak lebih dari Rp20.000\"\n" +
-          "> Pemisalan: x = harga sebuah buku, y = harga sebuah pensil\n" +
-          "3x + 2y\n" +
-          "> Frasa tidak lebih dari berarti ≤, maka:\n" +
-          "3x + 2y ≤ 20000",
-      },
     ],
     contoh: {
       soal:
-        "Perhatikan pertidaksamaan 4x − 3y ≤ 24.\nA. Sebutkan variabel, koefisien x, koefisien y, dan konstantanya.\nB. Apakah bentuk tersebut termasuk PtLDV? Jelaskan alasannya.",
+        "Perhatikan pertidaksamaan 4x − 3y ≤ 24.\na. Sebutkan variabel, koefisien x, koefisien y, dan konstantanya.\nb. Apakah bentuk tersebut termasuk PtLDV? Jelaskan alasannya.",
       stages: [
         {
           label: "Menentukan variabelnya",
@@ -360,7 +349,7 @@ export const SUBBABS: SubbabContent[] = [
           "> Garis y = 3 adalah garis datar melalui titik (0, 3).\n" +
           "> Garis x = 0 adalah sumbu Y, dan garis y = 0 adalah sumbu X.",
         figure: {
-          xRange: [-1, 7], yRange: [-1, 7],
+          xRange: [-3, 8], yRange: [-3, 8],
           lines: [
             { a: 1, b: 0, c: 4, sign: "<=" },
             { a: 0, b: 1, c: 3, sign: "<=", color: "#DC2626" },
@@ -383,7 +372,7 @@ export const SUBBABS: SubbabContent[] = [
           "Titik D(3, 2) bergerak 3 satuan ke kanan lalu 2 satuan ke atas",
         ],
         figure: {
-          xRange: [-2, 8], yRange: [-4, 6],
+          xRange: [-4, 9], yRange: [-6, 7],
           points: [
             { p: { x: 6, y: 0 }, label: "A(6, 0)" },
             { p: { x: 0, y: 4 }, label: "B(0, 4)" },
@@ -435,7 +424,7 @@ export const SUBBABS: SubbabContent[] = [
           explain:
             "Taruh titik A(4, 0) pada sumbu X dan titik B(0, 3) pada sumbu Y, hubungkan keduanya dengan garis penuh, lalu perpanjang sedikit keluar kedua ujungnya. Hasil gambarnya tampak seperti berikut.",
           figure: {
-            xRange: [-1, 6], yRange: [-1, 5],
+            xRange: [-3, 7], yRange: [-3, 6],
             lines: [{ a: 3, b: 4, c: 12, sign: ">=" }],
             points: [
               { p: { x: 4, y: 0 }, label: "A(4, 0)", hollow: true },
@@ -491,7 +480,7 @@ export const SUBBABS: SubbabContent[] = [
           "> Titik (0, 0) memenuhi pertidaksamaan.\n" +
           "> Maka daerah yang memuat titik (0, 0) itulah yang kita arsir.",
         figure: {
-          xRange: [-1, 8], yRange: [-1, 6],
+          xRange: [-3, 9], yRange: [-3, 7],
           lines: [{ a: 2, b: 3, c: 12, sign: "<=" }],
           shadeIndices: [0],
           crosshair: { x: 0, y: 0 },
@@ -510,7 +499,7 @@ export const SUBBABS: SubbabContent[] = [
           "> Titik (0, 0) tidak memenuhi pertidaksamaan.\n" +
           "> Maka yang kita arsir adalah daerah di sisi seberangnya.",
         figure: {
-          xRange: [-1, 8], yRange: [-1, 7],
+          xRange: [-3, 9], yRange: [-3, 8],
           lines: [{ a: 4, b: 5, c: 20, sign: ">=" }],
           shadeIndices: [0],
           crosshair: { x: 0, y: 0 },
@@ -527,7 +516,7 @@ export const SUBBABS: SubbabContent[] = [
           "Akibat keduanya: daerah penyelesaian berada di bagian kanan atas bidang",
         ],
         figure: {
-          xRange: [-4, 7], yRange: [-4, 7],
+          xRange: [-6, 8], yRange: [-6, 8],
           lines: [],
           dhpIneqs: [
             { a: 1, b: 0, c: 0, sign: ">=" },
@@ -573,7 +562,7 @@ export const SUBBABS: SubbabContent[] = [
           explain:
             "Hasil uji bernilai benar, sehingga titik (0, 0) berada di dalam daerah penyelesaian. Karena yang kita arsir adalah daerah penyelesaian, maka sisi garis yang memuat titik (0, 0) itulah yang diberi warna. Hasil akhirnya tampak seperti gambar berikut.",
           figure: {
-            xRange: [-1, 8], yRange: [-1, 6],
+            xRange: [-3, 9], yRange: [-3, 7],
             lines: [{ a: 2, b: 3, c: 12, sign: "<=" }],
             shadeIndices: [0],
             points: [
@@ -632,7 +621,7 @@ export const SUBBABS: SubbabContent[] = [
     ],
     contoh: {
       soal:
-        "Perhatikan kumpulan pertidaksamaan berikut.\nx + y ≤ 10\n2x + y ≤ 14\nx ≥ 0\ny ≥ 0\nA. Apakah kumpulan ini termasuk SPtLDV?\nB. Ada berapa kendala di dalamnya dan apa makna dua kendala terakhir?",
+        "Perhatikan kumpulan pertidaksamaan berikut.\nx + y ≤ 10\n2x + y ≤ 14\nx ≥ 0\ny ≥ 0\na. Apakah kumpulan ini termasuk SPtLDV?\nb. Ada berapa kendala di dalamnya dan apa makna dua kendala terakhir?",
       stages: [
         {
           label: "Memeriksa syarat SPtLDV",
@@ -645,7 +634,7 @@ export const SUBBABS: SubbabContent[] = [
             "> Semuanya pertidaksamaan linear yang berlaku bersamaan.",
         },
         {
-          label: "Menyimpulkan jawaban A",
+          label: "Menyimpulkan jawaban a",
           explain:
             "Karena memuat lebih dari satu pertidaksamaan linear yang harus dipenuhi secara bersamaan, kumpulan ini memang sebuah SPtLDV.",
           steps: "> Kesimpulan: ya, kumpulan tersebut adalah SPtLDV.",
@@ -703,7 +692,7 @@ export const SUBBABS: SubbabContent[] = [
           "Perjelas DHP dengan warna ungu yang lebih pekat",
         ],
         figure: {
-          xRange: [-1, 10], yRange: [-1, 8],
+          xRange: [-3, 11], yRange: [-3, 9],
           lines: [
             { a: 1, b: 1, c: 6, sign: "<=" },
             { a: 1, b: 2, c: 8, sign: "<=" },
@@ -766,7 +755,7 @@ export const SUBBABS: SubbabContent[] = [
           explain:
             "DHP adalah daerah yang terkena semua arsiran sekaligus, yaitu daerah di bagian kanan atas yang berada di bawah kedua garis. Bila diteliti, sudut sudutnya berada di (0, 0), (6, 0), (4, 2), dan (0, 4).",
           figure: {
-            xRange: [-1, 10], yRange: [-1, 8],
+            xRange: [-3, 11], yRange: [-3, 9],
             lines: [
               { a: 1, b: 1, c: 6, sign: "<=" },
               { a: 1, b: 2, c: 8, sign: "<=" },
@@ -815,7 +804,7 @@ export const SUBBABS: SubbabContent[] = [
           "Perpotongan dua garis kendala satu dengan yang lain",
         ],
         figure: {
-          xRange: [-1, 10], yRange: [-1, 8],
+          xRange: [-3, 11], yRange: [-3, 9],
           lines: [
             { a: 1, b: 1, c: 6, sign: "<=" },
             { a: 1, b: 2, c: 8, sign: "<=" },
@@ -902,7 +891,7 @@ export const SUBBABS: SubbabContent[] = [
           explain: "Kumpulkan titik yang lolos pemeriksaan. Urutkan mengikuti tepi DHP agar rapi dan mudah dicek ulang.",
           steps: "> Titik pojok DHP:\n(0, 0)\n(6, 0)\n(4, 2)\n(0, 4)",
           figure: {
-            xRange: [-1, 10], yRange: [-1, 8],
+            xRange: [-3, 11], yRange: [-3, 9],
             lines: [
               { a: 1, b: 1, c: 6, sign: "<=" },
               { a: 1, b: 2, c: 8, sign: "<=" },
@@ -1010,7 +999,7 @@ export const SUBBABS: SubbabContent[] = [
           "3 + 3(4) ≤ 15\n15 ≤ 15   → BENAR\n" +
           "> Karena semua kendala terpenuhi, (3, 4) SAH menjadi titik pojok DHP.",
         figure: {
-          xRange: [-1, 16], yRange: [-1, 11],
+          xRange: [-3, 17], yRange: [-3, 12],
           lines: [
             { a: 2, b: 1, c: 10, sign: "<=" },
             { a: 1, b: 3, c: 15, sign: "<=" },
@@ -1057,7 +1046,7 @@ export const SUBBABS: SubbabContent[] = [
           explain: "Substitusikan titik (4, 2) ke persamaan (1) untuk memastikan perhitungan kita benar. Pada gambar, titik itu memang tepat berada di perpotongan kedua garis.",
           steps: "3(4) + 2(2) = 16\n12 + 4 = 16\n16 = 16   → cocok",
           figure: {
-            xRange: [-1, 10], yRange: [-1, 9],
+            xRange: [-3, 11], yRange: [-3, 10],
             lines: [
               { a: 3, b: 2, c: 16, sign: "<=" },
               { a: 1, b: 2, c: 8, sign: "<=" },
@@ -1143,7 +1132,7 @@ export const SUBBABS: SubbabContent[] = [
           explain:
             "Sebelum menghitung, pastikan dahulu titik pojoknya. Telusuri tepi daerah ungu pada gambar berikut satu putaran. Setiap kali tepinya berbelok, di situ ada titik pojok. Terbaca empat sudut, yaitu (0, 0), (6, 0), (4, 2), dan (0, 4).",
           figure: {
-            xRange: [-1, 10], yRange: [-1, 8],
+            xRange: [-3, 11], yRange: [-3, 9],
             lines: [
               { a: 1, b: 1, c: 6, sign: "<=" },
               { a: 1, b: 2, c: 8, sign: "<=" },
@@ -1250,7 +1239,7 @@ export const SUBBABS: SubbabContent[] = [
         body:
           "Fungsi tujuan disusun dari nilai per unit objek dikali banyaknya objek. Perhatikan satuan yang dipakai, tulislah dalam ribuan rupiah agar angkanya ringkas, lalu tentukan apakah dimaksimumkan atau diminimumkan.",
         steps:
-          "> Keuntungan tiap kursi Rp40.000, tiap meja Rp60.000.\n" +
+          "> Keuntungan tiap kursi Rp40.000,00, tiap meja Rp60.000,00.\n" +
           "> Susun fungsi tujuannya (dalam ribuan rupiah):\n" +
           "f(x, y) = 40x + 60y\n" +
           "> Karena yang dicari keuntungan sebesar besarnya, fungsi ini DIMAKSIMUMKAN.",
@@ -1272,7 +1261,7 @@ export const SUBBABS: SubbabContent[] = [
     ],
     contoh: {
       soal:
-        "Sebuah pabrik membuat kursi (x) dan meja (y). Setiap kursi butuh 2 jam kerja dan meja 3 jam, total tersedia 18 jam. Gudang menampung 12 peti, setiap kursi memakan 1 peti dan meja memakan 2 peti. Keuntungan tiap kursi Rp40.000 dan tiap meja Rp60.000. Susunlah model matematikanya.",
+        "Sebuah pabrik membuat kursi (x) dan meja (y). Setiap kursi butuh 2 jam kerja dan meja 3 jam, total tersedia 18 jam. Gudang menampung 12 peti, setiap kursi memakan 1 peti dan meja memakan 2 peti. Keuntungan tiap kursi Rp40.000,00 dan tiap meja Rp60.000,00. Susunlah model matematikanya.",
       stages: [
         {
           label: "Langkah 1: pemisalan",

@@ -7,6 +7,8 @@ import {
   Check,
   ClipboardList,
   Eye,
+  BookMarked,
+  ChevronDown,
   GraduationCap,
   KeyRound,
   Lightbulb,
@@ -32,6 +34,7 @@ import {
 } from "@/lib/templates";
 import CartesianCanvas from "./CartesianCanvas";
 import MathSteps from "./MathText";
+import { SOAL_KATALOG, TOTAL_TEMPLATE } from "@/lib/soal-katalog";
 
 // ── tipe data telemetri ──────────────────────────────────────────────────────
 interface StudentRow {
@@ -60,7 +63,7 @@ interface ClassInfo {
   id: number; classCode: string; className: string; isLocked: boolean; studentCount: number;
 }
 
-type Tab = "telemetri" | "analitik" | "tutor" | "panggilan" | "nilai" | "siswa";
+type Tab = "telemetri" | "analitik" | "tutor" | "panggilan" | "nilai" | "siswa" | "katalog";
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: "telemetri", label: "Telemetri Kelas", icon: <Radio size={15} /> },
   { id: "analitik", label: "Analitik Belajar", icon: <BarChart3 size={15} /> },
@@ -68,6 +71,7 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: "panggilan", label: "Panggilan", icon: <MonitorPlay size={15} /> },
   { id: "nilai", label: "Nilai Sumatif", icon: <ClipboardList size={15} /> },
   { id: "siswa", label: "Data & Sandi Siswa", icon: <KeyRound size={15} /> },
+  { id: "katalog", label: "Katalog Soal", icon: <BookMarked size={15} /> },
 ];
 
 /** Sub-tab di dalam Analitik Belajar */
@@ -351,6 +355,8 @@ export default function TeacherApp({
                 <TelemetryView tele={tele} />
               ) : tab === "siswa" ? (
                 <StudentAdminView tele={tele} onChanged={loadTelemetry} />
+              ) : tab === "katalog" ? (
+                <KatalogView />
               ) : tab === "analitik" ? (
                 <AnalyticsView tele={tele} />
               ) : tab === "tutor" ? (
@@ -619,6 +625,108 @@ function TelemetryView({ tele }: { tele: Telemetry }) {
           </table>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ══ Katalog tipe soal 1.1 sampai 10.3 ══════════════════════════════════════
+function KatalogView() {
+  const [open, setOpen] = useState<number | null>(1);
+  const [preview, setPreview] = useState<Question | null>(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+
+  const warna: Record<string, string> = {
+    "Pilihan Ganda": "bg-[#3B82F6]/10 text-[#1D4ED8]",
+    "Isian Singkat": "bg-[#10B981]/10 text-[#047857]",
+    "Pilih Grafik": "bg-[#8B5CF6]/10 text-[#6D28D9]",
+    "Ketuk Titik": "bg-[#F59E0B]/15 text-[#B45309]",
+    "Ketuk Daerah": "bg-[#EF4444]/10 text-[#B91C1C]",
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="rounded-2xl border border-[#3B82F6]/30 bg-[#EFF6FF] px-4 py-3 text-xs leading-relaxed text-[#1E40AF]">
+        Daftar lengkap {TOTAL_TEMPLATE} tipe soal yang dipakai platform, dari 1.1 sampai 10.3. Setiap tipe
+        menjelaskan tugas siswa, kemampuan yang diukur, dan kekeliruan yang sering muncul. Tekan
+        <b> Lihat Contoh </b> untuk memunculkan satu soal nyata beserta kuncinya.
+      </div>
+
+      {preview && (
+        <CaseCard
+          q={preview}
+          showAnswer={showAnswer}
+          onToggle={() => setShowAnswer((v) => !v)}
+          onShuffle={() => {
+            const q = generateByTemplate(preview.templateId);
+            if (q) { setPreview(q); setShowAnswer(false); }
+          }}
+          onClose={() => setPreview(null)}
+        />
+      )}
+
+      {SOAL_KATALOG.map((sb) => (
+        <div key={sb.subbab} className="overflow-hidden rounded-2xl border border-[#E5E5E5] bg-white">
+          <button
+            onClick={() => setOpen(open === sb.subbab ? null : sb.subbab)}
+            className="flex w-full items-center gap-3 px-4 py-3 text-left"
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#1A1A1A] font-mono text-xs font-bold text-white">
+              {sb.subbab}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-bold">{sb.judul}</p>
+              <p className="text-[11px] text-[#A3A3A3]">
+                {sb.items.length} tipe soal · {sb.items.map((i) => i.id).join(", ")}
+              </p>
+            </div>
+            <ChevronDown
+              size={16}
+              className={`shrink-0 text-[#A3A3A3] transition ${open === sb.subbab ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          {open === sb.subbab && (
+            <div className="space-y-2.5 border-t border-[#F0F0F0] bg-[#FAFAFA] p-3.5">
+              {sb.items.map((it) => (
+                <div key={it.id} className="rounded-xl border border-[#E5E5E5] bg-white p-3.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-md bg-[#1A1A1A] px-2 py-0.5 font-mono text-[11px] font-bold text-white">
+                      {it.id}
+                    </span>
+                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${warna[it.jenis] ?? "bg-[#F5F5F5]"}`}>
+                      {it.jenis}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-[13px] font-bold">{it.judul}</span>
+                    <button
+                      onClick={() => {
+                        const q = generateByTemplate(it.id);
+                        if (q) { setPreview(q); setShowAnswer(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
+                      }}
+                      className="flex min-h-[34px] shrink-0 items-center gap-1.5 rounded-lg border-2 border-[#1A1A1A] px-2.5 text-[11px] font-bold transition active:scale-95"
+                    >
+                      <Eye size={12} /> Lihat Contoh
+                    </button>
+                  </div>
+                  <dl className="mt-2.5 space-y-1.5 text-[12px] leading-relaxed">
+                    <div className="flex gap-2">
+                      <dt className="w-[86px] shrink-0 font-semibold text-[#737373]">Tugas siswa</dt>
+                      <dd className="min-w-0 flex-1 text-[#404040]">{it.tugas}</dd>
+                    </div>
+                    <div className="flex gap-2">
+                      <dt className="w-[86px] shrink-0 font-semibold text-[#737373]">Mengukur</dt>
+                      <dd className="min-w-0 flex-1 text-[#404040]">{it.mengukur}</dd>
+                    </div>
+                    <div className="flex gap-2">
+                      <dt className="w-[86px] shrink-0 font-semibold text-[#B45309]">Sering keliru</dt>
+                      <dd className="min-w-0 flex-1 text-[#92400E]">{it.miskonsepsi}</dd>
+                    </div>
+                  </dl>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

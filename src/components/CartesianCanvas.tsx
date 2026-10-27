@@ -158,6 +158,44 @@ export default function CartesianCanvas({
         ctx.strokeStyle = isDhp ? "rgba(147, 51, 234, 0.9)" : "rgba(37, 99, 235, 0.7)";
         ctx.lineWidth = mini ? 1.4 : 2;
         ctx.stroke();
+
+        // ── Tulisan "DHP" di tengah daerah, membantu siswa mengenali letaknya ──
+        if (!mini && solution.length >= 3) {
+          // titik tengah (centroid) poligon daerah penyelesaian
+          let cx = 0, cy = 0;
+          for (const p of solution) { cx += p.x; cy += p.y; }
+          cx /= solution.length;
+          cy /= solution.length;
+          const label = isDhp ? "DHP" : "DP";
+          ctx.font = `bold ${isDhp ? 15 : 13}px 'Inter', sans-serif`;
+          const tw = ctx.measureText(label).width;
+          const lx = PX(cx);
+          const ly = PY(cy);
+          // latar putih semi-transparan agar tulisan tetap terbaca di atas arsiran
+          ctx.fillStyle = "rgba(255, 255, 255, 0.82)";
+          ctx.beginPath();
+          const padX = 7, padY = 5, h2 = 17;
+          const rx = lx - tw / 2 - padX;
+          const ry = ly - h2 / 2 - padY + 1;
+          const rw = tw + padX * 2;
+          const rh = h2 + padY;
+          const rr = 5;
+          ctx.moveTo(rx + rr, ry);
+          ctx.arcTo(rx + rw, ry, rx + rw, ry + rh, rr);
+          ctx.arcTo(rx + rw, ry + rh, rx, ry + rh, rr);
+          ctx.arcTo(rx, ry + rh, rx, ry, rr);
+          ctx.arcTo(rx, ry, rx + rw, ry, rr);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = isDhp ? "rgba(124, 58, 237, 0.55)" : "rgba(37, 99, 235, 0.45)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.fillStyle = isDhp ? "#6D28D9" : "#1D4ED8";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(label, lx, ly + 1);
+          ctx.textBaseline = "alphabetic";
+        }
       }
     }
 

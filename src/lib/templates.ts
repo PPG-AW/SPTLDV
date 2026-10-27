@@ -93,6 +93,9 @@ export function parseNum(raw: unknown): number {
 
 const pt = (x: number, y: number): Pt => ({ x, y });
 
+/** Format rupiah baku Indonesia: Rp20.000,00 */
+const rupiah = (n: number) => `Rp${n.toLocaleString("id-ID")},00`;
+
 /** Garis dari dua titik potong sumbu, disederhanakan sampai FPB(a,b,c) = 1. */
 function intLine(p: number, q: number): { a: number; b: number; c: number } {
   const l = lineFromIntercepts(p, q);
@@ -109,13 +112,18 @@ const flip = (s: Sign): Sign => ({ "<=": ">=", ">=": "<=", "<": ">", ">": "<" } 
 const ineqStr = (i: IneqSpec) => eqStr(i.a, i.b, i.c, SYM[i.sign]);
 
 /** Jangkauan sumbu menyesuaikan titik-titik penting (boleh negatif). */
-function rangeFor(values: number[], minSpan = 6): [number, number] {
+function rangeFor(values: number[], minSpan = 7): [number, number] {
   const finite = values.filter((v) => Number.isFinite(v));
   const lo = Math.min(0, ...finite);
   const hi = Math.max(0, ...finite);
-  // margin 1 satuan di kedua sisi agar garis selalu mencapai sumbu dan tidak terpotong
-  let a = Math.floor(lo) - 1;
-  let b = Math.ceil(hi) + 1;
+  // Margin proporsional: makin besar jangkauan, makin lebar ruang kosongnya,
+  // sehingga garis tidak menempel tepi dan daerah penyelesaian tampak lapang.
+  const span = Math.max(hi - lo, 1);
+  const margin = Math.max(2, Math.round(span * 0.22));
+  let a = Math.floor(lo) - margin;
+  let b = Math.ceil(hi) + margin;
+  // jangan terlalu jauh ke daerah negatif bila semua titik penting tidak negatif
+  if (lo >= 0) a = Math.max(a, -Math.max(2, Math.round(span * 0.18)));
   if (b - a < minSpan) b = a + minSpan;
   return [a, b];
 }
@@ -348,13 +356,13 @@ function t13(): Question {
   const notes: Record<string, string> = {};
   variants.forEach((v, i) => { if (!v.ok) notes[`o${i}`] = v.why; });
   const q = baseQ(1, "1.3", "mc",
-    `Harga sebuah ${s.A} adalah Rp${s.hA.toLocaleString("id-ID")} dan sebuah ${s.B} adalah Rp${s.hB.toLocaleString("id-ID")}. Misalkan x = banyak ${s.A} dan y = banyak ${s.B}. Jika total belanja tidak lebih dari Rp${s.tot.toLocaleString("id-ID")}, model matematikanya adalah…`,
+    `Harga sebuah ${s.A} adalah ${rupiah(s.hA)} dan sebuah ${s.B} adalah ${rupiah(s.hB)}. Misalkan x = banyak ${s.A} dan y = banyak ${s.B}. Jika total belanja tidak lebih dari ${rupiah(s.tot)}, model matematikanya adalah…`,
     [
       "Susun dahulu bentuk total belanjanya: (harga satuan) dikali (banyaknya), untuk kedua barang.",
       `Belanja ${s.A} adalah ${s.hA}x dan belanja ${s.B} adalah ${s.hB}y. Jumlahkan keduanya untuk memperoleh bentuk total belanja.`,
       "Sekarang terjemahkan frasa \"tidak lebih dari\". Frasa ini menyatakan BATAS ATAS — nilainya boleh kurang, tetapi tidak boleh melebihi, dan tidak harus tepat sama. Pilih tanda ketidaksamaan yang sesuai serta pastikan koefisiennya tidak tertukar.",
     ],
-    `Total belanja adalah ${s.hA}x + ${s.hB}y, dan karena tidak boleh melebihi Rp${s.tot.toLocaleString("id-ID")} maka tandanya ≤.`,
+    `Total belanja adalah ${s.hA}x + ${s.hB}y, dan karena tidak boleh melebihi ${rupiah(s.tot)} maka tandanya ≤.`,
     {
       mcOptions: opts,
       explainSteps:
@@ -1243,7 +1251,7 @@ function t103(): Question {
   const notes: Record<string, string> = {};
   variants.forEach((v, i) => { if (!v.ok) notes[`o${i}`] = v.why; });
   const q = baseQ(10, "10.3", "mc",
-    `Keuntungan setiap ${s.A} adalah Rp${s.ua}.000 dan setiap ${s.B} adalah Rp${s.ub}.000, dengan kendala ${k1} dan ${k2}. Model matematika LENGKAP yang benar adalah…`,
+    `Keuntungan setiap ${s.A} adalah ${rupiah(s.ua * 1000)} dan setiap ${s.B} adalah ${rupiah(s.ub * 1000)}, dengan kendala ${k1} dan ${k2}. Model matematika LENGKAP yang benar adalah…`,
     [
       "Model lengkap terdiri atas tiga bagian: fungsi tujuan, seluruh kendala sumber daya, dan kendala non-negatif.",
       "Perhatikan kata kuncinya. Keuntungan selalu dicari sebesar-besarnya, sedangkan biaya dicari sekecil-kecilnya.",
