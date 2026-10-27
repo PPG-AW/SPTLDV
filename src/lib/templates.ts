@@ -119,11 +119,12 @@ function rangeFor(values: number[], minSpan = 7): [number, number] {
   // Margin proporsional: makin besar jangkauan, makin lebar ruang kosongnya,
   // sehingga garis tidak menempel tepi dan daerah penyelesaian tampak lapang.
   const span = Math.max(hi - lo, 1);
-  const margin = Math.max(2, Math.round(span * 0.22));
+  // Margin secukupnya saja: kanvas otomatis melebarkan pandangan sampai
+  // memenuhi layar, sehingga grafik tampil sebesar mungkin.
+  const margin = Math.max(1, Math.round(span * 0.12));
   let a = Math.floor(lo) - margin;
   let b = Math.ceil(hi) + margin;
-  // jangan terlalu jauh ke daerah negatif bila semua titik penting tidak negatif
-  if (lo >= 0) a = Math.max(a, -Math.max(2, Math.round(span * 0.18)));
+  if (lo >= 0) a = Math.max(a, -Math.max(1, Math.round(span * 0.12)));
   if (b - a < minSpan) b = a + minSpan;
   return [a, b];
 }

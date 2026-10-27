@@ -158,6 +158,20 @@ export const SUBBABS: SubbabContent[] = [
           steps: "> Suku tanpa variabel adalah 24, maka:\nc = 24",
         },
         {
+          label: "Merangkum unsurnya dalam tabel",
+          explain:
+            "Agar mudah dibaca, rangkum keempat jawaban tadi ke dalam tabel seperti berikut.",
+          table: {
+            header: ["Unsur", "Lambang", "Nilai"],
+            rows: [
+              ["Variabel", "x dan y", "belum diketahui"],
+              ["Koefisien x", "a", "4"],
+              ["Koefisien y", "b", "−3"],
+              ["Konstanta", "c", "24"],
+            ],
+          },
+        },
+        {
           label: "Memeriksa apakah termasuk PtLDV",
           explain:
             "Periksa syaratnya satu per satu. Ada dua variabel yaitu x dan y, keduanya berpangkat satu, tidak ada perkalian antar variabel seperti xy, tidak ada variabel di dalam akar atau penyebut, dan tandanya ≤ yang merupakan tanda ketidaksamaan. Semua syarat terpenuhi.",
@@ -418,6 +432,13 @@ export const SUBBABS: SubbabContent[] = [
           explain:
             "Kembali ke tanda aslinya, yaitu ≥. Tanda ini memuat unsur sama dengan, artinya titik tepat pada garis ikut menjadi penyelesaian. Oleh karena itu garis digambar penuh.",
           steps: "> Tanda asli: ≥ (memuat sama dengan)\n> Kesimpulan: garis digambar PENUH.",
+          table: {
+            header: ["Tanda", "Jenis garis", "Berlaku untuk soal ini"],
+            rows: [
+              ["≤ atau ≥", "Penuh", "Ya, karena tandanya ≥"],
+              ["< atau >", "Putus putus", "Tidak"],
+            ],
+          },
         },
         {
           label: "Langkah 5: gambarkan",
@@ -644,6 +665,20 @@ export const SUBBABS: SubbabContent[] = [
           explain:
             "Hitung seluruh barisnya, termasuk kendala non negatif. Jangan lupa x ≥ 0 dan y ≥ 0 juga dihitung sebagai kendala.",
           steps: "> Banyak kendala seluruhnya: 4",
+        },
+        {
+          label: "Merangkum kendalanya dalam tabel",
+          explain:
+            "Susun seluruh kendala ke dalam tabel agar jenisnya terlihat jelas.",
+          table: {
+            header: ["No", "Kendala", "Jenis"],
+            rows: [
+              ["1", "x + y ≤ 10", "Kendala sumber daya"],
+              ["2", "2x + y ≤ 14", "Kendala sumber daya"],
+              ["3", "x ≥ 0", "Kendala non negatif"],
+              ["4", "y ≥ 0", "Kendala non negatif"],
+            ],
+          },
         },
         {
           label: "Memahami makna dua kendala terakhir",
@@ -1023,6 +1058,13 @@ export const SUBBABS: SubbabContent[] = [
           explain:
             "Koefisien y pada kedua persamaan sama sama 2. Karena sudah sama, eliminasi y bisa langsung dikerjakan tanpa mengalikan apa pun.",
           steps: "3x + 2y = 16   …(1)\nx + 2y = 8   …(2)",
+          table: {
+            header: ["Garis", "Titik potong sumbu X", "Titik potong sumbu Y"],
+            rows: [
+              ["3x + 2y = 16", "(frac(16,3), 0)", "(0, 8)"],
+              ["x + 2y = 8", "(8, 0)", "(0, 4)"],
+            ],
+          },
         },
         {
           label: "Langkah 2: eliminasi y",
@@ -1170,10 +1212,16 @@ export const SUBBABS: SubbabContent[] = [
           label: "Langkah 4: susun tabel dan bandingkan",
           explain:
             "Susun semua hasil dalam satu tabel seperti format baku, lalu pilih yang terbesar dan yang terkecil.",
-          steps:
-            "> Tabel evaluasi (Titik pojok, f(x,y), Nilai):\n" +
-            "(0, 0):   0\n(6, 0):   30\n(4, 2):   26\n(0, 4):   12\n" +
-            "> Nilai terbesar 30 tercapai di (6, 0), terkecil 0 di (0, 0).",
+          steps: "> Susun seluruh hasil ke dalam tabel evaluasi yang sama seperti di materi.",
+          table: {
+            header: ["Titik pojok", "f(x, y) = 5x + 3y", "Nilai"],
+            rows: [
+              ["(0, 0)", "5(0) + 3(0)", "0"],
+              ["(6, 0)", "5(6) + 3(0)", "30"],
+              ["(4, 2)", "5(4) + 3(2)", "26"],
+              ["(0, 4)", "5(0) + 3(4)", "12"],
+            ],
+          },
         },
       ],
       jawaban: "Nilai maksimum 30 di titik (6, 0) dan nilai minimum 0 di titik (0, 0)",

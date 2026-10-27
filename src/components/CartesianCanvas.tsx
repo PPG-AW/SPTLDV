@@ -79,13 +79,24 @@ export default function CartesianCanvas({
 
     const [x0, x1] = spec.xRange;
     const [y0, y1] = spec.yRange;
-    const pad = mini ? 16 : 28;
+    // Skala dipilih agar seluruh jangkauan yang diminta pasti terlihat,
+    // lalu jangkauan diperluas mengikuti bentuk kanvas sehingga TIDAK ada
+    // ruang kosong di sisi mana pun (grid memenuhi kanvas, seperti GeoGebra).
+    const pad = mini ? 8 : 14;
     const scale = Math.min((w - pad * 2) / (x1 - x0), (h - pad * 2) / (y1 - y0));
     const originX = w / 2 - ((x0 + x1) / 2) * scale;
     const originY = h / 2 + ((y0 + y1) / 2) * scale;
     tRef.current = { originX, originY, scale };
     const PX = (x: number) => originX + x * scale;
     const PY = (y: number) => originY - y * scale;
+
+    // Jangkauan yang benar benar tampak di layar (menutupi seluruh kanvas)
+    const vx0 = (0 - originX) / scale;
+    const vx1 = (w - originX) / scale;
+    const vy0 = (originY - h) / scale;
+    const vy1 = (originY - 0) / scale;
+    const VX: [number, number] = [vx0, vx1];
+    const VY: [number, number] = [vy0, vy1];
 
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, w, h);
@@ -94,7 +105,7 @@ export default function CartesianCanvas({
     ctx.strokeRect(0.5, 0.5, w - 1, h - 1);
 
     // ── label sumbu adaptif: pilih langkah agar label tidak menumpuk ──
-    const span = Math.max(x1 - x0, y1 - y0);
+    const span = Math.max(vx1 - vx0, vy1 - vy0);
     const stepUnit = span <= 10 ? 1 : span <= 20 ? 2 : span <= 40 ? 5 : 10;
     const minGapPx = mini ? 22 : 26;
     const step = Math.max(stepUnit, Math.ceil(minGapPx / scale));
@@ -103,7 +114,7 @@ export default function CartesianCanvas({
 
     // grid
     ctx.lineWidth = 1;
-    for (let gx = Math.ceil(x0); gx <= Math.floor(x1); gx++) {
+    for (let gx = Math.ceil(vx0); gx <= Math.floor(vx1); gx++) {
       const px = Math.round(PX(gx)) + 0.5;
       ctx.strokeStyle = gx === 0 ? C.gridBold : C.grid;
       ctx.beginPath();
@@ -111,7 +122,7 @@ export default function CartesianCanvas({
       ctx.lineTo(px, h - 2);
       ctx.stroke();
     }
-    for (let gy = Math.ceil(y0); gy <= Math.floor(y1); gy++) {
+    for (let gy = Math.ceil(vy0); gy <= Math.floor(vy1); gy++) {
       const py = Math.round(PY(gy)) + 0.5;
       ctx.strokeStyle = gy === 0 ? C.gridBold : C.grid;
       ctx.beginPath();
@@ -127,7 +138,7 @@ export default function CartesianCanvas({
         : (spec.shadeIndices ?? []).map((i) => (spec.lines ?? [])[i]).filter(Boolean);
 
     if (shadeIneqs.length > 0) {
-      const solution = feasiblePolygon(shadeIneqs, spec.xRange, spec.yRange);
+      const solution = feasiblePolygon(shadeIneqs, VX, VY);
       const isDhp = !!(spec.dhpIneqs && spec.dhpIneqs.length);
 
       if (isDhp) {
@@ -135,7 +146,7 @@ export default function CartesianCanvas({
         const layerColors = ["rgba(59, 130, 246, 0.14)", "rgba(239, 68, 68, 0.13)"];
         shadeIneqs.forEach((in2, li) => {
           if (li > 1) return; // kendala sumbu tak perlu dilapisi
-          const poly = feasiblePolygon([in2], spec.xRange, spec.yRange);
+          const poly = feasiblePolygon([in2], VX, VY);
           if (poly.length >= 3) {
             ctx.fillStyle = layerColors[li % layerColors.length];
             ctx.beginPath();
@@ -202,7 +213,7 @@ export default function CartesianCanvas({
     // ── sumbu ──
     ctx.strokeStyle = C.axis;
     ctx.lineWidth = 1.7;
-    if (y0 <= 0 && y1 >= 0) {
+    if (vy0 <= 0 && vy1 >= 0) {
       ctx.beginPath();
       ctx.moveTo(2, PY(0));
       ctx.lineTo(w - 2, PY(0));
@@ -215,7 +226,7 @@ export default function CartesianCanvas({
       ctx.textAlign = "right";
       ctx.fillText("x", w - 12, PY(0) - 6);
     }
-    if (x0 <= 0 && x1 >= 0) {
+    if (vx0 <= 0 && vx1 >= 0) {
       ctx.beginPath();
       ctx.moveTo(PX(0), h - 2);
       ctx.lineTo(PX(0), 2);
@@ -231,10 +242,10 @@ export default function CartesianCanvas({
 
     // ── angka pada sumbu (selalu tampil, termasuk pada grafik mini) ──
     ctx.fillStyle = "#6B7280";
-    const axisY = y0 <= 0 && y1 >= 0 ? PY(0) : h - 4;
-    const axisX = x0 <= 0 && x1 >= 0 ? PX(0) : 4;
+    const axisY = vy0 <= 0 && vy1 >= 0 ? PY(0) : h - 4;
+    const axisX = vx0 <= 0 && vx1 >= 0 ? PX(0) : 4;
     ctx.textAlign = "center";
-    for (let gx = Math.ceil(x0 / step) * step; gx <= x1; gx += step) {
+    for (let gx = Math.ceil(vx0 / step) * step; gx <= vx1; gx += step) {
       if (gx === 0) continue;
       const px = PX(gx);
       if (px < 10 || px > w - 10) continue;
@@ -245,7 +256,7 @@ export default function CartesianCanvas({
       ctx.fillText(String(gx), px, py);
     }
     ctx.textAlign = "right";
-    for (let gy = Math.ceil(y0 / step) * step; gy <= y1; gy += step) {
+    for (let gy = Math.ceil(vy0 / step) * step; gy <= vy1; gy += step) {
       if (gy === 0) continue;
       const py = PY(gy);
       if (py < 10 || py > h - 6) continue;
@@ -255,7 +266,7 @@ export default function CartesianCanvas({
       ctx.fillStyle = "#6B7280";
       ctx.fillText(String(gy), px, py + fontSize / 2 - 1);
     }
-    if (x0 <= 0 && x1 >= 0 && y0 <= 0 && y1 >= 0) {
+    if (vx0 <= 0 && vx1 >= 0 && vy0 <= 0 && vy1 >= 0) {
       ctx.textAlign = "right";
       ctx.fillStyle = "#9CA3AF";
       ctx.fillText("0", PX(0) - 4, PY(0) + fontSize + 2);
@@ -263,7 +274,7 @@ export default function CartesianCanvas({
 
     // ── garis pembatas ──
     (spec.lines ?? []).forEach((l, i) => {
-      const seg = lineRectSegment(l, spec.xRange, spec.yRange);
+      const seg = lineRectSegment(l, VX, VY);
       if (!seg) return;
       ctx.strokeStyle = l.color ?? LINE_COLORS[i % LINE_COLORS.length];
       ctx.lineWidth = mini ? 2.2 : 3;
@@ -377,16 +388,10 @@ export default function CartesianCanvas({
     const rect = canvas.getBoundingClientRect();
     const xCart = (e.clientX - rect.left - t.originX) / t.scale;
     const yCart = (t.originY - (e.clientY - rect.top)) / t.scale;
-    const within =
-      xCart >= spec.xRange[0] - 0.4 && xCart <= spec.xRange[1] + 0.4 &&
-      yCart >= spec.yRange[0] - 0.4 && yCart <= spec.yRange[1] + 0.4;
-    if (!within) return;
+    // Seluruh area kanvas dapat diketuk karena grid memenuhi kanvas
     onTap(
       { x: xCart, y: yCart },
-      {
-        x: Math.max(spec.xRange[0], Math.min(spec.xRange[1], Math.round(xCart))),
-        y: Math.max(spec.yRange[0], Math.min(spec.yRange[1], Math.round(yCart))),
-      }
+      { x: Math.round(xCart), y: Math.round(yCart) }
     );
   };
 

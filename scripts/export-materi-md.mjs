@@ -242,6 +242,10 @@ for (const sb of SUBBABS) {
       MD.push("```");
       MD.push("");
     }
+    if (m.figure) {
+      MD.push(`> **Gambar:** ${canvasDesc(m.figure)}${m.figure.caption ? ` (${m.figure.caption})` : ""}`);
+      MD.push("");
+    }
     if (m.tip) {
       MD.push(`> **Tips:** ${fmt(m.tip)}`);
       MD.push("");
@@ -275,6 +279,16 @@ for (const sb of SUBBABS) {
     MD.push("");
     if (s.steps) {
       MD.push(fence(s.steps));
+      MD.push("");
+    }
+    if (s.table) {
+      MD.push("| " + s.table.header.join(" | ") + " |");
+      MD.push("|" + s.table.header.map(() => "---").join("|") + "|");
+      s.table.rows.forEach((row) => MD.push("| " + row.map((c) => fmt(c)).join(" | ") + " |"));
+      MD.push("");
+    }
+    if (s.figure) {
+      MD.push(`> **Gambar:** ${canvasDesc(s.figure)}${s.figure.caption ? ` (${s.figure.caption})` : ""}`);
       MD.push("");
     }
   });
